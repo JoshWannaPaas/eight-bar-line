@@ -1,0 +1,14 @@
+# Ignore everything recursively
+*
+
+# But not the .ts files
+!*.ts
+!*.tsx
+!*.js
+!*.jsx
+
+# Check subdirectories too
+!*/
+
+# Ignore all in the build folder (compiled from typescript)
+**/dist/*

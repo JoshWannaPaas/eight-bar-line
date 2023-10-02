@@ -1,7 +1,20 @@
 {
+  "name": "eight-bar-line",
+  "private": true,
+  "scripts": {
+    "style": "prettier --write .",
+    "common": "cd common && npm run build && cd .. & npm upgrade common",
+    "build": "cd common && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "workspaces": [
+    "common"
+  ],
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  },
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "@mui/material": "^5.14.11"
+    "common": "file:common"
   }
 }
