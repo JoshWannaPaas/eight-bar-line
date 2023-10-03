@@ -13,9 +13,11 @@ npm install
 # Install the packages in the frontend directory
 cd frontend
 npm install
+cd ..
 # Install the packages in the backend directory
 cd backend
 npm install
+cd ..
 ```
 
 
