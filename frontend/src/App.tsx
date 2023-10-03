@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import "./App.css";
 import { io } from "socket.io-client";
+import { DEFAULT_SERVER_PORT } from "common/dist";
 
 function App() {
   useEffect(() => {
-    const socket = io(`localhost:8080`);
+    const socket = io(`localhost:${DEFAULT_SERVER_PORT}`);
     return () => {
       socket.disconnect();
     };
