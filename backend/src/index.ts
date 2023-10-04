@@ -2,7 +2,15 @@ import express from "express";
 import cors from "cors";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import { DEFAULT_SERVER_PORT } from "common/dist/index.js";
+import {
+  DEFAULT_SERVER_PORT,
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData,
+} from "common/dist/index.js";
+
+
 
 const PORT = process.env.PORT || DEFAULT_SERVER_PORT;
 
@@ -12,7 +20,12 @@ app.use(express.json());
 
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(httpServer, {
   cors: {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
