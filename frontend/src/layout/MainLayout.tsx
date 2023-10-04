@@ -6,7 +6,6 @@ const MainLayout: FC = () => {
   return (
     <Box>
       <Outlet />
-      <h1>Bar Lineee</h1>
     </Box>
   );
 };
