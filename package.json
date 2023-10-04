@@ -15,6 +15,7 @@
     "prettier": "^3.0.3"
   },
   "dependencies": {
-    "common": "file:common"
+    "common": "file:common",
+    "react-router-dom": "^6.16.0"
   }
 }
