@@ -1,13 +1,19 @@
 import { useEffect } from "react";
 import "./App.css";
-import { io } from "socket.io-client";
-import { DEFAULT_SERVER_PORT } from "common/dist";
 import Routes from "./routes";
 import { Container, CssBaseline } from "@mui/material";
+import { Socket, io } from "socket.io-client";
+import {
+  ClientToServerEvents,
+  DEFAULT_SERVER_PORT,
+  ServerToClientEvents,
+} from "common/dist";
 
 function App() {
   useEffect(() => {
-    const socket = io(`localhost:${DEFAULT_SERVER_PORT}`);
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      `localhost:${DEFAULT_SERVER_PORT}`
+    );
     return () => {
       socket.disconnect();
     };
