@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import { Server } from "socket.io";
 import { createServer } from "http";
-import { DEFAULT_SERVER_PORT } from "common/dist";
+import { DEFAULT_SERVER_PORT } from "common/dist/index.js";
 
 const PORT = process.env.PORT || DEFAULT_SERVER_PORT;
 

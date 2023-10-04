@@ -2,10 +2,10 @@
   "compilerOptions": {
     "declaration": true,
     "module": "esnext",
-    "outDir": "dist"
+    "rootDir": "./src",
+    "outDir": "./dist"
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist"],
   "target": "es2017",
   "lib": ["es2017"]
 }
