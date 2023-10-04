@@ -1,9 +1,9 @@
 import { UserID } from "./users.js";
 
 export enum NoteType {
-  ATTACK, 
-  SUSTAIN, 
-  REST
+  ATTACK,
+  SUSTAIN,
+  REST,
 }
 
 export enum Instrument {
@@ -17,7 +17,7 @@ export type Note = {
   type: NoteType;
   /** This is for telling apart when multiple notes overlap the same cell */
   author: UserID;
-}
+};
 
 /** THe Eight Bars for a single instrument */
 export type BarLine = {
@@ -33,7 +33,7 @@ export type BarLine = {
   dynamics: number[];
   /** Scales the entire instrument's volume. Range from 0-1 */
   masterVolume: number;
-}
+};
 
 export type Ensemble = {
   /** The ID of the ensemble */
@@ -44,4 +44,4 @@ export type Ensemble = {
   tempo: number;
   /** Each part in the Ensemble, represented by a Bar Line */
   arrangement: BarLine[];
-}
+};

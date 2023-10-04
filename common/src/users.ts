@@ -1,2 +1,1 @@
-export type UserID = string; 
-
+export type UserID = string;
