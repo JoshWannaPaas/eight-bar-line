@@ -12,7 +12,7 @@ import {
 function App() {
   useEffect(() => {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `localhost:${DEFAULT_SERVER_PORT}`
+      `localhost:${DEFAULT_SERVER_PORT}`,
     );
     return () => {
       socket.disconnect();
