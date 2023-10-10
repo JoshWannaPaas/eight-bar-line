@@ -1,9 +1,13 @@
 import { FC } from "react";
+import "./index.css";
 
 const Browse: FC = () => {
   return (
     <main>
-      <p>test</p>
+      <div id="title">
+        <h1>Browse</h1>
+        <h2>Find and combine other bites of music</h2>
+      </div>
     </main>
   );
 };

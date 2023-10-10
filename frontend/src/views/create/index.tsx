@@ -1,9 +1,13 @@
 import { FC } from "react";
+import "./index.css";
 
 const Create: FC = () => {
   return (
     <main>
-      <p>test</p>
+      <div id="title">
+        <h1>Create</h1>
+        <h2>Make and upload your own bite of music</h2>
+      </div>
     </main>
   );
 };

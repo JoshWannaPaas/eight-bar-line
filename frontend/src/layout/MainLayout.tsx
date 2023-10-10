@@ -8,6 +8,7 @@ import {
   styled,
 } from "@mui/material";
 import { FC } from "react";
+import { Outlet } from "react-router-dom";
 
 const MainLayout: FC = () => {
   return (
@@ -16,7 +17,9 @@ const MainLayout: FC = () => {
       <Container id="titlebar">
         <Grid id="topnavi" container spacing={1}>
           <Grid item xs={2}>
-            <Item>8Bar Line</Item>
+            <Item>
+              <Link href={"/home"}>8Bar Line</Link>
+            </Item>
           </Grid>
           <Grid item xs={1} />
           <Grid item xs={2}>
@@ -26,9 +29,7 @@ const MainLayout: FC = () => {
           </Grid>
           <Grid item xs={2}>
             <Item>
-              <Link href={"/ensemble"} key={"Ensemble"}>
-                Ensemble
-              </Link>
+              <Link href={"/ensemble"}>Ensemble</Link>
             </Item>
           </Grid>
           <Grid item xs={2}>
@@ -38,6 +39,7 @@ const MainLayout: FC = () => {
           </Grid>
         </Grid>
       </Container>
+      <Outlet />
     </Box>
   );
 };

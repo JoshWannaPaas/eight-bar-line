@@ -1,14 +1,13 @@
 import { FC } from "react";
+import "./index.css";
 
 const Ensemble: FC = () => {
   return (
     <main>
-      <h1>test</h1>
-      <h1>test</h1>
-      <h1>test</h1>
-      <h1>test</h1>
-      <h1>test</h1>
-      <h1>test</h1>
+      <div id="title">
+        <h1>Ensemble</h1>
+        <h2>Play Together</h2>
+      </div>
     </main>
   );
 };
