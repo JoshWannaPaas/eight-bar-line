@@ -1,40 +1,26 @@
 import { FC } from "react";
 import "./index.css";
-import { Box, Container, Grid, Paper, styled } from "@mui/material";
+import { Box, Container, Grid, Paper, Stack, styled } from "@mui/material";
 import _ from "lodash";
 
 const EnsembleView: FC = () => {
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
-      <Grid id="room" container spacing={1}>
-        <Grid item xs={0.5}></Grid>
-
-        <Grid item xs={3}>
-          <Item>
-            <h3>Instrument Settings</h3>
-            <p>placeholder</p>
-          </Item>
-        </Grid>
-
-        <Grid item xs={1.5}></Grid>
-
-        <Grid item xs={2} id="title">
+      <Stack direction="row" spacing={1} justifyContent="space-between" maxWidth="md" m='auto'>
+        <Item>
+          <h3>Instrument Settings</h3>
+          <p>placeholder</p>
+        </Item>
+        <Box>
           <p>Ensemble</p>
           <p>Play Together</p>
-        </Grid>
-
-        <Grid item xs={1.5}></Grid>
-
-        <Grid item xs={3}>
-          <Item>
-            <h3>Room Settings</h3>
-            <p>placeholder</p>
-          </Item>
-        </Grid>
-
-        <Grid item xs={0.5}></Grid>
-      </Grid>
+        </Box>
+        <Item>
+          <h3>Room Settings</h3>
+          <p>placeholder</p>
+        </Item>
+      </Stack>
 
       {/* Your play area */}
       <Container id="playerSelf">
