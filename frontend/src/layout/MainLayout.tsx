@@ -21,7 +21,7 @@ const MainLayout: FC = () => {
               <Link href={"/home"}>8Bar Line</Link>
             </Item>
           </Grid>
-          <Grid item xs={1} />
+          <Grid item xs={2} />
           <Grid item xs={2}>
             <Item>
               <Link href={"/create"}>Create</Link>
