@@ -1,28 +1,28 @@
 import MainLayout from "../layout/MainLayout";
-import Browse from "../views/browse";
-import Create from "../views/create";
-import Ensemble from "../views/ensemble";
-import Home from "../views/home";
+import BrowseView from "../views/browse";
+import CreateView from "../views/create";
+import EnsembleView from "../views/ensemble";
+import HomeView from "../views/home";
 
 const mainRoutes = {
   path: "/",
   element: <MainLayout />,
   children: [
     {
-      path: "/home",
-      element: <Home />,
+      path: "/",
+      element: <HomeView />,
     },
     {
       path: "/create",
-      element: <Create />,
+      element: <CreateView />,
     },
     {
       path: "/ensemble",
-      element: <Ensemble />,
+      element: <EnsembleView />,
     },
     {
       path: "/browse",
-      element: <Browse />,
+      element: <BrowseView />,
     },
   ],
 };

@@ -1,7 +1,7 @@
 import { FC } from "react";
 import "./index.css";
 
-const Create: FC = () => {
+const CreateView: FC = () => {
   return (
     <main>
       <div id="title">
@@ -12,4 +12,4 @@ const Create: FC = () => {
   );
 };
 
-export default Create;
+export default CreateView;

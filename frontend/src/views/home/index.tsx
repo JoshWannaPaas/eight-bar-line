@@ -1,7 +1,7 @@
 import { FC } from "react";
 import "./index.css";
 
-const Home: FC = () => {
+const HomeView: FC = () => {
   return (
     <main>
       <div id="title">
@@ -12,4 +12,4 @@ const Home: FC = () => {
   );
 };
 
-export default Home;
+export default HomeView;

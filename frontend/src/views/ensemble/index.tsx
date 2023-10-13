@@ -3,7 +3,7 @@ import "./index.css";
 import { Box, Container, Grid, Paper, styled } from "@mui/material";
 import _ from "lodash"
 
-const Ensemble: FC = () => {
+const EnsembleView: FC = () => {
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
@@ -45,7 +45,7 @@ const Ensemble: FC = () => {
   );
 };
 
-export default Ensemble;
+export default EnsembleView;
 
 // Taken from https://mui.com/material-ui/react-grid/
 const Item = styled(Paper)(({ theme }) => ({

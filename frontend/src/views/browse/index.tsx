@@ -1,7 +1,7 @@
 import { FC } from "react";
 import "./index.css";
 
-const Browse: FC = () => {
+const BrowseView: FC = () => {
   return (
     <main>
       <div id="title">
@@ -12,4 +12,4 @@ const Browse: FC = () => {
   );
 };
 
-export default Browse;
+export default BrowseView;
