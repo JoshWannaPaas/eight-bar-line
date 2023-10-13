@@ -1,14 +1,14 @@
 import { FC } from "react";
 import "./index.css";
 import { Box, Container, Grid, Paper, styled } from "@mui/material";
-import _ from "lodash"
+import _ from "lodash";
 
 const EnsembleView: FC = () => {
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
       <Grid id="room" container spacing={1}>
-      <Grid item xs={0.5}></Grid>
+        <Grid item xs={0.5}></Grid>
 
         <Grid item xs={3}>
           <Item>
@@ -36,7 +36,6 @@ const EnsembleView: FC = () => {
         <Grid item xs={0.5}></Grid>
       </Grid>
 
-
       {/* Your play area */}
       <Container id="playerSelf">
         <Board></Board>
@@ -57,33 +56,38 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 // consts for calculating board, not including volume bar
-const boardWidth = 32;    // 8 bars of 4 quarter notes = 32 note placements
-const boardHeight = 8;    // 8 Notes from C -> C
+const boardWidth = 32; // 8 bars of 4 quarter notes = 32 note placements
+const boardHeight = 8; // 8 Notes from C -> C
 
 // temp name for music editor area
-const Board : React.FC = () => {
+const Board: React.FC = () => {
   return (
     <Container>
-      {_.range(boardHeight).map((n) => <SingleRow key={`note-pitch-${n}`} />)}
+      {_.range(boardHeight).map((n) => (
+        <SingleRow key={`note-pitch-${n}`} />
+      ))}
     </Container>
   );
-}
+};
 
-const SingleRow : React.FC = () => {
-  return <RowContainer>
-    {_.range(boardWidth).map((n) => <SingleNote key={`note-number-${n}`} />)}
-  </RowContainer>
-}
+const SingleRow: React.FC = () => {
+  return (
+    <RowContainer>
+      {_.range(boardWidth).map((n) => (
+        <SingleNote key={`note-number-${n}`} />
+      ))}
+    </RowContainer>
+  );
+};
 
 const RowContainer = styled(Container)({
-  display: 'flex',
-})
-
+  display: "flex",
+});
 
 const SingleNote = styled(Box)({
-  width:32, 
-  height:32, 
-  backgroundColor: 'lightblue', 
-  margin: "1px", 
-  display: "block"
-})
+  width: 32,
+  height: 32,
+  backgroundColor: "lightblue",
+  margin: "1px",
+  display: "block",
+});

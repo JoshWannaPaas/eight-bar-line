@@ -19,9 +19,9 @@ function App() {
   }, []);
 
   return (
-  <body>
-    <Routes />
-  </body>
+    <body>
+      <Routes />
+    </body>
   );
 }
 
