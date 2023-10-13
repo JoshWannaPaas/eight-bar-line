@@ -18,7 +18,7 @@ const MainLayout: FC = () => {
         <Grid id="topnavi" container spacing={1}>
           <Grid item xs={2}>
             <Item>
-              <Link href={"/home"}>8Bar Line</Link>
+              <Link href={"/"}>8Bar Line</Link>
             </Item>
           </Grid>
           <Grid item xs={2} />
