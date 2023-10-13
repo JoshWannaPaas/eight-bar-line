@@ -1,0 +1,17 @@
+#room {
+  padding:0%;
+  width: 80%;
+  margin-top: 2%;
+  margin-left: 10%;
+
+}
+
+#title {
+  font-size: large;
+  vertical-align: top;
+  padding-top: 0%;
+}
+
+#playerSelf {
+  margin-top: 2%;
+}

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import "./App.css";
 import Routes from "./routes";
-import { Container, CssBaseline } from "@mui/material";
 import { Socket, io } from "socket.io-client";
 import {
   ClientToServerEvents,
@@ -21,10 +20,6 @@ function App() {
 
   return (
     <body>
-      <CssBaseline />
-      <Container id="titlebar">
-        <h1 id="title">8Bar Line</h1>
-      </Container>
       <Routes />
     </body>
   );
