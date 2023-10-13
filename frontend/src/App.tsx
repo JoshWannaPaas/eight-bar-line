@@ -18,7 +18,11 @@ function App() {
     };
   }, []);
 
-  return <Routes />;
+  return (
+  <body>
+    <Routes />
+  </body>
+  );
 }
 
 export default App;
