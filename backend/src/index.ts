@@ -9,6 +9,7 @@ import {
   InterServerEvents,
   SocketData,
 } from "common/dist/index.js";
+import registerRoomEvents from "./routes/rooms";
 
 const PORT = process.env.PORT || DEFAULT_SERVER_PORT;
 
@@ -32,6 +33,13 @@ const io = new Server<
 
 io.on("connection", (socket) => {
   console.log("A client connected to the server!");
+
+  // A dummy endpoint that receives a message from the client and returns it
+  socket.on("ping", (message) => {
+    socket.emit("pong", `The server received: ${message}`);
+  });
+
+  registerRoomEvents(io, socket);
 });
 
 httpServer.listen(PORT, () => {

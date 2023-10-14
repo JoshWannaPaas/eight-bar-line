@@ -9,3 +9,4 @@ export type {
   InterServerEvents,
   SocketData,
 };
+export type * from "./ClientToServerEvents.js";
