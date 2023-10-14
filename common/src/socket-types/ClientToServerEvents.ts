@@ -28,7 +28,5 @@ interface ClientToServerEvents {
   ["ensemble:set-instrument"]: (instrument: Instrument) => void;
   /** Toggles the state of the note between Rest to Attack to Sustain (if the previous note is not a rest) */
   ["ensemble:toggle-note"]: (row: number, col: number) => void;
-  /** A message */
-  chat: (message: string) => void;
 }
 export default ClientToServerEvents;
