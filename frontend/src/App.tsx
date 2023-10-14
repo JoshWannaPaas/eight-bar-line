@@ -18,19 +18,15 @@ function App() {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `localhost:${DEFAULT_SERVER_PORT}`,
     );
-    // Save this connection to the `socketAtom` for other pages to use. 
+    // Save this connection to the `socketAtom` for other pages to use.
     setSocket(socket);
 
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [setSocket]);
 
-  return (
-      <Routes />
-  );
+  return <Routes />;
 }
 
 export default App;
-
-
