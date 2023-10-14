@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
 
   // A dummy endpoint that receives a message from the client and returns it
   socket.on("ping", (message) => {
+    console.log("Received a ping from the client.");
     socket.emit("pong", `The server received: ${message}`);
   });
 

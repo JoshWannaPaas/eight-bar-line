@@ -7,7 +7,13 @@ const EnsembleView: FC = () => {
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
-      <Stack direction="row" spacing={1} justifyContent="space-between" maxWidth="md" m='auto'>
+      <Stack
+        direction="row"
+        spacing={1}
+        justifyContent="space-between"
+        maxWidth="md"
+        m="auto"
+      >
         <Item>
           <h3>Instrument Settings</h3>
           <p>placeholder</p>

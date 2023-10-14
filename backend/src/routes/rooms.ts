@@ -6,6 +6,9 @@ const rooms: Record<RoomCode, Ensemble> = {};
 const ROOM_CODE_LEN = 6;
 
 const registerRoomEvents = (io: IoType, socket: SocketType) => {
+  /**
+   * Creates a new room and adds this socket to the room.
+   */
   const createRoom = () => {
     const existingRoomCodes = Object.keys(rooms);
 
@@ -27,6 +30,9 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     socket.leave(currentRoomCode);
   };
 
+  /**
+   * Handles whenever this user attempts to join a room.
+   */
   const joinRoom = (roomCode: RoomCode) => {
     // If already in a room, leave.
     leaveRoom();
@@ -61,6 +67,12 @@ const generateRoomCode = (): RoomCode => {
   return roomCode;
 };
 
+/**
+ *
+ * Specifications
+ * --------------
+ * - Assumes that a user is in at most 1 room.
+ */
 const getRoomCode = (userId: UserID): RoomCode | undefined => {
   const matchingEntry = Object.entries(rooms).find(([roomCode, ensemble]) =>
     ensemble.hasUser(userId),

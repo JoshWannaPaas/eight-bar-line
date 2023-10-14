@@ -1,7 +1,7 @@
-import { randomUUID } from "crypto";
 import { UserID } from "../users.js";
 import { BarLine, BarLineObject } from "./BarLine.js";
 import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 export type EnsembleObject = {
   /** The ID of the ensemble */
@@ -23,7 +23,7 @@ export class Ensemble {
 
   constructor() {
     const initialState: EnsembleState = {
-      id: randomUUID(),
+      id: uuidv4(),
       authors: [],
       tempo: 0.5,
       arrangement: [],

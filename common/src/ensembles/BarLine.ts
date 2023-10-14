@@ -1,6 +1,7 @@
 import { UserID } from "../users.js";
 import { Instrument, Note, NoteType } from "./Note.js";
 import _ from "lodash";
+import { v4 as uuidv4 } from "uuid";
 
 /** The Eight Bars for a single instrument */
 export type BarLineObject = {
@@ -35,7 +36,7 @@ export class BarLine {
     }
 
     const initialState: BarLineObject = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       author,
       instrument,
       dynamics: new Array(BarLine.COLS).fill(0.5),

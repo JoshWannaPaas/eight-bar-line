@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon dist/index.js\""
+    "start": "node --experimental-modules --es-module-specifier-resolution=node dist/index.js",
+    "dev": "concurrently \"tsc -w\" \"nodemon --experimental-modules --es-module-specifier-resolution=node dist/index.js\""
   },
   "keywords": [],
   "author": "",
@@ -15,6 +15,7 @@
   "devDependencies": {
     "@types/express": "^4.17.18",
     "@types/lodash": "^4.14.199",
+    "@types/uuid": "^9.0.5",
     "concurrently": "^8.2.1",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
@@ -24,6 +25,7 @@
     "express": "^4.18.2",
     "http": "^0.0.1-security",
     "lodash": "^4.17.21",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.1"
   }
 }
