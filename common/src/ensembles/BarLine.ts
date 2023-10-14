@@ -7,9 +7,9 @@ import { v4 as uuidv4 } from "uuid";
 export type BarLineObject = {
   /** The UUID for storing in a database */
   id: string;
-  /** THe author of this particular barline */
+  /** The author of this particular barline */
   author: UserID;
-  /** THe type of instrument this BarLine is for */
+  /** The type of instrument this BarLine is for */
   instrument: Instrument;
   /** A grid of 8 rows by 32 columns */
   notes: Note[][];
@@ -29,9 +29,8 @@ export class BarLine {
     const notes: Note[][] = [];
     for (let r = 0; r < BarLine.ROWS; r++) {
       const row: Note[] = [];
-      for (let c = 0; c < BarLine.COLS; c++) {
+      for (let c = 0; c < BarLine.COLS; c++)
         row.push({ author, type: NoteType.REST });
-      }
       notes.push(row);
     }
 
@@ -48,6 +47,10 @@ export class BarLine {
 
   getAuthor() {
     return this._state.author;
+  }
+
+  setInstrument(instrument: Instrument) {
+    this._state.instrument = instrument;
   }
 
   toObject() {
