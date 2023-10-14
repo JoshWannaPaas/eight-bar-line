@@ -11,7 +11,5 @@ interface ClientToServerEvents {
   ["room:join"]: (roomCode: RoomCode) => void;
   ["room:leave"]: () => void;
   ["room:send-message"]: (message: string) => void;
-  /** A message */
-  chat: (message: string) => void;
 }
 export default ClientToServerEvents;

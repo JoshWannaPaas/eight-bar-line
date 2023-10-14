@@ -6,19 +6,19 @@ const rooms: Record<RoomCode, Ensemble> = {};
 const ROOM_CODE_LEN = 6;
 
 const registerRoomEvents = (io: IoType, socket: SocketType) => {
-  /**
-   * Creates a new room and adds this socket to the room.
-   */
+  /** Creates a new room and adds this socket to the room. */
   const createRoom = () => {
     const existingRoomCodes = Object.keys(rooms);
-
     // Keep generating random roomCodes until there is no collision
     let roomCode: RoomCode;
     do roomCode = generateRoomCode();
     while (existingRoomCodes.includes(roomCode));
-    rooms[roomCode] = new Ensemble();
-    rooms[roomCode].joinRoom(socket.id);
+    const ensemble = new Ensemble();
+    ensemble.joinRoom(socket.id);
+    rooms[roomCode] = ensemble;
     socket.join(roomCode);
+    // Let everyone in the room know the list of users changed
+    io.to(roomCode).emit("room:user-list", ensemble.getMembers());
     return roomCode;
   };
 
@@ -28,24 +28,28 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     const ensemble = rooms[currentRoomCode];
     ensemble.leaveRoom(socket.id);
     socket.leave(currentRoomCode);
+    // Let everyone in the room know the list of users changed
+    io.to(currentRoomCode).emit("room:user-list", ensemble.getMembers());
   };
 
-  /**
-   * Handles whenever this user attempts to join a room.
-   */
   const joinRoom = (roomCode: RoomCode) => {
     // If already in a room, leave.
     leaveRoom();
-
-    /** @TODO Return a meaningful error message here */
     const ensemble = rooms[roomCode];
+    /** @TODO Return a meaningful error message here */
     if (ensemble === undefined) return;
-
     ensemble.joinRoom(socket.id);
     socket.join(roomCode);
+    // Let everyone in the room know the list of users changed
+    io.to(roomCode).emit("room:user-list", ensemble.getMembers());
   };
 
-  const messageRoom = (message: string) => {};
+  const messageRoom = (message: string) => {
+    const roomCode = getRoomCode(socket.id);
+    if (roomCode === undefined) return;
+    // Let everyone in the room EXCEPT `socket` know about the new message
+    socket.to(roomCode).emit("room:receive-message", socket.id, message);
+  };
 
   socket.on("room:create", createRoom);
   socket.on("room:join", joinRoom);
@@ -68,6 +72,7 @@ const generateRoomCode = (): RoomCode => {
 };
 
 /**
+ * @returns the room code for the ensemble that contains the user
  *
  * Specifications
  * --------------
