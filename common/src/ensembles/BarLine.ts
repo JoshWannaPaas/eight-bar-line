@@ -23,7 +23,7 @@ export class BarLine {
   static ROWS = 8;
   static COLS = 32;
 
-  private _state: BarLineObject;
+  private state: BarLineObject;
 
   constructor(author: UserID, instrument = Instrument.PIANO) {
     const notes: Note[][] = [];
@@ -43,15 +43,15 @@ export class BarLine {
       masterVolume: 1,
       notes,
     };
-    this._state = initialState;
+    this.state = initialState;
   }
 
   getAuthor() {
-    return this._state.author;
+    return this.state.author;
   }
 
   toObject() {
-    return _.cloneDeep(this._state);
+    return _.cloneDeep(this.state);
   }
 
   /**
@@ -64,7 +64,7 @@ export class BarLine {
    */
   static fromObject(object: BarLineObject): BarLine {
     const newBarLine = new BarLine(object.author);
-    newBarLine._state = _.cloneDeep(object);
+    newBarLine.state = _.cloneDeep(object);
     return newBarLine;
   }
 }

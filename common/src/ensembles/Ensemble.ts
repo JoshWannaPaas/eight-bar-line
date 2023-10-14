@@ -19,7 +19,7 @@ type EnsembleState = Omit<EnsembleObject, "arrangement"> & {
 };
 
 export class Ensemble {
-  private _state: EnsembleState;
+  private state: EnsembleState;
 
   constructor() {
     const initialState: EnsembleState = {
@@ -29,22 +29,22 @@ export class Ensemble {
       arrangement: [],
     };
 
-    this._state = initialState;
-    console.log(`Made new Ensemble with ID: ${this._state.id}`);
+    this.state = initialState;
+    console.log(`Made new Ensemble with ID: ${this.state.id}`);
   }
 
   hasUser(userId: UserID) {
-    return this._state.authors.includes(userId);
+    return this.state.authors.includes(userId);
   }
 
   joinRoom(userId: UserID) {
-    this._state.authors.push(userId);
-    this._state.arrangement.push(new BarLine(userId));
+    this.state.authors.push(userId);
+    this.state.arrangement.push(new BarLine(userId));
   }
 
   leaveRoom(userId: UserID) {
-    this._state.authors = this._state.authors.filter((e) => e !== userId);
-    this._state.arrangement = this._state.arrangement.filter(
+    this.state.authors = this.state.authors.filter((e) => e !== userId);
+    this.state.arrangement = this.state.arrangement.filter(
       (a) => a.getAuthor() !== userId,
     );
   }
@@ -53,11 +53,11 @@ export class Ensemble {
    * Returns a copy of the list of userIDs
    */
   getMembers() {
-    return Array.from(this._state.authors);
+    return Array.from(this.state.authors);
   }
 
   toObject(): EnsembleObject {
-    const clone = _.cloneDeep(this._state);
+    const clone = _.cloneDeep(this.state);
     const nestedClone: EnsembleObject = {
       ...clone,
       arrangement: clone.arrangement.map((barline) => barline.toObject()),
@@ -78,7 +78,7 @@ export class Ensemble {
    */
   static fromObject(object: EnsembleObject) {
     const newEnsemble = new Ensemble();
-    newEnsemble._state = {
+    newEnsemble.state = {
       ...object,
       arrangement: object.arrangement.map(BarLine.fromObject),
     };
