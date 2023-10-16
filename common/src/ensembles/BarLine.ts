@@ -48,11 +48,10 @@ export class BarLine {
   getAuthor() {
     return this.state.author;
   }
-  
+
   setInstrument(instrument: Instrument) {
     this.state.instrument = instrument;
   }
-
 
   toObject() {
     return _.cloneDeep(this.state);
