@@ -27,6 +27,7 @@ function App() {
   }, [setSocket]);
 
   return <Routes />;
+
 }
 
 export default App;
