@@ -1,6 +1,6 @@
 import { FC } from "react";
 import "./index.css";
-import { Box, Container, Grid, Paper, Stack, styled } from "@mui/material";
+import { Box, Container, Paper, Stack, styled } from "@mui/material";
 import _ from "lodash";
 
 const EnsembleView: FC = () => {
