@@ -2,7 +2,6 @@ import {
   Box,
   Container,
   CssBaseline,
-  Grid,
   Paper,
   styled,
 } from "@mui/material";
@@ -13,31 +12,31 @@ const MainLayout: FC = () => {
   return (
     <Box>
       <CssBaseline />
-      <Container id="titlebar">
-        <Grid id="topnavi" container spacing={1}>
-          <Grid item xs={2}>
+      <Box id='titlebar' sx={{ width: "100%"}}>
+        <Container sx={{display: 'flex', gap: 2}}>
+          <Box flex={1}>
             <Item>
               <Link to={"/"}>8Bar Line</Link>
             </Item>
-          </Grid>
-          <Grid item xs={2} />
-          <Grid item xs={2}>
+            </Box>
+          <Box flex={1}/>
+          <Box flex={1}>
             <Item>
               <Link to={"/create"}>Create</Link>
             </Item>
-          </Grid>
-          <Grid item xs={2}>
+          </Box>
+          <Box flex={1}>
             <Item>
               <Link to={"/ensemble"}>Ensemble</Link>
             </Item>
-          </Grid>
-          <Grid item xs={2}>
+            </Box>
+          <Box flex={1}>
             <Item>
               <Link to={"/browse"}>Browse</Link>
             </Item>
-          </Grid>
-        </Grid>
-      </Container>
+            </Box>
+          </Container>
+      </Box>
       <Outlet />
     </Box>
   );
