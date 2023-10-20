@@ -2,6 +2,7 @@ import { UserID } from "../users.js";
 import { BarLine, BarLineObject } from "./BarLine.js";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
+import { Instrument, NoteType } from "./Note.js";
 
 export type EnsembleObject = {
   /** The ID of the ensemble */
@@ -47,6 +48,42 @@ export class Ensemble {
     this.state.arrangement = this.state.arrangement.filter(
       (a) => a.getAuthor() !== userId,
     );
+  }
+
+  private getBarLine(userId: UserID) {
+    return this.state.arrangement.find(
+      (barline) => barline.getAuthor() === userId,
+    );
+  }
+
+  setInstrument(userId: UserID, instrument: Instrument) {
+    const barLine = this.getBarLine(userId);
+    /** @todo handle this error better */
+    if (barLine === undefined) return;
+    barLine.setInstrument(instrument);
+  }
+
+  toggleNote(userId: UserID, row: number, col: number) {
+    const barLine = this.getBarLine(userId);
+    /** @todo handle this error better */
+    if (barLine === undefined) return;
+    const currentNote = barLine[row][col];
+    // Rests always go to Attack
+    if (currentNote.type === NoteType.REST) {
+      barLine[row][col] = { ...currentNote, type: NoteType.ATTACK };
+      return;
+    }
+    // An attack can become a sustain only if the previous note is an attack or sustain
+    if (
+      currentNote.type === NoteType.ATTACK &&
+      col > 0 &&
+      barLine[row][col - 1].type !== NoteType.REST
+    ) {
+      barLine[row][col] = { ...currentNote, type: NoteType.SUSTAIN };
+      return;
+    }
+    // Otherwise, an attack or a sustain becomes a rest
+    barLine[row][col] = { ...currentNote, type: NoteType.REST };
   }
 
   /**
