@@ -8,9 +8,9 @@
     "build:common": "cd common && npm run build && cd .. && npm upgrade common",
     "build:frontend": "cd frontend && npm run build",
     "build": "npm run build:common && npm run build:frontend && npm run build:backend",
-    "start:backend": "cd backend && npm run start",
-    "backend": "cd backend && npm run dev",
-    "frontend": "cd frontend && npm run dev"
+    "start": "cd backend && npm run start",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev"
   },
   "workspaces": [
     "common",
