@@ -1,27 +1,28 @@
 import { FC } from "react";
 import "./index.css";
-import { Box, Container, Grid, Paper, Stack, styled } from "@mui/material";
+import { Box, Container, Paper, Stack, styled } from "@mui/material";
+import Divider from '@mui/material/Divider'
 import _ from "lodash";
 
 const EnsembleView: FC = () => {
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
-
       <Stack
         direction="row"
-        spacing={1}
-        justifyContent="space-between"
-        maxWidth="md"
-        m="auto"
+        divider={<Divider orientation="vertical" flexItem />}
+        justifyContent="space-evenly"
+        alignItems="center"
+        paddingTop="1%"
+        textAlign="center"
       >
         <Item>
           <h3>Instrument Settings</h3>
           <p>placeholder</p>
         </Item>
         <Box>
-          <p>Ensemble</p>
-          <p>Play Together</p>
+          <h2>Ensemble</h2>
+          <h3>Play Together</h3>
         </Box>
         <Item>
           <h3>Room Settings</h3>
@@ -31,7 +32,9 @@ const EnsembleView: FC = () => {
 
       {/* Your play area */}
       <Container id="playerSelf">
-        <Board></Board>
+        <Board />
+        <br />
+        <VolumeRow />
       </Container>
     </main>
   );
@@ -43,8 +46,12 @@ export default EnsembleView;
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
   ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
+  paddingLeft: "15px",
+  // textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "baseline",
+  minWidth: "20%",
   color: theme.palette.text.secondary,
 }));
 
@@ -55,32 +62,41 @@ const boardHeight = 8; // 8 Notes from C -> C
 // temp name for music editor area
 const Board: React.FC = () => {
   return (
-    <Container>
+    <Box>
       {_.range(boardHeight).map((n) => (
         <SingleRow key={`note-pitch-${n}`} />
       ))}
-    </Container>
+    </Box>
   );
 };
 
 const SingleRow: React.FC = () => {
   return (
-    <RowContainer>
+    <RowBox>
       {_.range(boardWidth).map((n) => (
         <SingleNote key={`note-number-${n}`} />
       ))}
-    </RowContainer>
+    </RowBox>
   );
 };
 
-const RowContainer = styled(Container)({
-  display: "flex",
+const VolumeRow: React.FC = () => {
+  return (
+    <RowBox>
+      {_.range(boardWidth).map((n) => (
+        <SingleNote key={`note-volume-${n}`} />
+      ))}
+    </RowBox>
+  );
+}
+
+const RowBox = styled(Container)({
+  display: "flex"
 });
 
 const SingleNote = styled(Box)({
-  width: 32,
-  height: 32,
+  minWidth: 32,
+  minHeight: 32,
   backgroundColor: "lightblue",
-  margin: "1px",
-  display: "block",
+  margin: "2px",
 });
