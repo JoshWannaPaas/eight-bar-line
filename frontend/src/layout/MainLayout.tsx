@@ -3,12 +3,11 @@ import {
   Container,
   CssBaseline,
   Grid,
-  Link,
   Paper,
   styled,
 } from "@mui/material";
 import { FC } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
 const MainLayout: FC = () => {
   return (
@@ -18,23 +17,23 @@ const MainLayout: FC = () => {
         <Grid id="topnavi" container spacing={1}>
           <Grid item xs={2}>
             <Item>
-              <Link href={"/"}>8Bar Line</Link>
+              <Link to={"/"}>8Bar Line</Link>
             </Item>
           </Grid>
           <Grid item xs={2} />
           <Grid item xs={2}>
             <Item>
-              <Link href={"/create"}>Create</Link>
+              <Link to={"/create"}>Create</Link>
             </Item>
           </Grid>
           <Grid item xs={2}>
             <Item>
-              <Link href={"/ensemble"}>Ensemble</Link>
+              <Link to={"/ensemble"}>Ensemble</Link>
             </Item>
           </Grid>
           <Grid item xs={2}>
             <Item>
-              <Link href={"/browse"}>Browse</Link>
+              <Link to={"/browse"}>Browse</Link>
             </Item>
           </Grid>
         </Grid>

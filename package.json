@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "style": "prettier --write .",
+    "style-check": "prettier --check .",
     "common": "cd common && npm run build && cd .. & npm upgrade common",
     "build": "cd common && npm run build && cd ../backend && npm run build && cd ../frontend && npm run build",
     "backend": "cd backend && npm run dev",
@@ -11,7 +12,11 @@
   "workspaces": [
     "common"
   ],
+  "pre-commit": [
+    "style-check"
+  ],
   "devDependencies": {
+    "pre-commit": "^1.2.2",
     "prettier": "^3.0.3"
   },
   "dependencies": {
