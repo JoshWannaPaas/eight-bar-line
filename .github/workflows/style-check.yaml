@@ -2,7 +2,7 @@ name: Style Check
 
 on: 
   pull_request:
-    branches: [ main ]  # Replace 'main' with your default branch name
+    branches: [ main ]
 
 jobs:
   style-check:
@@ -16,7 +16,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '16'  # Use the appropriate Node.js version
+        node-version: '16'
 
     - name: Install dependencies
       run: npm install
