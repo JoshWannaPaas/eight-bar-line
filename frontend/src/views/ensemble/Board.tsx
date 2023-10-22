@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import _ from 'lodash';
+import _ from "lodash";
 import SingleNote from "./SingleNote";
 
 // consts for calculating board, not including volume bar
