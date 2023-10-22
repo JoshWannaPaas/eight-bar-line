@@ -8,16 +8,28 @@ const Ping: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
+  // The `state` will tell you if the socket has connected or not:
+  // => "loading" if socket is undefined (the frontend has not connected to the backend yet)
+  // => "hasValue" if socket is defined (the frontend has connected to the backend)
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
 
   useEffect(() => {
-    if (state !== "hasValue") return console.log("Uh oh");
-    socket.emit("ping", "Hello World");
-    socket.on("pong", (msg) => {
+    // I need to check if we have the value before we continue to do anything
+    if (state !== "hasValue") return undefined;
+
+    /** An event handler that is called when the server sends a Pong to the client */
+    const pongHandler = (message: string) => {
       setOpen(true);
-      setMessage(msg);
-    });
-    return undefined;
+      setMessage(message);
+    };
+
+    socket.emit("ping", "Hello World");
+    socket.on("pong", pongHandler);
+    // This function will be called when the component unmounts.
+    // When it unmounts, we want to remove the event listener(s) we set up earlier.
+    return () => {
+      socket.off("pong", pongHandler);
+    };
   }, [state, socket, setMessage, setOpen]);
   return (
     <Snackbar
