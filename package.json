@@ -10,7 +10,8 @@
     "build": "npm run build:common && npm run build:frontend && npm run build:backend",
     "start": "cd backend && npm run start",
     "dev:backend": "cd backend && npm run dev",
-    "dev:frontend": "cd frontend && npm run dev"
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "workspaces": [
     "common",
