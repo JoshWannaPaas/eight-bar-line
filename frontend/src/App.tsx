@@ -18,11 +18,16 @@ function App() {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `localhost:${DEFAULT_SERVER_PORT}`,
     );
+
     // Save this connection to the `socketAtom` for other pages to use.
-    setSocket(socket);
+    const saveSocketToRecoil = () => setSocket(socket);
+    socket.on("connect", saveSocketToRecoil);
 
     return () => {
-      socket.disconnect();
+      // Remove the "connect" event listener if we unmount too quickly
+      socket.off("connect", saveSocketToRecoil);
+      // If we did connect, we need to disconnect the socket
+      socket.connected && socket.disconnect();
     };
   }, [setSocket]);
 
