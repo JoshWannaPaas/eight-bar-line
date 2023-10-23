@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 const colorMapping = {
   [NoteType.REST]: "lightgray",
   [NoteType.ATTACK]: "gray",
-  [NoteType.SUSTAIN]: "darkgray"  // ???? why is this lighter than gray
+  [NoteType.SUSTAIN]: "darkgray", // ???? why is this lighter than gray
 };
 
 const SingleNote: FC = () => {
@@ -41,10 +41,10 @@ const SingleNote: FC = () => {
 
   // Coloring
   if (currentNoteType === NoteType.ATTACK)
-  noteColor = colorMapping[NoteType.ATTACK];
-if (currentNoteType === NoteType.SUSTAIN)
-noteColor = colorMapping[NoteType.SUSTAIN];
-if (onHover) highlight = 1.1;
+    noteColor = colorMapping[NoteType.ATTACK];
+  if (currentNoteType === NoteType.SUSTAIN)
+    noteColor = colorMapping[NoteType.SUSTAIN];
+  if (onHover) highlight = 1.1;
 
   return (
     <Box
@@ -56,7 +56,7 @@ if (onHover) highlight = 1.1;
         minWidth: 32,
         minHeight: 32,
         margin: "2px",
-        filter: `brightness(${highlight})`
+        filter: `brightness(${highlight})`,
       }}
     />
   );
