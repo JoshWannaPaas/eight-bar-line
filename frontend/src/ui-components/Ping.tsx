@@ -1,4 +1,4 @@
-import { useRecoilValueLoadable } from "recoil";
+import { useRecoilValue } from "recoil";
 import { socketAtom } from "../recoil/socket";
 import { useEffect, useState } from "react";
 import { IconButton, Snackbar } from "@mui/material";
@@ -8,17 +8,15 @@ const Ping: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
 
-  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  const socket = useRecoilValue(socketAtom);
 
   useEffect(() => {
-    if (state !== "hasValue") return console.log("Uh oh");
     socket.emit("ping", "Hello World");
     socket.on("pong", (msg) => {
       setOpen(true);
       setMessage(msg);
     });
-    return undefined;
-  }, [state, socket, setMessage, setOpen]);
+  });
   return (
     <Snackbar
       open={open}
