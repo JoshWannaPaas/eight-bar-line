@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "start": "node --experimental-modules --es-module-specifier-resolution=node dist/index.js",
-    "dev": "concurrently \"tsc -w\" \"nodemon --experimental-modules --es-module-specifier-resolution=node dist/index.js\""
+    "dev": "npm run build && concurrently \"tsc -w\" \"nodemon --experimental-modules --es-module-specifier-resolution=node dist/index.js\""
   },
   "keywords": [],
   "author": "",
