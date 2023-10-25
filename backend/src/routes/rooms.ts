@@ -79,7 +79,7 @@ const generateRoomCode = (): RoomCode => {
  * - Assumes that a user is in at most 1 room.
  */
 const getRoomCode = (userId: UserID): RoomCode | undefined => {
-  const matchingEntry = Object.entries(rooms).find(([roomCode, ensemble]) =>
+  const matchingEntry = Object.entries(rooms).find(([, ensemble]) =>
     ensemble.hasUser(userId),
   );
   return matchingEntry?.[0];

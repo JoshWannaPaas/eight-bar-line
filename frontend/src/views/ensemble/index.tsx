@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { Box, Container, Paper, Stack, styled } from "@mui/material";
-import _ from "lodash";
 import Board, { VolumeRow } from "./Board";
 
 const EnsembleView: FC = () => {

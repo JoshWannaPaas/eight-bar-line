@@ -1,0 +1,69 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:eslint-comments/recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "overrides": [
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "@typescript-eslint/no-shadow": ["error", { "allow": ["_"] }],
+        "consistent-return": "error",
+        "camelcase": "error",
+        "dot-notation": "error",    
+        "eqeqeq": "error",
+        "eslint-comments/no-unused-disable": "error",
+        "max-classes-per-file": "error",
+        "no-bitwise": "error",
+        "no-duplicate-imports": "error",
+        "no-else-return": "error",
+        "no-param-reassign": "error",
+        "no-sequences": "error",
+        "no-throw-literal": "error",
+        "no-unneeded-ternary": "error",
+        "no-useless-concat": "error",
+        "no-var": "warn",
+        "no-with": "error",
+        "object-shorthand": "error",
+        "prefer-destructuring": "error",
+        "prefer-exponentiation-operator": "error",
+        "prefer-object-spread": "error",
+        "prefer-promise-reject-errors": "error",
+        "radix": "error",
+        "react/jsx-pascal-case": "error",    
+        "react/prop-types": "off", // Typescript handles this
+        "react/react-in-jsx-scope": "off",
+        "react/self-closing-comp": "warn",
+        // for recoil: https://recoiljs.org/docs/introduction/installation#eslint
+        "react-hooks/exhaustive-deps": [
+          "warn", { 
+            "additionalHooks": "(useRecoilCallback|useRecoilTransaction_UNSTABLE)"
+          }
+        ],
+        "require-await": "error",
+        "yoda": "error"
+    }
+}
