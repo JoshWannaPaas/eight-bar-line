@@ -9,7 +9,7 @@ import {
   InterServerEvents,
   SocketData,
 } from "common/dist/index.js";
-import registerRoomEvents from "./routes/rooms";
+import registerRoomEvents from "./routes/rooms.js";
 import path from "path";
 import { fileURLToPath } from "url";
 

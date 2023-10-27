@@ -3,7 +3,7 @@ import {
   ServerToClientEvents,
   InterServerEvents,
   SocketData,
-} from "common/dist";
+} from "common/dist/index.js";
 import { Server, Socket } from "socket.io";
 
 export type IoType = Server<
