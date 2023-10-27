@@ -9,6 +9,7 @@
     "build:frontend": "cd frontend && npm run build",
     "build": "npm run build:common && npm run build:frontend && npm run build:backend",
     "start": "cd backend && npm run start",
+    "lint": "npx eslint . --ext .ts --ext .tsx --max-warnings 0",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
@@ -22,6 +23,12 @@
     "style-check"
   ],
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
+    "eslint-plugin-eslint-comments": "^3.2.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "pre-commit": "^1.2.2",
     "prettier": "^3.0.3"
   },

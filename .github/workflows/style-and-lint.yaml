@@ -5,8 +5,8 @@ on:
     branches: [ main ]
 
 jobs:
-  style-check:
-    name: Style Check
+  style-and-lint-check:
+    name: Style and Lint Check
     runs-on: ubuntu-latest
 
     steps:
@@ -22,11 +22,17 @@ jobs:
       run: npm install
 
     - name: Run style check
-      run: npm run style
-
-    - name: Check for status
       run: |
+        npm run style
         if [ $? -ne 0 ]; then
           echo "Code style check failed. Please fix the issues before merging."
+          exit 1
+        fi
+
+    - name: Run lint check
+      run: |
+        npm run lint
+        if [ $? -ne 0 ]; then
+          echo "Lint check failed. Please fix the issues before merging."
           exit 1
         fi

@@ -18,9 +18,9 @@ const Ping: React.FC = () => {
     if (state !== "hasValue") return undefined;
 
     /** An event handler that is called when the server sends a Pong to the client */
-    const pongHandler = (message: string) => {
+    const pongHandler = (serverMessage: string) => {
       setOpen(true);
-      setMessage(message);
+      setMessage(serverMessage);
     };
 
     socket.emit("ping", "Hello World");
@@ -30,7 +30,7 @@ const Ping: React.FC = () => {
     return () => {
       socket.off("pong", pongHandler);
     };
-  }, [state, socket, setMessage, setOpen]);
+  }, [socket, state]);
   return (
     <Snackbar
       open={open}
