@@ -24,6 +24,10 @@ However, this does not listen to changes in the `common` directory automatically
 npm run build:common
 ```
 
+### Local SQL Server
+
+1. Download SQL for your device (https://www.postgresql.org/download/)
+
 ## Deployment
 
 Running these three commands in order will make sure all the code is built and hosted properly.
