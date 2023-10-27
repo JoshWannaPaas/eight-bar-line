@@ -1,4 +1,4 @@
-import { Ensemble, Instrument } from "common/dist";
+import { Ensemble, Instrument } from "common/dist/index.js";
 import { IoType, SocketType } from "./types";
 
 const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
