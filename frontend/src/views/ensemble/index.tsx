@@ -5,7 +5,6 @@ import { useParams } from "react-router-dom";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
-
   console.log(roomCode);
 
   return (
@@ -28,7 +27,7 @@ const EnsembleView: FC = () => {
         </Box>
         <Item>
           <h3>Room Settings</h3>
-          <p>placeholder</p>
+          <p>Room Code: {roomCode.roomCode}</p>
         </Item>
       </Stack>
 

@@ -2,13 +2,14 @@ import { Box, Button, Container, Paper, Stack, TextField, Typography } from "@mu
 import { FC } from "react";
 import { useRecoilValueLoadable } from "recoil";
 import { socketAtom } from "../../recoil/socket";
+import { useNavigate } from "react-router-dom";
 
 
 // <Stack> is the same as <Box display='flex' flexDirection='column'>
 
 const LobbyView: FC = () => {
   const stackSpacing = 3;
-
+  const navigate = useNavigate();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
  
   // if(state !==)
@@ -16,12 +17,16 @@ const LobbyView: FC = () => {
   const onCreateRoom = async () => {
     // Tell server you're making a new room
     if (state !== "hasValue") return undefined;   // Check if youre talking to the server AKA socket has value
-    let roomCode = await socket.emit("room:create");
-    console.log(roomCode);
-    // Server creates an inactive room code and gives it to client
-
-
-    // Client takes the room code and navigates to the Ensemble 
+    socket.emit("room:create", (roomCode) => {
+      navigate(roomCode);
+      
+      // Server creates an inactive room code and gives it to client
+  
+  
+      // Client takes the room code and navigates to the Ensemble 
+    
+    
+    });
   };
 
   return (
