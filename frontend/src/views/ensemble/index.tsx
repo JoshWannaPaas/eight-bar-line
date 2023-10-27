@@ -1,8 +1,13 @@
 import { FC } from "react";
 import { Box, Container, Paper, Stack, styled } from "@mui/material";
 import Board, { VolumeRow } from "./Board";
+import { useParams } from "react-router-dom";
 
 const EnsembleView: FC = () => {
+  const roomCode = useParams();
+
+  console.log(roomCode);
+
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}

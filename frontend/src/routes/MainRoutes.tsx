@@ -1,8 +1,10 @@
+import { Outlet } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import BrowseView from "../views/browse";
 import CreateView from "../views/create";
 import EnsembleView from "../views/ensemble";
 import HomeView from "../views/home";
+import LobbyView from "../views/ensemble/LobbyView";
 
 const mainRoutes = {
   path: "/",
@@ -18,7 +20,17 @@ const mainRoutes = {
     },
     {
       path: "/ensemble",
-      element: <EnsembleView />,
+      element: <Outlet />,
+      children: [
+        {
+          path: ":roomCode",
+          element: <EnsembleView />,
+        },
+        {
+          path: "",
+          element: <LobbyView />,
+        }
+      ]
     },
     {
       path: "/browse",
