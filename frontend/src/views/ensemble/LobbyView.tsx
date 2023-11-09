@@ -31,7 +31,7 @@ const LobbyView: FC = () => {
       // Client takes the room code and navigates to the Ensemble
     });
 
-    return state;
+    return undefined;
   };
 
   return (
