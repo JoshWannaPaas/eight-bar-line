@@ -29,9 +29,9 @@ const LobbyView: FC = () => {
       // Server creates an inactive room code and gives it to client
 
       // Client takes the room code and navigates to the Ensemble
-
-      return roomCode;
     });
+
+    return state;
   };
 
   return (
