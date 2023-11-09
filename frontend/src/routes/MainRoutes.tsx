@@ -29,8 +29,8 @@ const mainRoutes = {
         {
           path: "",
           element: <LobbyView />,
-        }
-      ]
+        },
+      ],
     },
     {
       path: "/browse",
