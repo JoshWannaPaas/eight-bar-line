@@ -21,12 +21,11 @@ const LobbyView: FC = () => {
 
   // if(state !==)
 
-  const onCreateRoom = async () => {
+  const onCreateRoom = () => {
     // Tell server you're making a new room
     if (state !== "hasValue") return undefined; // Check if youre talking to the server AKA socket has value
     socket.emit("room:create", (roomCode) => {
       navigate(roomCode);
-
       // Server creates an inactive room code and gives it to client
 
       // Client takes the room code and navigates to the Ensemble
