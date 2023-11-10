@@ -9,8 +9,6 @@ import * as Tone from "tone";
 const EnsembleView: FC = () => {
   const roomCode = useParams();
 
-  // On load, start tone
-
   console.log(roomCode);
 
   return (
