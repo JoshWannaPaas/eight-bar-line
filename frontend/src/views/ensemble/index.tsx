@@ -1,8 +1,12 @@
 import { FC } from "react";
 import { Box, Container, Paper, Stack, styled } from "@mui/material";
 import Board, { VolumeRow } from "./Board";
+import { useParams } from "react-router-dom";
 
 const EnsembleView: FC = () => {
+  const roomCode = useParams();
+  console.log(roomCode);
+
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
@@ -23,7 +27,7 @@ const EnsembleView: FC = () => {
         </Box>
         <Item>
           <h3>Room Settings</h3>
-          <p>placeholder</p>
+          <p>Room Code: {roomCode.roomCode}</p>
         </Item>
       </Stack>
 

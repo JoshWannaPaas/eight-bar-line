@@ -7,7 +7,7 @@ const ROOM_CODE_LEN = 6;
 
 const registerRoomEvents = (io: IoType, socket: SocketType) => {
   /** Creates a new room and adds this socket to the room. */
-  const createRoom = () => {
+  const createRoom = (callback: (arg0: RoomCode) => void) => {
     const existingRoomCodes = Object.keys(rooms);
     // Keep generating random roomCodes until there is no collision
     let roomCode: RoomCode;
@@ -19,7 +19,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     socket.join(roomCode);
     // Let everyone in the room know the list of users changed
     io.to(roomCode).emit("room:user-list", ensemble.getMembers());
-    return roomCode;
+    callback(roomCode);
   };
 
   const leaveRoom = () => {
