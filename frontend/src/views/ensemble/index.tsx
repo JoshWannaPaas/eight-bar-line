@@ -1,10 +1,16 @@
-import { FC } from "react";
-import { Box, Container, Paper, Stack, styled } from "@mui/material";
+import { FC, useEffect, useState } from "react";
+import { Box, Button, Container, Paper, Stack, styled } from "@mui/material";
 import Board, { VolumeRow } from "./Board";
 import { useParams } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { beatNumberAtom } from "../../recoil/beat";
+import * as Tone from "tone";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
+
+  // On load, start tone
+
   console.log(roomCode);
 
   return (
@@ -20,6 +26,7 @@ const EnsembleView: FC = () => {
         <Item>
           <h3>Instrument Settings</h3>
           <p>placeholder</p>
+          <Metronome />
         </Item>
         <Box>
           <h2>Ensemble</h2>
@@ -62,3 +69,33 @@ const Item = styled(Paper)(({ theme }) => ({
   minWidth: "20%",
   color: theme.palette.text.secondary,
 }));
+
+/**
+ * This component is only responsible for incrementing the global beat number atom
+ */
+const Metronome: React.FC = () => {
+  const setBeatNumber = useSetRecoilState(beatNumberAtom);
+  const [playing, setPlaying] = useState(false);
+  const toggleMetronome = async () => {
+    await Tone.start();
+    setPlaying(!playing);
+  };
+  useEffect(() => {
+    if (!playing) return setBeatNumber(-1);
+    const intervalId = setInterval(
+      () => setBeatNumber((old) => (old + 1) % 32),
+      200,
+    );
+    return () => clearInterval(intervalId);
+  }, [playing, setBeatNumber]);
+
+  return (
+    <Button
+      variant="contained"
+      color={playing ? "success" : "primary"}
+      onClick={toggleMetronome}
+    >
+      Toggle Metronome
+    </Button>
+  );
+};

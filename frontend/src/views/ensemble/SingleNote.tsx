@@ -1,6 +1,9 @@
 import { NoteType } from "common/dist";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
+import { useRecoilValue } from "recoil";
+import { beatNumberAtom } from "../../recoil/beat";
+import { Synth } from "tone";
 
 // Colors for notes
 const colorMapping = {
@@ -9,9 +12,30 @@ const colorMapping = {
   [NoteType.SUSTAIN]: "darkgray", // ???? why is this lighter than gray
 };
 
-const SingleNote: FC = () => {
+interface SingleNoteProps {
+  beatNumber: number;
+  /** An integer */
+  pitch: number;
+}
+
+const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
+
+const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   // note type - attack sustain rest
   const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
+
+  const globalBeatNumber = useRecoilValue(beatNumberAtom);
+  const playNow = globalBeatNumber === beatNumber;
+  useEffect(() => {
+    if (!playNow) return;
+    // Trigger a music note if we are not a NoteType.REST
+    // console.log("Playing Note")
+    // Insert Josh ...
+    if (currentNoteType !== NoteType.REST) {
+      const synth = new Synth().toDestination();
+      synth.triggerAttackRelease(PITCH_VALUES[pitch], "8n");
+    }
+  }, [playNow, pitch, currentNoteType]);
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -32,6 +56,7 @@ const SingleNote: FC = () => {
     else if (currentNoteType === NoteType.SUSTAIN)
       setCurrentNoteType(NoteType.REST);
   };
+
   // If hovering, overwrite the note color
 
   // Color depends on Hover and NoteType
@@ -44,7 +69,7 @@ const SingleNote: FC = () => {
     noteColor = colorMapping[NoteType.ATTACK];
   if (currentNoteType === NoteType.SUSTAIN)
     noteColor = colorMapping[NoteType.SUSTAIN];
-  if (onHover) highlight = 1.1;
+  if (onHover || playNow) highlight = 1.1;
 
   return (
     <Box
