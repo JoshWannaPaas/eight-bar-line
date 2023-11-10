@@ -8,7 +8,6 @@ import * as Tone from "tone";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
-
   console.log(roomCode);
 
   return (
