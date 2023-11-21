@@ -11,18 +11,21 @@ const Board: React.FC = () => {
   return (
     <Box>
       {_.range(boardHeight).map((n) => (
-        <SingleRow key={`note-pitch-${n}`} />
+        <SingleRow pitch={n} key={`note-pitch-${n}`} />
       ))}
     </Box>
   );
 };
 export default Board;
 
-const SingleRow: React.FC = () => {
+interface SingleRowProps {
+  pitch: number;
+}
+const SingleRow: React.FC<SingleRowProps> = ({ pitch }) => {
   return (
     <Box display="flex">
       {_.range(boardWidth).map((n) => (
-        <SingleNote key={`note-number-${n}`} />
+        <SingleNote beatNumber={n} pitch={pitch} key={`note-number-${n}`} />
       ))}
     </Box>
   );
@@ -32,7 +35,7 @@ export const VolumeRow: React.FC = () => {
   return (
     <Box display="flex">
       {_.range(boardWidth).map((n) => (
-        <SingleNote key={`note-volume-${n}`} />
+        <SingleNote pitch={-1} beatNumber={n} key={`note-volume-${n}`} />
       ))}
     </Box>
   );

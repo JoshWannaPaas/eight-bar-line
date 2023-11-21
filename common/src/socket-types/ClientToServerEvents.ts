@@ -10,7 +10,7 @@ interface ClientToServerEvents {
   ping: (message: string) => void;
 
   /** Creates a new room and returns the room's code */
-  ["room:create"]: () => RoomCode;
+  ["room:create"]: (callback: (arg0: RoomCode) => void) => void;
   /** Joins the room with the given room code, if it exists */
   ["room:join"]: (roomCode: RoomCode) => void;
   /** The user leaves their current room if they are currently in one */

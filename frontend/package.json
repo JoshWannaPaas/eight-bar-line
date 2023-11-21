@@ -18,7 +18,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.16.0",
     "recoil": "^0.7.7",
-    "socket.io-client": "^4.7.2"
+    "socket.io-client": "^4.7.2",
+    "tone": "^14.7.77"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.199",
