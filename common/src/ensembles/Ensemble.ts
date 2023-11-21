@@ -86,10 +86,8 @@ export class Ensemble {
     barLine[row][col] = { ...currentNote, type: NoteType.REST };
   }
 
-  /**
-   * Returns a copy of the list of userIDs
-   */
-  getMembers() {
+  /** Returns a copy of the list of userIDs */
+  getMembers(): readonly string[] {
     return Array.from(this.state.authors);
   }
 
