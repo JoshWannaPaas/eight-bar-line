@@ -1,7 +1,7 @@
-import { Ensemble, RoomCode, UserID } from "common/dist/index.js";
+import { Ensemble, RoomCode } from "common/dist/index.js";
 import { IoType, SocketType } from "./types";
 
-const rooms: Record<RoomCode, Ensemble> = {};
+export const rooms: Record<RoomCode, Ensemble> = {};
 
 const ROOM_CODE_LEN = 6;
 
@@ -17,19 +17,22 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     ensemble.joinRoom(socket.id);
     rooms[roomCode] = ensemble;
     socket.join(roomCode);
+    socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
     io.to(roomCode).emit("room:user-list", ensemble.getMembers());
     callback(roomCode);
   };
 
   const leaveRoom = () => {
-    const currentRoomCode = getRoomCode(socket.id);
+    const { roomCode: currentRoomCode } = socket.data;
     if (currentRoomCode === undefined) return;
     const ensemble = rooms[currentRoomCode];
     ensemble.leaveRoom(socket.id);
     socket.leave(currentRoomCode);
+    socket.data.roomCode = undefined;
     // Let everyone in the room know the list of users changed
     io.to(currentRoomCode).emit("room:user-list", ensemble.getMembers());
+    if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
   };
 
   const joinRoom = (roomCode: RoomCode) => {
@@ -40,12 +43,13 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     if (ensemble === undefined) return;
     ensemble.joinRoom(socket.id);
     socket.join(roomCode);
+    socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
     io.to(roomCode).emit("room:user-list", ensemble.getMembers());
   };
 
   const messageRoom = (message: string) => {
-    const roomCode = getRoomCode(socket.id);
+    const { roomCode } = socket.data;
     if (roomCode === undefined) return;
     // Let everyone in the room EXCEPT `socket` know about the new message
     socket.to(roomCode).emit("room:receive-message", socket.id, message);
@@ -69,18 +73,4 @@ const generateRoomCode = (): RoomCode => {
     roomCode += String.fromCharCode(charCode);
   }
   return roomCode;
-};
-
-/**
- * @returns the room code for the ensemble that contains the user
- *
- * Specifications
- * --------------
- * - Assumes that a user is in at most 1 room.
- */
-const getRoomCode = (userId: UserID): RoomCode | undefined => {
-  const matchingEntry = Object.entries(rooms).find(([, ensemble]) =>
-    ensemble.hasUser(userId),
-  );
-  return matchingEntry?.[0];
 };

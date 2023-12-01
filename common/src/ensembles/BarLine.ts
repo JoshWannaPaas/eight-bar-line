@@ -3,6 +3,11 @@ import { Instrument, Note, NoteType } from "./Note.js";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
+export enum NoteToggleDirection {
+  FORWARD,
+  BACKWARD,
+}
+
 /** The Eight Bars for a single instrument */
 export type BarLineObject = {
   /** The UUID for storing in a database */
@@ -53,6 +58,92 @@ export class BarLine {
     this.state.instrument = instrument;
   }
 
+  /**
+   * Returns true if the given `row` and `col` are in range of 
+   * this barline. 
+   */
+  static inRange (row: number, col: number) {
+    if (row < 0 || row > BarLine.ROWS) return false;
+    if (col < 0 || col > BarLine.COLS) return false;
+    return true;
+  }
+
+  getNote(row: number, col: number): Note | undefined {
+    if (!BarLine.inRange(row, col)) return undefined;
+    return this.state.notes[row][col];
+  }
+
+  setNote(row: number, col: number, note: Note) : void{
+    if (!BarLine.inRange(row, col)) return;
+    this.state.notes[row][col] = note;
+  }
+
+  getNoteType (row: number, col: number): NoteType | undefined {
+    return this.getNote(row, col)?.type;
+  }
+
+  /**
+   * Updates the note at the given position according to the following
+   * rules. If the note becomes a REST and the next note is a SUSTAIN, 
+   * we set that note to ATTACK instead.
+   * 
+   * Forward Direction: 
+   *   REST -> ATTACK -> SUSTAIN (skipped if prev note is REST)
+   * Backward Direction:
+   *   REST -> SUSTAIN (skipped if prev note is REST) -> ATTACK
+   */
+  toggleNote (row: number, col: number, direction: NoteToggleDirection) {
+    if (!BarLine.inRange(row, col)) return; 
+    const note = this.getNote(row, col);
+    // Behavior for the Forward Direction
+    if (direction === NoteToggleDirection.FORWARD) {
+      switch(note.type) {
+        case NoteType.REST: {
+          note.type = NoteType.ATTACK;
+          return;
+        }
+        case NoteType.ATTACK: {
+          const priorNoteType = this.getNoteType(row, col-1);
+          const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+          note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.REST;
+          return;
+        }
+        case NoteType.SUSTAIN: {
+          note.type = NoteType.REST;
+          // If the next note was a SUSTAIN, it becomes an ATTACK
+          const nextNote = this.getNote(row, col+1);
+          if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
+            return;
+          nextNote.type = NoteType.ATTACK;
+          return;
+        }
+      }
+    }
+
+    // Behavior for the Backward Direction
+    switch(note.type) {
+      case NoteType.REST: {
+        const priorNoteType = this.getNoteType(row, col-1);
+        const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+        note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.ATTACK;
+        return;
+      }
+      case NoteType.ATTACK: {
+        note.type = NoteType.REST;
+        // If the next note was a SUSTAIN, it becomes an ATTACK
+        const nextNote = this.getNote(row, col+1);
+        if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
+          return;
+        nextNote.type = NoteType.ATTACK;
+        return;
+      }
+      case NoteType.SUSTAIN: {
+        note.type = NoteType.ATTACK;
+        return;
+      }
+    }
+  }
+
   toObject() {
     return _.cloneDeep(this.state);
   }
@@ -71,3 +162,5 @@ export class BarLine {
     return newBarLine;
   }
 }
+
+const ALLOWED_SUSTAIN_PRECEDENTS = [NoteType.ATTACK, NoteType.SUSTAIN];
