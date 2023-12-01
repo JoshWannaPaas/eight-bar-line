@@ -1,22 +1,35 @@
-import { Ensemble, Instrument } from "common/dist/index.js";
+import { ClientToServerEvents, Instrument } from "common/dist/index.js";
 import { IoType, SocketType } from "./types";
+import { rooms } from "./rooms";
 
 const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
-  const fetchEnsemble = () => {
-    console.log("WIP");
-    return new Ensemble().toObject();
+  const fetchEnsemble: ClientToServerEvents["ensemble:fetch"] = (callback) => {
+    const { username, roomCode } = socket.data;
+    if (roomCode === undefined) 
+      return console.error(`User "${username}" is not in an ensemble.`);
+    const ensemble = rooms[roomCode];
+
+    return callback(ensemble.toObject());
   };
 
   const setInstrument = (instrument: Instrument) => {
-    console.log("WIP");
-    const ensemble = new Ensemble();
+    const { username, roomCode } = socket.data;
+    if (roomCode === undefined) 
+      return console.error(`User "${username}" is not in an ensemble.`);
+    const ensemble = rooms[roomCode];
     ensemble.setInstrument(socket.id, instrument);
+    io.to(roomCode).emit("ensemble:update", ensemble.toObject());
+    return undefined;
   };
 
   const toggleNote = (row: number, col: number) => {
-    console.log("WIP");
-    const ensemble = new Ensemble();
+    const { username, roomCode } = socket.data;
+    if (roomCode === undefined) 
+      return console.error(`User "${username}" is not in an ensemble.`);
+    const ensemble = rooms[roomCode];
     ensemble.toggleNote(socket.id, row, col);
+    io.to(roomCode).emit("ensemble:update", ensemble.toObject());
+    return undefined;
   };
 
   socket.on("ensemble:fetch", fetchEnsemble);

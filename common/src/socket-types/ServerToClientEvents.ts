@@ -10,7 +10,7 @@ interface ServerToClientEvents {
   /** Triggered when someone in the same room broadcasts a message */
   ["room:receive-message"]: (username: string, message: string) => void;
   /** Triggered whenever someone joins or leaves the room */
-  ["room:user-list"]: (usernames: string[]) => void;
+  ["room:user-list"]: (usernames: readonly string[]) => void;
 
   /** Triggered whenever another user modifies the Ensemble  */
   ["ensemble:update"]: (newState: EnsembleObject) => void;

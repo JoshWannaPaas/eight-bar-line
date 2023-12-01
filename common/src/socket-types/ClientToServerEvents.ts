@@ -19,7 +19,7 @@ interface ClientToServerEvents {
   ["room:send-message"]: (message: string) => void;
 
   /** Read the current state of the board */
-  ["ensemble:fetch"]: () => EnsembleObject;
+  ["ensemble:fetch"]: (callback: (ensmbleData: EnsembleObject) => void) => void;
   /** Updates the instrument of the current user. Triggers an update */
   ["ensemble:set-instrument"]: (instrument: Instrument) => void;
   /** Toggles the state of the note between Rest to Attack to Sustain (if the previous note is not a rest) */

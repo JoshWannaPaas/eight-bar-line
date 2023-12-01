@@ -12,6 +12,7 @@ import {
 import registerRoomEvents from "./routes/rooms.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import registerEnsembleEvents from "./routes/ensemble";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -47,6 +48,7 @@ io.on("connection", (socket) => {
   });
 
   registerRoomEvents(io, socket);
+  registerEnsembleEvents(io, socket);
 });
 
 // Serve the index.html file for all routes
