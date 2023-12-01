@@ -5,7 +5,14 @@ import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
 import * as Tone from "tone";
 import { currentInstrumentAtom } from "../../recoil/instrument";
-import { altoSaxSampler, bassSampler, fluteSampler, guitarSampler, marimbaSampler, tubaSampler } from "./Samplers";
+import {
+  altoSaxSampler,
+  bassSampler,
+  fluteSampler,
+  guitarSampler,
+  marimbaSampler,
+  tubaSampler,
+} from "./Samplers";
 
 // Colors for notes
 const colorMapping = {
@@ -28,11 +35,9 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   // note type - attack sustain rest
   const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
 
-
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
   const currentInstrument = useRecoilValue(currentInstrumentAtom);
   const playNow = globalBeatNumber === beatNumber;
-
 
   useEffect(() => {
     // Do nothing if music is not being played
@@ -41,22 +46,32 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
       // Assign correct instrument sounds to what player selected
-      switch(currentInstrument){
-        case Instrument.FLUTE: instrumentSampler = fluteSampler; break;
-        case Instrument.ALTO_SAX: instrumentSampler = altoSaxSampler; break;
-        case Instrument.MARIMBA: instrumentSampler = marimbaSampler; break;
-        case Instrument.GUITAR: instrumentSampler = guitarSampler; break;
-        case Instrument.BASS: instrumentSampler = bassSampler; break;
-        case Instrument.TUBA: instrumentSampler = tubaSampler; break;
+      switch (currentInstrument) {
+        case Instrument.FLUTE:
+          instrumentSampler = fluteSampler;
+          break;
+        case Instrument.ALTO_SAX:
+          instrumentSampler = altoSaxSampler;
+          break;
+        case Instrument.MARIMBA:
+          instrumentSampler = marimbaSampler;
+          break;
+        case Instrument.GUITAR:
+          instrumentSampler = guitarSampler;
+          break;
+        case Instrument.BASS:
+          instrumentSampler = bassSampler;
+          break;
+        case Instrument.TUBA:
+          instrumentSampler = tubaSampler;
+          break;
       }
       instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
-    }
-    else if (currentNoteType === NoteType.REST) {
+    } else if (currentNoteType === NoteType.REST) {
       instrumentSampler.triggerRelease(now);
     }
   }, [playNow, pitch, currentNoteType, currentInstrument]);
 
-  
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
 
@@ -81,7 +96,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
 
   // Color depends on Hover and NoteType
   let noteColor = colorMapping[NoteType.REST];
-  let highlight = 1;  // 100% Brightness which is Normal Brightness
+  let highlight = 1; // 100% Brightness which is Normal Brightness
 
   // Coloring
   if (currentNoteType === NoteType.ATTACK)

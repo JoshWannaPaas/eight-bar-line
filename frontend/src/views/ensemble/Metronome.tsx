@@ -4,7 +4,6 @@ import { beatNumberAtom } from "../../recoil/beat";
 import * as Tone from "tone";
 import { Button } from "@mui/material";
 
-
 /**
  * This component is only responsible for incrementing the global beat number atom
  */
@@ -13,7 +12,7 @@ const Metronome: FC = () => {
   const [playing, setPlaying] = useState(false);
   const toggleMetronome = async () => {
     await Tone.start();
-    Tone.Transport.bpm.value =  msToBPM(tempoMS);
+    Tone.Transport.bpm.value = msToBPM(tempoMS);
     setPlaying(!playing);
   };
   useEffect(() => {
@@ -42,4 +41,4 @@ const tempoMS = 200;
 
 const msToBPM = (ms: number) => {
   return (1000 / ms) * 60;
-}
+};

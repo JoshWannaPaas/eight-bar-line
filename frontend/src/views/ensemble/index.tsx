@@ -1,5 +1,16 @@
 import { FC } from "react";
-import { Box, Container, Paper, Stack, styled, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import {
+  Box,
+  Container,
+  Paper,
+  Stack,
+  styled,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+} from "@mui/material";
 import Board, { VolumeRow } from "./Board";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
@@ -13,12 +24,11 @@ const EnsembleView: FC = () => {
 
   const [instrument, setInstrument] = useRecoilState(currentInstrumentAtom);
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
-    if(typeof e.target.value === 'string')
-      return
+    if (typeof e.target.value === "string") return;
     console.log(e.target.value);
-    setInstrument(e.target.value)
-  }
-  
+    setInstrument(e.target.value);
+  };
+
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
@@ -37,7 +47,7 @@ const EnsembleView: FC = () => {
               <Select
                 value={instrument}
                 label="instrument"
-                onChange={ changeInstrumentHandler }
+                onChange={changeInstrumentHandler}
                 fullWidth
                 size="small"
               >

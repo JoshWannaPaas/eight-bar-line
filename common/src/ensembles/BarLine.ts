@@ -59,10 +59,10 @@ export class BarLine {
   }
 
   /**
-   * Returns true if the given `row` and `col` are in range of 
-   * this barline. 
+   * Returns true if the given `row` and `col` are in range of
+   * this barline.
    */
-  static inRange (row: number, col: number) {
+  static inRange(row: number, col: number) {
     if (row < 0 || row > BarLine.ROWS) return false;
     if (col < 0 || col > BarLine.COLS) return false;
     return true;
@@ -73,45 +73,46 @@ export class BarLine {
     return this.state.notes[row][col];
   }
 
-  setNote(row: number, col: number, note: Note) : void{
+  setNote(row: number, col: number, note: Note): void {
     if (!BarLine.inRange(row, col)) return;
     this.state.notes[row][col] = note;
   }
 
-  getNoteType (row: number, col: number): NoteType | undefined {
+  getNoteType(row: number, col: number): NoteType | undefined {
     return this.getNote(row, col)?.type;
   }
 
   /**
    * Updates the note at the given position according to the following
-   * rules. If the note becomes a REST and the next note is a SUSTAIN, 
+   * rules. If the note becomes a REST and the next note is a SUSTAIN,
    * we set that note to ATTACK instead.
-   * 
-   * Forward Direction: 
+   *
+   * Forward Direction:
    *   REST -> ATTACK -> SUSTAIN (skipped if prev note is REST)
    * Backward Direction:
    *   REST -> SUSTAIN (skipped if prev note is REST) -> ATTACK
    */
-  toggleNote (row: number, col: number, direction: NoteToggleDirection) {
-    if (!BarLine.inRange(row, col)) return; 
+  toggleNote(row: number, col: number, direction: NoteToggleDirection) {
+    if (!BarLine.inRange(row, col)) return;
     const note = this.getNote(row, col);
     // Behavior for the Forward Direction
     if (direction === NoteToggleDirection.FORWARD) {
-      switch(note.type) {
+      switch (note.type) {
         case NoteType.REST: {
           note.type = NoteType.ATTACK;
           return;
         }
         case NoteType.ATTACK: {
-          const priorNoteType = this.getNoteType(row, col-1);
-          const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+          const priorNoteType = this.getNoteType(row, col - 1);
+          const canBecomeSustain =
+            ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
           note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.REST;
           return;
         }
         case NoteType.SUSTAIN: {
           note.type = NoteType.REST;
           // If the next note was a SUSTAIN, it becomes an ATTACK
-          const nextNote = this.getNote(row, col+1);
+          const nextNote = this.getNote(row, col + 1);
           if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
             return;
           nextNote.type = NoteType.ATTACK;
@@ -121,17 +122,18 @@ export class BarLine {
     }
 
     // Behavior for the Backward Direction
-    switch(note.type) {
+    switch (note.type) {
       case NoteType.REST: {
-        const priorNoteType = this.getNoteType(row, col-1);
-        const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+        const priorNoteType = this.getNoteType(row, col - 1);
+        const canBecomeSustain =
+          ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
         note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.ATTACK;
         return;
       }
       case NoteType.ATTACK: {
         note.type = NoteType.REST;
         // If the next note was a SUSTAIN, it becomes an ATTACK
-        const nextNote = this.getNote(row, col+1);
+        const nextNote = this.getNote(row, col + 1);
         if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
           return;
         nextNote.type = NoteType.ATTACK;

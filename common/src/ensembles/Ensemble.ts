@@ -52,7 +52,6 @@ export class Ensemble {
     );
   }
 
-
   setInstrument(userId: UserID, instrument: Instrument) {
     const barLine = this.getBarLine(userId);
     /** @todo handle this error better */
@@ -62,12 +61,17 @@ export class Ensemble {
 
   /**
    * Toggles the note at position (`row`, `col`) in the BarLine that belongs to `userId`.
-   * 
+   *
    * Specifications
    * --------------
    * - See {@link BarLine.toggleNote}
    */
-  toggleNote(userId: UserID, row: number, col: number, direction=NoteToggleDirection.FORWARD) {
+  toggleNote(
+    userId: UserID,
+    row: number,
+    col: number,
+    direction = NoteToggleDirection.FORWARD,
+  ) {
     return this.getBarLine(userId)?.toggleNote(row, col, direction);
   }
 

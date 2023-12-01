@@ -15,7 +15,7 @@ export enum Instrument {
   GUITAR,
   BASS,
   ALTO_SAX,
-  TUBA
+  TUBA,
 }
 
 export type Note = {

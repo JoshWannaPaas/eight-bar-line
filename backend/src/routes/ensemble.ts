@@ -5,7 +5,7 @@ import { rooms } from "./rooms";
 const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
   const fetchEnsemble: ClientToServerEvents["ensemble:fetch"] = (callback) => {
     const { username, roomCode } = socket.data;
-    if (roomCode === undefined) 
+    if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);
     const ensemble = rooms[roomCode];
 
@@ -14,7 +14,7 @@ const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
 
   const setInstrument = (instrument: Instrument) => {
     const { username, roomCode } = socket.data;
-    if (roomCode === undefined) 
+    if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);
     const ensemble = rooms[roomCode];
     ensemble.setInstrument(socket.id, instrument);
@@ -24,7 +24,7 @@ const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
 
   const toggleNote = (row: number, col: number) => {
     const { username, roomCode } = socket.data;
-    if (roomCode === undefined) 
+    if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);
     const ensemble = rooms[roomCode];
     ensemble.toggleNote(socket.id, row, col);
