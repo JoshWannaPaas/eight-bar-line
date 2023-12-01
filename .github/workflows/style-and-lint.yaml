@@ -1,4 +1,4 @@
-name: Style Check
+name: Build, Style, and Lint Check
 
 on: 
   pull_request:
@@ -20,6 +20,14 @@ jobs:
 
     - name: Install dependencies
       run: npm install
+    
+    - name: Run build check
+      run: |
+        npm run build
+        if [ $? -ne 0 ]; then
+          echo "Code failed to build. Please fix the issues before merging."
+          exit 1
+        fi
 
     - name: Run style check
       run: |
