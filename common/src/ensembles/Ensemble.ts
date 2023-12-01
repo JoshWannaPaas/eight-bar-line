@@ -71,10 +71,8 @@ export class Ensemble {
     return this.getBarLine(userId)?.toggleNote(row, col, direction);
   }
 
-  /**
-   * Returns a copy of the list of userIDs
-   */
-  getMembers() {
+  /** Returns a copy of the list of userIDs */
+  getMembers(): readonly string[] {
     return Array.from(this.state.authors);
   }
 
