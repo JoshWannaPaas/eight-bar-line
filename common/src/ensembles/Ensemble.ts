@@ -1,8 +1,8 @@
 import { UserID } from "../users.js";
-import { BarLine, BarLineObject } from "./BarLine.js";
+import { BarLine, BarLineObject, NoteToggleDirection } from "./BarLine.js";
 import _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { Instrument, NoteType } from "./Note.js";
+import { Instrument } from "./Note.js";
 
 export type EnsembleObject = {
   /** The ID of the ensemble */
@@ -34,8 +34,10 @@ export class Ensemble {
     console.log(`Made new Ensemble with ID: ${this.state.id}`);
   }
 
-  hasUser(userId: UserID) {
-    return this.state.authors.includes(userId);
+  private getBarLine(userId: UserID) {
+    return this.state.arrangement.find(
+      (barline) => barline.getAuthor() === userId,
+    );
   }
 
   joinRoom(userId: UserID) {
@@ -50,11 +52,6 @@ export class Ensemble {
     );
   }
 
-  private getBarLine(userId: UserID) {
-    return this.state.arrangement.find(
-      (barline) => barline.getAuthor() === userId,
-    );
-  }
 
   setInstrument(userId: UserID, instrument: Instrument) {
     const barLine = this.getBarLine(userId);
@@ -63,27 +60,15 @@ export class Ensemble {
     barLine.setInstrument(instrument);
   }
 
-  toggleNote(userId: UserID, row: number, col: number) {
-    const barLine = this.getBarLine(userId);
-    /** @todo handle this error better */
-    if (barLine === undefined) return;
-    const currentNote = barLine[row][col];
-    // Rests always go to Attack
-    if (currentNote.type === NoteType.REST) {
-      barLine[row][col] = { ...currentNote, type: NoteType.ATTACK };
-      return;
-    }
-    // An attack can become a sustain only if the previous note is an attack or sustain
-    if (
-      currentNote.type === NoteType.ATTACK &&
-      col > 0 &&
-      barLine[row][col - 1].type !== NoteType.REST
-    ) {
-      barLine[row][col] = { ...currentNote, type: NoteType.SUSTAIN };
-      return;
-    }
-    // Otherwise, an attack or a sustain becomes a rest
-    barLine[row][col] = { ...currentNote, type: NoteType.REST };
+  /**
+   * Toggles the note at position (`row`, `col`) in the BarLine that belongs to `userId`.
+   * 
+   * Specifications
+   * --------------
+   * - See {@link BarLine.toggleNote}
+   */
+  toggleNote(userId: UserID, row: number, col: number, direction=NoteToggleDirection.FORWARD) {
+    return this.getBarLine(userId)?.toggleNote(row, col, direction);
   }
 
   /** Returns a copy of the list of userIDs */
