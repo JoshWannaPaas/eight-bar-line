@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
-import * as Tone from "tone";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import {
   altoSaxSampler,
@@ -27,7 +26,6 @@ interface SingleNoteProps {
   pitch: number;
 }
 
-const now = Tone.now();
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 let instrumentSampler = fluteSampler;
 
@@ -67,8 +65,6 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
           break;
       }
       instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
-    } else if (currentNoteType === NoteType.REST) {
-      instrumentSampler.triggerRelease(now);
     }
   }, [playNow, pitch, currentNoteType, currentInstrument]);
 
