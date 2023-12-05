@@ -43,7 +43,7 @@ const EnsembleView: FC = () => {
           <h3>Instrument Settings</h3>
           <Box sx={{ width: "50%", marginTop: "5px", marginBottom: "20px" }}>
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Instrument</InputLabel>
+              <InputLabel>Instrument</InputLabel>
               <Select
                 value={instrument}
                 label="instrument"

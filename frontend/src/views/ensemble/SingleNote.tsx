@@ -17,7 +17,7 @@ import {
 const colorMapping = {
   [NoteType.REST]: "lightgray",
   [NoteType.ATTACK]: "gray",
-  [NoteType.SUSTAIN]: "darkgray", // This is lighter than gray for some reason
+  [NoteType.SUSTAIN]: "darkgray", // This is lighter than gray
 };
 
 interface SingleNoteProps {
