@@ -4,13 +4,8 @@ import { Box } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
 import { Synth } from "tone";
-
-// Colors for notes
-const colorMapping = {
-  [NoteType.REST]: "lightgray",
-  [NoteType.ATTACK]: "gray",
-  [NoteType.SUSTAIN]: "darkgray", // ???? why is this lighter than gray
-};
+import { paletteAtom } from "../../recoil/palette";
+import { paletteList } from "../../ui-components/Palette";
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -21,6 +16,14 @@ interface SingleNoteProps {
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
+  const palette = useRecoilValue(paletteAtom);
+  // Colors for notes
+  const colorMapping = {
+    [NoteType.REST]: paletteList[palette].rest,
+    [NoteType.ATTACK]: paletteList[palette].attack,
+    [NoteType.SUSTAIN]: paletteList[palette].sustain,
+  };
+
   // note type - attack sustain rest
   const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
 
@@ -69,7 +72,11 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
     noteColor = colorMapping[NoteType.ATTACK];
   if (currentNoteType === NoteType.SUSTAIN)
     noteColor = colorMapping[NoteType.SUSTAIN];
-  if (onHover || playNow) highlight = 1.1;
+  if (onHover || playNow) {
+    if (currentNoteType === NoteType.REST) highlight = 1.1;
+    if (currentNoteType === NoteType.SUSTAIN) highlight = 1.4;
+    if (currentNoteType === NoteType.ATTACK) highlight = 1.8;
+  }
 
   return (
     <Box

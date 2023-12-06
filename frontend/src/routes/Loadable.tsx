@@ -5,7 +5,7 @@ type LoaderProps = LinearProgressProps;
 
 /** Wraps a Lazy Loaded component with a Suspense component */
 const Loadable = (
-  Component: LazyExoticComponent<FC>
+  Component: LazyExoticComponent<FC>,
 ): ((props: LoaderProps) => JSX.Element) => {
   const SuspensedLoadable = (props: LoaderProps) => (
     <Suspense fallback={<Loader {...props} />}>
