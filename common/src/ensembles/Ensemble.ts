@@ -52,7 +52,6 @@ export class Ensemble {
     );
   }
 
-
   setInstrument(userId: UserID, instrument: Instrument) {
     const barLine = this.getBarLine(userId);
     /** @todo handle this error better */

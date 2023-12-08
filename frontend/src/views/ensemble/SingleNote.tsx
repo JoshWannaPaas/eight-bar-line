@@ -1,11 +1,19 @@
-import { NoteType } from "common/dist";
+import { Instrument, NoteType } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
-import { Synth } from "tone";
 import { paletteAtom } from "../../recoil/palette";
 import { paletteDict } from "../../ui-components/Palette";
+import { currentInstrumentAtom } from "../../recoil/instrument";
+import {
+  altoSaxSampler,
+  bassSampler,
+  fluteSampler,
+  guitarSampler,
+  marimbaSampler,
+  tubaSampler,
+} from "./Samplers";
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -14,6 +22,7 @@ interface SingleNoteProps {
 }
 
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
+let instrumentSampler = fluteSampler;
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const palette = useRecoilValue(paletteAtom);
@@ -28,17 +37,39 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
 
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
+  const currentInstrument = useRecoilValue(currentInstrumentAtom);
   const playNow = globalBeatNumber === beatNumber;
+
   useEffect(() => {
+    // Do nothing if music is not being played
     if (!playNow) return;
+
     // Trigger a music note if we are not a NoteType.REST
-    // console.log("Playing Note")
-    // Insert Josh ...
-    if (currentNoteType !== NoteType.REST) {
-      const synth = new Synth().toDestination();
-      synth.triggerAttackRelease(PITCH_VALUES[pitch], "8n");
+    if (currentNoteType === NoteType.ATTACK) {
+      // Assign correct instrument sounds to what player selected
+      switch (currentInstrument) {
+        case Instrument.FLUTE:
+          instrumentSampler = fluteSampler;
+          break;
+        case Instrument.ALTO_SAX:
+          instrumentSampler = altoSaxSampler;
+          break;
+        case Instrument.MARIMBA:
+          instrumentSampler = marimbaSampler;
+          break;
+        case Instrument.GUITAR:
+          instrumentSampler = guitarSampler;
+          break;
+        case Instrument.BASS:
+          instrumentSampler = bassSampler;
+          break;
+        case Instrument.TUBA:
+          instrumentSampler = tubaSampler;
+          break;
+      }
+      instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
     }
-  }, [playNow, pitch, currentNoteType]);
+  }, [playNow, pitch, currentNoteType, currentInstrument]);
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -47,10 +78,12 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const handleMouseEnter = () => {
     setOnHover(true);
   };
+
   // When mouse leave, "we are not hovering"
   const handleMouseLeave = () => {
     setOnHover(false);
   };
+
   // When click, update current note type
   const handleClick = () => {
     if (currentNoteType === NoteType.REST) setCurrentNoteType(NoteType.ATTACK);
@@ -60,12 +93,9 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
       setCurrentNoteType(NoteType.REST);
   };
 
-  // If hovering, overwrite the note color
-
   // Color depends on Hover and NoteType
-
   let noteColor = colorMapping[NoteType.REST];
-  let highlight = 1;
+  let highlight = 1; // 100% Brightness which is Normal Brightness
 
   // Coloring
   if (currentNoteType === NoteType.ATTACK)

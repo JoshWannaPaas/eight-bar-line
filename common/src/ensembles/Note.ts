@@ -11,6 +11,11 @@ export enum Instrument {
   FLUTE,
   PIANO,
   TRUMPET,
+  MARIMBA,
+  GUITAR,
+  BASS,
+  ALTO_SAX,
+  TUBA,
 }
 
 export type Note = {
