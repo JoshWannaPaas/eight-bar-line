@@ -59,4 +59,4 @@ export const paletteDict: Record<Palette, PaletteType> = {
   [Palette.MARINE]: marine,
   [Palette.GOLDENROD]: goldenrod,
   [Palette.FOREST]: forest,
-}
+};
