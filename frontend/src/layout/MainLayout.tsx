@@ -13,7 +13,7 @@ import {
 import { FC } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { paletteAtom } from "../recoil/palette";
-import { paletteList, Palette } from "../ui-components/Palette";
+import { paletteDict, Palette } from "../ui-components/Palette";
 import { useRecoilState } from "recoil";
 
 const MainLayout: FC = () => {
@@ -29,7 +29,7 @@ const MainLayout: FC = () => {
       <Box
         sx={{
           width: "100%",
-          bgcolor: paletteList[palette].sustain,
+          bgcolor: paletteDict[palette].sustain,
           paddingTop: "10px",
           paddingBottom: "10px",
           borderRadius: "0px 0px 5px 5px",
@@ -72,19 +72,19 @@ const MainLayout: FC = () => {
                 size="small"
               >
                 <MenuItem value={Palette.GRAYSCALE}>
-                  {paletteList[Palette.GRAYSCALE].name}
+                  {paletteDict[Palette.GRAYSCALE].name}
                 </MenuItem>
                 <MenuItem value={Palette.SUNSET}>
-                  {paletteList[Palette.SUNSET].name}
+                  {paletteDict[Palette.SUNSET].name}
                 </MenuItem>
                 <MenuItem value={Palette.MARINE}>
-                  {paletteList[Palette.MARINE].name}
+                  {paletteDict[Palette.MARINE].name}
                 </MenuItem>
                 <MenuItem value={Palette.GOLDENROD}>
-                  {paletteList[Palette.GOLDENROD].name}
+                  {paletteDict[Palette.GOLDENROD].name}
                 </MenuItem>
                 <MenuItem value={Palette.FOREST}>
-                  {paletteList[Palette.FOREST].name}
+                  {paletteDict[Palette.FOREST].name}
                 </MenuItem>
               </Select>
             </FormControl>
