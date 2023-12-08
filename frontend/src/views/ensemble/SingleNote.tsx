@@ -5,7 +5,7 @@ import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
 import { Synth } from "tone";
 import { paletteAtom } from "../../recoil/palette";
-import { paletteList } from "../../ui-components/Palette";
+import { paletteDict } from "../../ui-components/Palette";
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -19,9 +19,9 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const palette = useRecoilValue(paletteAtom);
   // Colors for notes
   const colorMapping = {
-    [NoteType.REST]: paletteList[palette].rest,
-    [NoteType.ATTACK]: paletteList[palette].attack,
-    [NoteType.SUSTAIN]: paletteList[palette].sustain,
+    [NoteType.REST]: paletteDict[palette].rest,
+    [NoteType.ATTACK]: paletteDict[palette].attack,
+    [NoteType.SUSTAIN]: paletteDict[palette].sustain,
   };
 
   // note type - attack sustain rest
