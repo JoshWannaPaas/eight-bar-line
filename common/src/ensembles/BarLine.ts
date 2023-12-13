@@ -50,16 +50,24 @@ export class BarLine {
     this.state = initialState;
   }
 
+  /**
+   * Returns the author of this BarLine
+   * @returns The author of this BarLine
+   */
   getAuthor() {
     return this.state.author;
   }
 
+  /**
+   * Returns the instrument of this BarLine
+   * @returns The instrument of this BarLine
+   */
   setInstrument(instrument: Instrument) {
     this.state.instrument = instrument;
   }
 
   /**
-   * Returns true if the given `row` and `col` are in range of
+   * @returns true if the given `row` and `col` are in range of
    * this barline.
    */
   static inRange(row: number, col: number) {
@@ -68,16 +76,40 @@ export class BarLine {
     return true;
   }
 
+  /**
+   * Returns the note at the given position. Returns undefined if the
+   * position is out of range.
+   * 
+   * @param row The row of the note
+   * @param col The column of the note
+   * @returns The note at the given position
+   */
   getNote(row: number, col: number): Note | undefined {
     if (!BarLine.inRange(row, col)) return undefined;
     return this.state.notes[row][col];
   }
 
+  /**
+   * Sets the note at the given position. Does nothing if the position
+   * is out of range.
+   * 
+   * @param row The row of the note
+   * @param col The column of the note
+   * @param note The note to set
+   */
   setNote(row: number, col: number, note: Note): void {
     if (!BarLine.inRange(row, col)) return;
     this.state.notes[row][col] = note;
   }
 
+  /**
+   * Gets the type of the note at the given position. Returns undefined
+   * if the position is out of range.
+   * 
+   * @param row The row of the note
+   * @param col The column of the note
+   * @returns The type of the note at the given position
+   */
   getNoteType(row: number, col: number): NoteType | undefined {
     return this.getNote(row, col)?.type;
   }
@@ -182,10 +214,15 @@ export class BarLine {
   }
 
   /**
-   *
+   * To send the BarLine over the network, we need to convert it to a
+   * plain object. This method converts the BarLine into a JOSN object.
+   * To reconstruct the BarLine, use {@link BarLine.fromObject}
    *
    * @example
-   *
+   * const barLine = new BarLine();
+   * const barLineObject = barLine.toObject();
+   * // barLineObject is now a JSON object that can be sent over the network
+   * // and then converted back to a BarLine using BarLine.fromObject
    */
   toObject() {
     return _.cloneDeep(this.state);
