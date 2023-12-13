@@ -1,33 +1,93 @@
-import { Box, Container, CssBaseline, Paper, styled } from "@mui/material";
+import {
+  Box,
+  Container,
+  CssBaseline,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  SelectChangeEvent,
+  styled,
+} from "@mui/material";
 import { FC } from "react";
 import { Outlet, Link } from "react-router-dom";
+import { paletteAtom } from "../recoil/palette";
+import { paletteDict, Palette } from "../ui-components/Palette";
+import { useRecoilState } from "recoil";
 
 const MainLayout: FC = () => {
+  const [palette, setPalette] = useRecoilState(paletteAtom);
+  const changePaletteHandler = (e: SelectChangeEvent<Palette>) => {
+    if (typeof e.target.value !== "number") return;
+    setPalette(e.target.value);
+  };
+
   return (
     <Box>
       <CssBaseline />
-      <Box id="titlebar" sx={{ width: "100%" }}>
+      <Box
+        sx={{
+          width: "100%",
+          bgcolor: paletteDict[palette].sustain,
+          paddingTop: "10px",
+          paddingBottom: "10px",
+          borderRadius: "0px 0px 5px 5px",
+        }}
+      >
         <Container sx={{ display: "flex", gap: 2 }}>
           <Box flex={1}>
-            <Item>
+            <TitleButtons>
               <Link to={"/"}>8Bar Line</Link>
-            </Item>
+            </TitleButtons>
           </Box>
           <Box flex={1} />
           <Box flex={1}>
-            <Item>
+            <TitleButtons>
               <Link to={"/create"}>Create</Link>
-            </Item>
+            </TitleButtons>
           </Box>
           <Box flex={1}>
-            <Item>
+            <TitleButtons>
               <Link to={"/ensemble"}>Ensemble</Link>
-            </Item>
+            </TitleButtons>
           </Box>
           <Box flex={1}>
-            <Item>
+            <TitleButtons>
               <Link to={"/browse"}>Browse</Link>
-            </Item>
+            </TitleButtons>
+          </Box>
+          <Box flex={1} sx={{ width: "50%" }}>
+            <FormControl
+              fullWidth
+              variant="filled"
+              sx={{ backgroundColor: "white", borderRadius: "5px" }}
+            >
+              <InputLabel>Palette</InputLabel>
+              <Select
+                value={palette}
+                label="palette"
+                onChange={changePaletteHandler}
+                fullWidth
+                size="small"
+              >
+                <MenuItem value={Palette.GRAYSCALE}>
+                  {paletteDict[Palette.GRAYSCALE].name}
+                </MenuItem>
+                <MenuItem value={Palette.SUNSET}>
+                  {paletteDict[Palette.SUNSET].name}
+                </MenuItem>
+                <MenuItem value={Palette.MARINE}>
+                  {paletteDict[Palette.MARINE].name}
+                </MenuItem>
+                <MenuItem value={Palette.GOLDENROD}>
+                  {paletteDict[Palette.GOLDENROD].name}
+                </MenuItem>
+                <MenuItem value={Palette.FOREST}>
+                  {paletteDict[Palette.FOREST].name}
+                </MenuItem>
+              </Select>
+            </FormControl>
           </Box>
         </Container>
       </Box>
@@ -36,13 +96,9 @@ const MainLayout: FC = () => {
   );
 };
 
-// Taken from https://mui.com/material-ui/react-grid/
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
+const TitleButtons = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: "center",
-  color: theme.palette.text.secondary,
 }));
 
 export default MainLayout;

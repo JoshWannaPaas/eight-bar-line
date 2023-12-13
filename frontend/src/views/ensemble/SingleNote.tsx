@@ -3,6 +3,8 @@ import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
+import { paletteAtom } from "../../recoil/palette";
+import { paletteDict } from "../../ui-components/Palette";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import {
   altoSaxSampler,
@@ -12,13 +14,6 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-
-// Colors for notes
-const colorMapping = {
-  [NoteType.REST]: "lightgray",
-  [NoteType.ATTACK]: "gray",
-  [NoteType.SUSTAIN]: "darkgray", // This is lighter than gray
-};
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -30,6 +25,14 @@ const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 let instrumentSampler = fluteSampler;
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
+  const palette = useRecoilValue(paletteAtom);
+  // Colors for notes
+  const colorMapping = {
+    [NoteType.REST]: paletteDict[palette].rest,
+    [NoteType.ATTACK]: paletteDict[palette].attack,
+    [NoteType.SUSTAIN]: paletteDict[palette].sustain,
+  };
+
   // note type - attack sustain rest
   const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
 
@@ -99,7 +102,11 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
     noteColor = colorMapping[NoteType.ATTACK];
   if (currentNoteType === NoteType.SUSTAIN)
     noteColor = colorMapping[NoteType.SUSTAIN];
-  if (onHover || playNow) highlight = 1.1;
+  if (onHover || playNow) {
+    if (currentNoteType === NoteType.REST) highlight = 1.1;
+    if (currentNoteType === NoteType.SUSTAIN) highlight = 1.4;
+    if (currentNoteType === NoteType.ATTACK) highlight = 1.8;
+  }
 
   return (
     <Box
