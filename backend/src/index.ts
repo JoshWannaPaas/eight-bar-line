@@ -12,7 +12,7 @@ import {
 import registerRoomEvents from "./routes/rooms.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import registerEnsembleEvents from "./routes/ensemble";
+import registerEnsembleEvents from "./routes/ensemble.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
