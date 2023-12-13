@@ -10,30 +10,18 @@ import { Button } from "@mui/material";
 const Metronome: FC = () => {
   const setBeatNumber = useSetRecoilState(beatNumberAtom);
   const [playing, setPlaying] = useState(false);
-
   const toggleMetronome = async () => {
-    if (!playing) {
-      await Tone.start();
-      Tone.Transport.start();
-      Tone.Transport.bpm.value = msToBPM(tempoMS);
-      setPlaying(true);
-    } else {
-      setPlaying(false);
-    }
+    await Tone.start();
+    Tone.Transport.bpm.value = msToBPM(tempoMS);
+    setPlaying(!playing);
   };
-
   useEffect(() => {
     if (!playing) return setBeatNumber(-1);
-    
-
     const intervalId = setInterval(
       () => setBeatNumber((old) => (old + 1) % 32),
       tempoMS,
     );
-    
-    return () => {
-      clearInterval(intervalId);
-    }
+    return () => clearInterval(intervalId);
   }, [playing, setBeatNumber]);
 
   return (

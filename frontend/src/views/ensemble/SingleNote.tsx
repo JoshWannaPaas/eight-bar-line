@@ -14,7 +14,6 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-import * as Tone from "tone";
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -40,46 +39,37 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
   const currentInstrument = useRecoilValue(currentInstrumentAtom);
   const playNow = globalBeatNumber === beatNumber;
-  const now = Tone.now();
 
   useEffect(() => {
     // Do nothing if music is not being played
     if (!playNow) return;
 
-    // Assign correct instrument sounds to what player selected
-    switch (currentInstrument) {
-      case Instrument.FLUTE:
-        instrumentSampler = fluteSampler;
-        break;
-      case Instrument.ALTO_SAX:
-        instrumentSampler = altoSaxSampler;
-        break;
-      case Instrument.MARIMBA:
-        instrumentSampler = marimbaSampler;
-        break;
-      case Instrument.GUITAR:
-        instrumentSampler = guitarSampler;
-        break;
-      case Instrument.BASS:
-        instrumentSampler = bassSampler;
-        break;
-      case Instrument.TUBA:
-        instrumentSampler = tubaSampler;
-        break;
-    }
-    
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
-      // instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
-      Tone.Transport.scheduleOnce((time) => {
-        instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], '4n', time);
-      }, Tone.now());
+      // Assign correct instrument sounds to what player selected
+      switch (currentInstrument) {
+        case Instrument.FLUTE:
+          instrumentSampler = fluteSampler;
+          break;
+        case Instrument.ALTO_SAX:
+          instrumentSampler = altoSaxSampler;
+          break;
+        case Instrument.MARIMBA:
+          instrumentSampler = marimbaSampler;
+          break;
+        case Instrument.GUITAR:
+          instrumentSampler = guitarSampler;
+          break;
+        case Instrument.BASS:
+          instrumentSampler = bassSampler;
+          break;
+        case Instrument.TUBA:
+          instrumentSampler = tubaSampler;
+          break;
+      }
+      instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
     }
-
-    if (currentNoteType === NoteType.REST) {
-      instrumentSampler.triggerRelease(now);
-    }
-  }, [playNow, pitch, currentNoteType, currentInstrument, now, beatNumber]);
+  }, [playNow, pitch, currentNoteType, currentInstrument]);
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
