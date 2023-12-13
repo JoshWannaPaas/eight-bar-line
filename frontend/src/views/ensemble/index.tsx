@@ -11,7 +11,7 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import Board, { VolumeRow } from "./Board";
+import Barline, { VolumeRow } from "./Board";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
 import { useRecoilState } from "recoil";
@@ -82,7 +82,7 @@ const EnsembleView: FC = () => {
           padding: "0px",
         }}
       >
-        <Board />
+        <Barline />
         <br />
         <VolumeRow />
       </Container>

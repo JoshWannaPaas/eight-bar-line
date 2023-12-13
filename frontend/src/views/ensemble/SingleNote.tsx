@@ -1,7 +1,7 @@
 import { Instrument, NoteType } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
 import { paletteAtom } from "../../recoil/palette";
 import { paletteDict } from "../../ui-components/Palette";
@@ -14,6 +14,8 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
+import { ensembleAtom } from "../../recoil/ensemble";
+import { userIDSelector } from "../../recoil/socket";
 
 interface SingleNoteProps {
   beatNumber: number;
@@ -26,6 +28,8 @@ let instrumentSampler = fluteSampler;
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const palette = useRecoilValue(paletteAtom);
+  const [currentEnsemble, changeCurrentEnsemble] = useRecoilState(ensembleAtom);
+  const userID = useRecoilValue(userIDSelector);
   // Colors for notes
   const colorMapping = {
     [NoteType.REST]: paletteDict[palette].rest,
@@ -86,11 +90,17 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
 
   // When click, update current note type
   const handleClick = () => {
-    if (currentNoteType === NoteType.REST) setCurrentNoteType(NoteType.ATTACK);
-    else if (currentNoteType === NoteType.ATTACK)
+    if (currentNoteType === NoteType.REST) {
+      setCurrentNoteType(NoteType.ATTACK);
+    }
+    else if (currentNoteType === NoteType.ATTACK){
       setCurrentNoteType(NoteType.SUSTAIN);
-    else if (currentNoteType === NoteType.SUSTAIN)
+    }
+    else if (currentNoteType === NoteType.SUSTAIN){
       setCurrentNoteType(NoteType.REST);
+    }
+
+    currentEnsemble.toggleNote(userID, pitch, beatNumber);
   };
 
   // Color depends on Hover and NoteType
