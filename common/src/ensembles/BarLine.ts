@@ -59,10 +59,10 @@ export class BarLine {
   }
 
   /**
-   * Returns true if the given `row` and `col` are in range of 
-   * this barline. 
+   * Returns true if the given `row` and `col` are in range of
+   * this barline.
    */
-  static inRange (row: number, col: number) {
+  static inRange(row: number, col: number) {
     if (row < 0 || row > BarLine.ROWS) return false;
     if (col < 0 || col > BarLine.COLS) return false;
     return true;
@@ -73,45 +73,46 @@ export class BarLine {
     return this.state.notes[row][col];
   }
 
-  setNote(row: number, col: number, note: Note) : void{
+  setNote(row: number, col: number, note: Note): void {
     if (!BarLine.inRange(row, col)) return;
     this.state.notes[row][col] = note;
   }
 
-  getNoteType (row: number, col: number): NoteType | undefined {
+  getNoteType(row: number, col: number): NoteType | undefined {
     return this.getNote(row, col)?.type;
   }
 
   /**
    * Updates the note at the given position according to the following
-   * rules. If the note becomes a REST and the next note is a SUSTAIN, 
+   * rules. If the note becomes a REST and the next note is a SUSTAIN,
    * we set that note to ATTACK instead.
-   * 
-   * Forward Direction: 
+   *
+   * Forward Direction:
    *   REST -> ATTACK -> SUSTAIN (skipped if prev note is REST)
    * Backward Direction:
    *   REST -> SUSTAIN (skipped if prev note is REST) -> ATTACK
    */
-  toggleNote (row: number, col: number, direction: NoteToggleDirection) {
-    if (!BarLine.inRange(row, col)) return; 
+  toggleNote(row: number, col: number, direction: NoteToggleDirection) {
+    if (!BarLine.inRange(row, col)) return;
     const note = this.getNote(row, col);
     // Behavior for the Forward Direction
     if (direction === NoteToggleDirection.FORWARD) {
-      switch(note.type) {
+      switch (note.type) {
         case NoteType.REST: {
           note.type = NoteType.ATTACK;
           return;
         }
         case NoteType.ATTACK: {
-          const priorNoteType = this.getNoteType(row, col-1);
-          const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+          const priorNoteType = this.getNoteType(row, col - 1);
+          const canBecomeSustain =
+            ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
           note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.REST;
           return;
         }
         case NoteType.SUSTAIN: {
           note.type = NoteType.REST;
           // If the next note was a SUSTAIN, it becomes an ATTACK
-          const nextNote = this.getNote(row, col+1);
+          const nextNote = this.getNote(row, col + 1);
           if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
             return;
           nextNote.type = NoteType.ATTACK;
@@ -121,17 +122,18 @@ export class BarLine {
     }
 
     // Behavior for the Backward Direction
-    switch(note.type) {
+    switch (note.type) {
       case NoteType.REST: {
-        const priorNoteType = this.getNoteType(row, col-1);
-        const canBecomeSustain = ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
+        const priorNoteType = this.getNoteType(row, col - 1);
+        const canBecomeSustain =
+          ALLOWED_SUSTAIN_PRECEDENTS.includes(priorNoteType);
         note.type = canBecomeSustain ? NoteType.SUSTAIN : NoteType.ATTACK;
         return;
       }
       case NoteType.ATTACK: {
         note.type = NoteType.REST;
         // If the next note was a SUSTAIN, it becomes an ATTACK
-        const nextNote = this.getNote(row, col+1);
+        const nextNote = this.getNote(row, col + 1);
         if (nextNote === undefined || nextNote.type !== NoteType.SUSTAIN)
           return;
         nextNote.type = NoteType.ATTACK;
@@ -144,11 +146,54 @@ export class BarLine {
     }
   }
 
+  /**
+   * Sets the dynamics for the given column
+   *
+   * @param col The column to set the dynamics for
+   * @param dynamic A number from 0-1
+   * @throws if `col` is out of range
+   */
+  setDynamics(col: number, dynamic: number) {
+    if (col < 0 || col >= BarLine.COLS)
+      throw new Error(`Column ${col} is out of range`);
+    this.state.dynamics[col] = dynamic;
+  }
+
+  /**
+   * Gets the dynamics for the given column
+   *
+   * @param col The column to get the dynamics for
+   * @returns A number from 0-1
+   * @throws if `col` is out of range
+   */
+  getDynamics(col: number) {
+    if (col < 0 || col >= BarLine.COLS)
+      throw new Error(`Column ${col} is out of range`);
+    return this.state.dynamics[col];
+  }
+
+  /**
+   * Sets the volume for the entire barline
+   *
+   * @param volume A number from 0-1
+   */
+  setMasterVolume(volume: number) {
+    this.state.masterVolume = volume;
+  }
+
+  /**
+   *
+   *
+   * @example
+   *
+   */
   toObject() {
     return _.cloneDeep(this.state);
   }
 
   /**
+   * Constructs a new BarLine instance from the given object.
+   *
    * @example
    * // The object data
    * const barLineObject = { ... };
