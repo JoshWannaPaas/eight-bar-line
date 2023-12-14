@@ -1,6 +1,6 @@
 import { ClientToServerEvents, Instrument } from "common/dist/index.js";
-import { IoType, SocketType } from "./types";
-import { rooms } from "./rooms";
+import { IoType, SocketType } from "./types.js";
+import { rooms } from "./rooms.js";
 
 const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
   const fetchEnsemble: ClientToServerEvents["ensemble:fetch"] = (callback) => {

@@ -18,6 +18,12 @@
       }
     },
     "overrides": [
+      {
+        "files": ["frontend/**/*"],
+        "rules": {
+          "node/file-extension-in-import": "off"
+        }
+      }
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -27,9 +33,11 @@
     "plugins": [
         "react",
         "react-hooks",
+        "eslint-plugin-node",
         "@typescript-eslint"
     ],
     "rules": {
+        "node/file-extension-in-import": ["error", "always", { "tryExtensions": [".js", ".json", ".node"]}],
         "@typescript-eslint/no-shadow": ["error", { "allow": ["_"] }],
         "consistent-return": "error",
         "camelcase": "error",

@@ -79,7 +79,7 @@ export class BarLine {
   /**
    * Returns the note at the given position. Returns undefined if the
    * position is out of range.
-   * 
+   *
    * @param row The row of the note
    * @param col The column of the note
    * @returns The note at the given position
@@ -92,7 +92,7 @@ export class BarLine {
   /**
    * Sets the note at the given position. Does nothing if the position
    * is out of range.
-   * 
+   *
    * @param row The row of the note
    * @param col The column of the note
    * @param note The note to set
@@ -105,7 +105,7 @@ export class BarLine {
   /**
    * Gets the type of the note at the given position. Returns undefined
    * if the position is out of range.
-   * 
+   *
    * @param row The row of the note
    * @param col The column of the note
    * @returns The type of the note at the given position
