@@ -24,16 +24,15 @@ const Metronome: FC = () => {
 
   useEffect(() => {
     if (!playing) return setBeatNumber(-1);
-    
 
     const intervalId = setInterval(
       () => setBeatNumber((old) => (old + 1) % 32),
       tempoMS,
     );
-    
+
     return () => {
       clearInterval(intervalId);
-    }
+    };
   }, [playing, setBeatNumber]);
 
   return (

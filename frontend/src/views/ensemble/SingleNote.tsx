@@ -67,12 +67,12 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
         instrumentSampler = tubaSampler;
         break;
     }
-    
+
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
       // instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
       Tone.Transport.scheduleOnce((time) => {
-        instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], '4n', time);
+        instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
       }, Tone.now());
     }
 
