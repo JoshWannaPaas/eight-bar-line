@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   Box,
   Container,
@@ -14,20 +14,28 @@ import {
 import Barline, { VolumeRow } from "./Barline";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import { Instrument } from "common/dist/ensembles/Note";
+import { userIDSelector } from "../../recoil/socket";
+import { ensembleAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
-  console.log(roomCode);
 
   const [instrument, setInstrument] = useRecoilState(currentInstrumentAtom);
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
     if (typeof e.target.value === "string") return;
-    console.log(e.target.value);
     setInstrument(e.target.value);
   };
+
+  const userID = useRecoilValue(userIDSelector);
+
+  const currentEnsemble = useRecoilValue(ensembleAtom);
+  useEffect(() => {
+    currentEnsemble.joinRoom(userID);
+    return () => currentEnsemble.leaveRoom(userID);
+  }, [userID, currentEnsemble]);
 
   return (
     <main>
@@ -69,6 +77,7 @@ const EnsembleView: FC = () => {
         <Item>
           <h3>Room Settings</h3>
           <p>Room Code: {roomCode.roomCode}</p>
+          <p>User ID: {userID}</p>
         </Item>
       </Stack>
 

@@ -1,15 +1,19 @@
-import { ClientToServerEvents, ServerToClientEvents } from "common/dist";
+import {
+  ClientToServerEvents,
+  ServerToClientEvents,
+  UserID,
+} from "common/dist";
 import { atom, selector } from "recoil";
 import { Socket } from "socket.io-client";
 
 export const socketAtom = atom<
   Socket<ServerToClientEvents, ClientToServerEvents>
 >({
-  key: "todo",
+  key: "socketAtom",
   dangerouslyAllowMutability: true,
 });
 
-export const userIDSelector = selector<string>({
+export const userIDSelector = selector<UserID>({
   key: "userIDSelector",
   get: ({ get }) => {
     return get(socketAtom).id;

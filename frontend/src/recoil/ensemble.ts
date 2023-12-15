@@ -3,5 +3,6 @@ import { atom } from "recoil";
 
 export const ensembleAtom = atom<Ensemble>({
   key: "ensembleAtom",
-  default: new Ensemble()
+  default: new Ensemble(),
+  dangerouslyAllowMutability: true,
 });
