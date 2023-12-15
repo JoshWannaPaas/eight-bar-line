@@ -31,7 +31,7 @@ jobs:
 
     - name: Run style check
       run: |
-        npm run style
+        npm run style-check
         if [ $? -ne 0 ]; then
           echo "Code style check failed. Please fix the issues before merging."
           exit 1
