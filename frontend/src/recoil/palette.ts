@@ -8,7 +8,7 @@ export const localStoragePaletteEffect: (key: string) => AtomEffect<Palette> =
   ({ setSelf, onSet }) => {
     if (store) {
       const savedValue = store.getItem(key);
-      if (savedValue != null) {
+      if (savedValue !== null) {
         setSelf(JSON.parse(savedValue));
       }
 
