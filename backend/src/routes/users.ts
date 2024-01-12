@@ -5,6 +5,8 @@
 
 import express, { Request } from "express";
 
+type ReqBody<T> = Request<unknown, unknown, T>;
+
 /**
  * @todo DO NOT release this project with passwords stored as plaintext.
  * Down the line, we will want to delegate logging in responsibility to
@@ -38,7 +40,7 @@ usersRouter.get("/", (req, res) => {
  * @throws {400} if the password is invalid
  * @throws {409} if the username already exists
  */
-usersRouter.post("/", (req: Request<{}, {}, PostUserReqBody>, res) => {
+usersRouter.post("/", (req: ReqBody<PostUserReqBody>, res) => {
   if (req.body.username === undefined)
     return res.status(400).send("Invalid username.");
   if (req.body.password === undefined)
@@ -56,7 +58,7 @@ usersRouter.post("/", (req: Request<{}, {}, PostUserReqBody>, res) => {
     password: req.body.password,
   });
   // Send a success status with the default message ("OK")
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 type PostUserReqBody = {
   /** The name of the user to add */
@@ -74,7 +76,7 @@ type PostUserReqBody = {
  * @throws {403} if the user is deleting someone else's account
  * @throws {409} if the username does not exist
  */
-usersRouter.delete("/", (req: Request<{}, {}, DeleteUserReqBody>, res) => {
+usersRouter.delete("/", (req: ReqBody<DeleteUserReqBody>, res) => {
   // Sends an error status if they are trying to delete an account while not logged in
   if (req.session.username === undefined)
     return res.status(401).send("You are not logged in.");
@@ -96,7 +98,7 @@ usersRouter.delete("/", (req: Request<{}, {}, DeleteUserReqBody>, res) => {
     dummyUsersList.findIndex((user) => user.username === req.body.username),
   );
 
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 type DeleteUserReqBody = {
   /** The name of the user to delete */
