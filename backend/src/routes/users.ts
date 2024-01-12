@@ -5,6 +5,8 @@
 
 import express, { Request } from "express";
 
+type ReqBody<T> = Request<unknown, unknown, T>;
+
 // The "Database"
 const dummyUsersList: string[] = [];
 
@@ -26,14 +28,14 @@ usersRouter.get("/", (req, res) => {
  *
  * @throws {409} if the username already exists
  */
-usersRouter.post("/", (req: Request<{}, {}, PostUserReqBody>, res) => {
+usersRouter.post("/", (req: ReqBody<PostUserReqBody>, res) => {
   if (dummyUsersList.includes(req.body.username))
     return res
       .status(409)
       .send(`The username "${req.body.username}" already exists.`);
   dummyUsersList.push(req.body.username);
   // Send a success status with the default message ("OK")
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 type PostUserReqBody = {
   /** The name of the user to add */
@@ -47,14 +49,14 @@ type PostUserReqBody = {
  *
  * @throws {409} if the username does not exist
  */
-usersRouter.delete("/", (req: Request<{}, {}, DeleteUserReqBody>, res) => {
+usersRouter.delete("/", (req: ReqBody<DeleteUserReqBody>, res) => {
   // Sends an error status with a custom message
   if (!dummyUsersList.includes(req.body.username))
     return res
       .status(409)
       .send(`The username "${req.body.username}" does not exist.`);
   dummyUsersList.splice(dummyUsersList.indexOf(req.body.username));
-  res.sendStatus(200);
+  return res.sendStatus(200);
 });
 type DeleteUserReqBody = {
   /** The name of the user to delete */
