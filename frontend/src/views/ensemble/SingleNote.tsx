@@ -30,7 +30,6 @@ let instrumentSampler = fluteSampler;
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const palette = useRecoilValue(paletteAtom);
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
-  // const userID = useRecoilValueLoadable(userIDSelector).contents;
   const userID = useRecoilValue(userIDSelector);
   // Colors for notes
   const colorMapping = {
@@ -75,7 +74,6 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
 
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
-      // instrumentSampler.triggerAttack(PITCH_VALUES[pitch]);
       Tone.Transport.scheduleOnce((time) => {
         instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
       }, Tone.now());
