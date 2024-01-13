@@ -110,25 +110,24 @@ type DeleteUserReqBody = {
  *
  * @name POST /api/users/session/
  *
+ *
  * @throws {403} if the user is trying to log in but is already logged in
  */
-usersRouter.post(
-  "/session/",
-  (req: Request<{}, {}, PostSessionReqBody>, res) => {
-    // Throw an error if they are already logged in.
-    if (req.session.username !== undefined)
-      return res.status(403).send("You are already signed in.");
+usersRouter.post("/session/", (req: ReqBody<PostSessionReqBody>, res) => {
+  // Throw an error if they are already logged in.
+  if (req.session.username !== undefined)
+    return res.status(403).send("You are already signed in.");
 
-    // Throw an error if the login credentials are not correct
-    const matchingUser = dummyUsersList.find(
-      (user) => user.username === req.body.username,
-    );
-    if (matchingUser === undefined) return res.status;
+  // Throw an error if the login credentials are not correct
+  const matchingUser = dummyUsersList.find(
+    (user) => user.username === req.body.username,
+  );
+  if (matchingUser === undefined)
+    return res.status(400).send("Username or password is incorrect.");
 
-    req.session.username = req.body.username;
-    res.sendStatus(200);
-  },
-);
+  req.session.username = req.body.username;
+  return res.sendStatus(200);
+});
 type PostSessionReqBody = {
   username: string;
   password: string;
