@@ -32,20 +32,18 @@ npm run database
 
 ### 2. Start the Development Servers
 
-For convenience, while in development mode, we have a service that will observe any file changes and automatically refresh the preview.
-
-To start the development mode for the frontend or backend individually:
+While in development mode, we have a service that will observe any file changes and automatically refresh the preview. To start the development mode for the frontend or backend, run these commands in separate terminals:
 ```bash
 npm run dev:backend
 npm run dev:frontend
 ```
 
-For convenience, you can run this command, which will handle starting **both** the backend and frontend development servers.
+For convenience, you can run this command, which will handle starting **both** the backend and frontend development servers concurrently in the same terminal:
 ```bash
 npm run dev
 ```
 
-However, this does not listen to changes in the `common` directory automatically. If you want to make changes to the `common` directory, you will need to run this command in the project root directory:
+However, while in development mode, changes in the `common` directory are not immediately reloaded. If you want to make changes to the `common` directory, you will need to run this command in the project root directory:
 ```bash
 npm run build:common
 ```
