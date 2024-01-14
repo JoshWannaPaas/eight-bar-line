@@ -3,6 +3,9 @@
 Music notation website allowing for custom 8 bars of music to be played with other users.
 
 ## Installation
+
+To begin, install all of the node modules. I've configured this command to recursively install node modules for both the frontends and backends.
+
 ```bash
 # Start in the root directory
 cd eight-bar-line
@@ -11,12 +14,35 @@ npm install
 
 ## Development
 
-To start the dev
+There are three parts to the stack that are relevant for local development:
+- The PostgreSQL Database
+- The Backend Node Server
+- The Frontend React Client
 
-These commands will start the backend and frontend projects and listen to changes in either directory.
+### 1. Start the PostgreSQL Database
+
+Before running the backend in developer mode, you will need to have a docker image. 
+
+Once you install the Docker CLI, you can download the `postrgres` Docker image. This docker image will handle hosting a local PostgreSQL server at the location `localhost:5432`. (Setting one up without docker is much more involved.)
+
+With both the Docker CLI and the `postgres` docker image, you can run this command.
+```bash
+npm run database
+```
+
+### 2. Start the Development Servers
+
+For convenience, while in development mode, we have a service that will observe any file changes and automatically refresh the preview.
+
+To start the development mode for the frontend or backend individually:
 ```bash
 npm run dev:backend
 npm run dev:frontend
+```
+
+For convenience, you can run this command, which will handle starting **both** the backend and frontend development servers.
+```bash
+npm run dev
 ```
 
 However, this does not listen to changes in the `common` directory automatically. If you want to make changes to the `common` directory, you will need to run this command in the project root directory:

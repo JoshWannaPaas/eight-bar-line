@@ -4,6 +4,7 @@
 // with the `sequelize` library)
 
 import express, { Request } from "express";
+import User from "../models/User.js";
 
 type ReqBody<T> = Request<unknown, unknown, T>;
 
@@ -27,8 +28,10 @@ const usersRouter = express.Router();
  *
  * @name GET /api/users/
  */
-usersRouter.get("/", (req, res) => {
-  res.json(dummyUsersList.map((user) => user.username).join(", "));
+usersRouter.get("/", async (req, res) => {
+  const users = await User.findAll();
+  const usernames = users.map((user) => user.username);
+  res.json(usernames.join(", "));
 });
 
 /**
@@ -40,23 +43,29 @@ usersRouter.get("/", (req, res) => {
  * @throws {400} if the password is invalid
  * @throws {409} if the username already exists
  */
-usersRouter.post("/", (req: ReqBody<PostUserReqBody>, res) => {
+usersRouter.post("/", async (req: ReqBody<PostUserReqBody>, res) => {
   if (req.body.username === undefined)
     return res.status(400).send("Invalid username.");
   if (req.body.password === undefined)
     return res.status(400).send("Invalid password.");
 
-  const matchingUser = dummyUsersList.find(
-    (user) => user.username === req.body.username,
-  );
-  if (matchingUser !== undefined)
+  const matchingUser = await User.findOne({
+    where: { username: req.body.username },
+  });
+
+  if (matchingUser !== null)
     return res
       .status(409)
       .send(`The username "${req.body.username}" already exists.`);
-  dummyUsersList.push({
-    username: req.body.username,
-    password: req.body.password,
-  });
+  try {
+    await User.create({
+      username: req.body.username,
+      password: req.body.password,
+    });
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+
   // Send a success status with the default message ("OK")
   return res.sendStatus(200);
 });
