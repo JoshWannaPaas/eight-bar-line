@@ -8,10 +8,14 @@ import {
   ServerToClientEvents,
 } from "common/dist";
 import { socketAtom } from "./recoil/socket";
-import { useSetRecoilState } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { paletteAtom } from "./recoil/palette";
+import { paletteDict } from "./ui-components/Palette";
 
 function App() {
   const setSocket = useSetRecoilState(socketAtom);
+  const palette = useRecoilValue(paletteAtom);
+  const currentFavicon = paletteDict[palette].icon;
 
   useEffect(() => {
     // Create a connection to the server, called a "socket"
@@ -31,7 +35,12 @@ function App() {
     };
   }, [setSocket]);
 
-  return <Routes />;
+  return (
+    <>
+      <link id="favicon" rel="icon" type="image/x-icon" href={currentFavicon} />
+      <Routes />
+    </>
+  );
 }
 
 export default App;
