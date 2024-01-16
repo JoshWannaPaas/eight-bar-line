@@ -36,6 +36,7 @@
         "eslint-plugin-node",
         "@typescript-eslint"
     ],
+    "ignorePatterns": ["common/dist/*"],
     "rules": {
         "node/file-extension-in-import": ["error", "always", { "tryExtensions": [".js", ".json", ".node"]}],
         "@typescript-eslint/no-shadow": ["error", { "allow": ["_"] }],
