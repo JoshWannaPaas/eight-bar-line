@@ -14,10 +14,10 @@ import {
 import Barline, { VolumeRow } from "./Barline";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import { Instrument } from "common/dist/ensembles/Note";
-import { userIDSelector } from "../../recoil/socket";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { ensembleAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
@@ -29,9 +29,21 @@ const EnsembleView: FC = () => {
     setInstrument(e.target.value);
   };
 
+  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const userID = useRecoilValue(userIDSelector);
-
   const currentEnsemble = useRecoilValue(ensembleAtom);
+
+  useEffect(() => {
+    // I need to check if we have the value before we continue to do anything
+    if (state !== "hasValue") return undefined;
+    
+    const serverEnsembleUpdateHandler = () => {
+      console.log("Ensemble Update Received from Server")
+      
+    };
+    socket.on("ensemble:update", serverEnsembleUpdateHandler);
+  }, [socket, state, currentEnsemble]);
+
   useEffect(() => {
     currentEnsemble.joinRoom(userID);
     return () => currentEnsemble.leaveRoom(userID);
@@ -95,6 +107,26 @@ const EnsembleView: FC = () => {
         <br />
         <VolumeRow />
       </Container>
+      <br />
+      <br />
+      <br />
+      {/* Other play area */}
+      <Container
+        sx={{
+          margin: "auto",
+          marginTop: "2%",
+          alignSelf: "center",
+          alignItems: "center",
+          padding: "0px",
+        }}
+      >
+        <Barline />
+        <br />
+        <VolumeRow />
+      </Container>
+      <br />
+      <br />
+      <br />
     </main>
   );
 };

@@ -1,7 +1,7 @@
 import { Instrument, NoteType } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../recoil/beat";
 import { paletteAtom } from "../../recoil/palette";
 import { paletteDict } from "../../ui-components/Palette";
@@ -15,7 +15,7 @@ import {
   tubaSampler,
 } from "./Samplers";
 import { ensembleAtom } from "../../recoil/ensemble";
-import { userIDSelector } from "../../recoil/socket";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
 import * as Tone from "tone";
 
 interface SingleNoteProps {
@@ -31,6 +31,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
   const palette = useRecoilValue(paletteAtom);
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
   const userID = useRecoilValue(userIDSelector);
+  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   // Colors for notes
   const colorMapping = {
     [NoteType.REST]: paletteDict[palette].rest,
@@ -99,12 +100,17 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
 
   // When click, update current note type
   const handleClick = () => {
+    if (state !== "hasValue") return undefined;
+
     currentEnsemble.toggleNote(userID, pitch, beatNumber);
     setCurrentEnsemble(currentEnsemble);
     const newNoteType = currentEnsemble
       .getBarLine(userID)
       .getNoteType(pitch, beatNumber);
     if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+
+    socket.emit("ensemble:toggle-note", pitch, beatNumber);
+    console.log("Socket Emitted!");
   };
 
   // Color depends on Hover and NoteType

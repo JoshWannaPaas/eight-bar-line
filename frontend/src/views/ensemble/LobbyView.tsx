@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useRecoilValueLoadable } from "recoil";
 import { socketAtom } from "../../recoil/socket";
 import { useNavigate } from "react-router-dom";
@@ -18,8 +18,7 @@ const LobbyView: FC = () => {
   const stackSpacing = 3;
   const navigate = useNavigate();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
-
-  // if(state !==)
+  const [joinRoomCode, setJoinRoomCode] = useState("");
 
   const onCreateRoom = () => {
     // Tell server you're making a new room
@@ -34,15 +33,30 @@ const LobbyView: FC = () => {
     return undefined;
   };
 
+  const onJoinRoom = () => {
+    if (joinRoomCode === "") return;
+    if (state !== "hasValue") return undefined; // Check if youre talking to the server AKA socket has value
+    console.log("Room Code: " + joinRoomCode)
+    socket.emit("room:join", joinRoomCode);
+    navigate(joinRoomCode);
+  };
+
   return (
     <Container>
       <Box display="flex" justifyContent="center" gap={10} sx={{ my: 10 }}>
         <Paper elevation={2} sx={{ p: 2 }}>
           <Stack spacing={stackSpacing}>
             <Typography textAlign="center">Join a Room</Typography>
-            <TextField label="Room Code" InputProps={{}} />
+            <TextField
+              value={joinRoomCode}
+              label="Room Code"
+              InputProps={{}}
+              onChange={e => {setJoinRoomCode(e.target.value)}}
+            />
             <TextField label="Password" />
-            <Button variant="outlined">Join</Button>
+            <Button variant="outlined" onClick={onJoinRoom}>
+              Join
+            </Button>
           </Stack>
         </Paper>
 
