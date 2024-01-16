@@ -2,10 +2,10 @@ import { Instrument, NoteType } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { beatNumberAtom } from "../../recoil/beat";
-import { paletteAtom } from "../../recoil/palette";
-import { paletteDict } from "../../ui-components/Palette";
-import { currentInstrumentAtom } from "../../recoil/instrument";
+import { beatNumberAtom } from "../../../recoil/beat";
+import { paletteAtom } from "../../../recoil/palette";
+import { paletteDict } from "../../../ui-components/Palette";
+import { currentInstrumentAtom } from "../../../recoil/instrument";
 import {
   altoSaxSampler,
   bassSampler,
@@ -14,8 +14,8 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-import { ensembleAtom } from "../../recoil/ensemble";
-import { userIDSelector } from "../../recoil/socket";
+import { ensembleAtom } from "../../../recoil/ensemble";
+import { userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
 
 interface SingleNoteProps {
