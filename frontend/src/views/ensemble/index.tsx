@@ -19,6 +19,7 @@ import { currentInstrumentAtom } from "../../recoil/instrument";
 import { Instrument } from "common/dist/ensembles/Note";
 import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { ensembleAtom } from "../../recoil/ensemble";
+import { Ensemble } from "common/dist";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
@@ -31,23 +32,28 @@ const EnsembleView: FC = () => {
 
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const userID = useRecoilValue(userIDSelector);
-  const currentEnsemble = useRecoilValue(ensembleAtom);
+  const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
 
   useEffect(() => {
     // I need to check if we have the value before we continue to do anything
-    if (state !== "hasValue") return undefined;
+    if (state !== "hasValue") return;
     
     const serverEnsembleUpdateHandler = () => {
       console.log("Ensemble Update Received from Server")
+      // socket.emit("ensemble:fetch", (curEnsemble) => {
+      //   // const updatedEnsemble = new Ensemble().fromObject(curEnsemble);
+      //   // setCurrentEnsemble(updatedEnsemble);
+      // })
       
     };
-    socket.on("ensemble:update", serverEnsembleUpdateHandler);
-  }, [socket, state, currentEnsemble]);
 
-  useEffect(() => {
-    currentEnsemble.joinRoom(userID);
-    return () => currentEnsemble.leaveRoom(userID);
-  }, [userID, currentEnsemble]);
+    const updateUsers = (users: readonly string[]) => {
+      console.log(users)
+    }
+
+    socket.on("ensemble:update", serverEnsembleUpdateHandler);
+    socket.on("room:user-list", updateUsers)
+  }, [socket, state, currentEnsemble, setCurrentEnsemble]);
 
   return (
     <main>
@@ -111,7 +117,7 @@ const EnsembleView: FC = () => {
       <br />
       <br />
       {/* Other play area */}
-      <Container
+      {/* <Container
         sx={{
           margin: "auto",
           marginTop: "2%",
@@ -123,7 +129,7 @@ const EnsembleView: FC = () => {
         <Barline />
         <br />
         <VolumeRow />
-      </Container>
+      </Container> */}
       <br />
       <br />
       <br />
