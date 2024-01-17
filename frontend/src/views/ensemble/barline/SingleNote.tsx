@@ -49,6 +49,13 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const now = Tone.now();
 
   useEffect(() => {
+    // Update currentNotType
+    console.log("update note?")
+    const newNoteType = currentEnsemble
+      .getBarLine(userID)
+      .getNoteType(pitch, beatNumber);
+    if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+
     // Do nothing if music is not being played
     if (!playNow) return;
 
@@ -84,7 +91,16 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     if (currentNoteType === NoteType.REST) {
       instrumentSampler.triggerRelease(now);
     }
-  }, [playNow, pitch, currentNoteType, currentInstrument, now, beatNumber]);
+  }, [
+    playNow,
+    pitch,
+    currentNoteType,
+    currentInstrument,
+    now,
+    beatNumber,
+    currentEnsemble,
+    userID,
+  ]);
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -105,11 +121,8 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     if (userID === author) {
       currentEnsemble.toggleNote(userID, pitch, beatNumber);
       setCurrentEnsemble(currentEnsemble);
-      const newNoteType = currentEnsemble
-        .getBarLine(userID)
-        .getNoteType(pitch, beatNumber);
-      if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
       socket.emit("ensemble:toggle-note", pitch, beatNumber);
+      console.log("Socket Emitted! Toggled Note from " + userID);
     }
   };
 

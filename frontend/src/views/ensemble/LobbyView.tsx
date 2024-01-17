@@ -8,9 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useEffect, useState } from "react";
-import { useRecoilValueLoadable } from "recoil";
-import { socketAtom } from "../../recoil/socket";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { useNavigate } from "react-router-dom";
+import { ensembleAtom } from "../../recoil/ensemble";
 
 // <Stack> is the same as <Box display='flex' flexDirection='column'>
 
@@ -18,6 +19,8 @@ const LobbyView: FC = () => {
   const stackSpacing = 3;
   const navigate = useNavigate();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
+  const userID = useRecoilValue(userIDSelector);
   const [joinRoomCode, setJoinRoomCode] = useState("");
 
   const onCreateRoom = () => {
@@ -26,7 +29,7 @@ const LobbyView: FC = () => {
     socket.emit("room:create", (roomCode) => {
       navigate(roomCode);
       // Server creates an inactive room code and gives it to client
-
+      currentEnsemble.joinRoom(userID);
       // Client takes the room code and navigates to the Ensemble
     });
 
@@ -35,10 +38,12 @@ const LobbyView: FC = () => {
 
   const onJoinRoom = () => {
     if (joinRoomCode === "") return;
-    if (state !== "hasValue") return undefined; // Check if youre talking to the server AKA socket has value
+    if (state !== "hasValue") return; // Check if youre talking to the server AKA socket has value
+    // return () => currentEnsemble.leaveRoom(userID);
     console.log("Room Code: " + joinRoomCode)
     socket.emit("room:join", joinRoomCode);
     navigate(joinRoomCode);
+    currentEnsemble.joinRoom(userID);
   };
 
   return (
