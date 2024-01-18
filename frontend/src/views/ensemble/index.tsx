@@ -40,11 +40,6 @@ const EnsembleView: FC = () => {
     
     const serverEnsembleUpdateHandler = () => {
       console.log("Ensemble Update Received from Server")
-      // socket.emit("ensemble:fetch", (curEnsemble) => {
-      //   // const updatedEnsemble = new Ensemble().fromObject(curEnsemble);
-      //   // setCurrentEnsemble(updatedEnsemble);
-      // })
-      
     };
 
     const updateUsers = (users: readonly string[]) => {
