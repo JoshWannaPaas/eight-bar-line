@@ -23,6 +23,8 @@ const RTCLayout: React.FC = () => {
     
     const serverEnsembleUpdateHandler = (ensembleObject: EnsembleObject) => {
       const newEnsemble = Ensemble.fromObject(ensembleObject);
+      console.log(ensembleObject)
+      console.log("New Ensemble ", newEnsemble);
       setCurrentEnsemble(newEnsemble);
       // console.log("Ensemble Update Received from Server")
     };

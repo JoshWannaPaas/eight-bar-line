@@ -41,24 +41,17 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   };
 
   // note type - attack sustain rest
-  const [currentNoteType, setCurrentNoteType] = useState(NoteType.REST);
+  
+  console.log("Pitch: ", pitch);
+  console.log("Beat: ", beatNumber);
+  const currentNoteType = currentEnsemble.getNote(author, pitch, beatNumber).type;
 
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
   const currentInstrument = useRecoilValue(currentInstrumentAtom);
   const playNow = globalBeatNumber === beatNumber;
-  const now = Tone.now();
 
+  // 
   useEffect(() => {
-    // Update currentNotType
-    if(userID === author){
-      console.log("Updated note from " + userID);
-      const newNoteType = currentEnsemble
-        .getBarLine(userID)
-        .getNoteType(pitch, beatNumber);
-      if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
-      socket.emit("ensemble:toggle-note")
-    }
-
     // Do nothing if music is not being played
     if (!playNow) return;
 
@@ -71,21 +64,15 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
         instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
       }, Tone.now());
     }
-
-    if (currentNoteType === NoteType.REST) {
-      instrumentSampler.triggerRelease(now);
-    }
   }, [
     playNow,
     pitch,
     currentNoteType,
     currentInstrument,
-    now,
     beatNumber,
     currentEnsemble,
     userID,
-    author,
-    socket
+    author
   ]);
 
   // Change instrument sound based on currently selected
