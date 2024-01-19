@@ -95,13 +95,9 @@ const EnsembleView: FC = () => {
       >
         <BarLineVisualizer author={userID} />
         <br />
-        <VolumeRow author={userID} />
-        <br />
         <br />
         <br />
         <BarLineVisualizer author={testID} />
-        <br />
-        <VolumeRow author={testID} />
       </Container>
     </main>
   );
