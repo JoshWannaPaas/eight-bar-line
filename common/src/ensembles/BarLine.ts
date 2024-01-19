@@ -62,6 +62,13 @@ export class BarLine {
    * Returns the instrument of this BarLine
    * @returns The instrument of this BarLine
    */
+  getInstrument() {
+    return this.state.instrument;
+  }
+
+  /**
+   * Updates the instrument to the given value
+   */
   setInstrument(instrument: Instrument) {
     this.state.instrument = instrument;
   }

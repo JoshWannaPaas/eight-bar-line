@@ -17,4 +17,4 @@ export const ensembleAtom = atom<Ensemble>({
 export const userListAtom = atom<string[]>({
   key: "userListAtom",
   default: [],
-})
+});

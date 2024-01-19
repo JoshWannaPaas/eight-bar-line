@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC } from "react";
 import {
   Box,
   Container,
@@ -14,24 +14,25 @@ import {
 import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { currentInstrumentAtom } from "../../recoil/instrument";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { Instrument } from "common/dist/ensembles/Note";
-import { userIDSelector } from "../../recoil/socket";
-import { ensembleAtom, userListAtom } from "../../recoil/ensemble";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
+import { ensembleAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
+  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  const currentEnsemble = useRecoilValue(ensembleAtom);
 
-  const [instrument, setInstrument] = useRecoilState(currentInstrumentAtom);
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
     if (typeof e.target.value === "string") return;
-    setInstrument(e.target.value);
+    if (state !== "hasValue") return;
+    socket.emit("ensemble:set-instrument", e.target.value);
   };
 
   const userID = useRecoilValue(userIDSelector);
   const currentUsers = useRecoilValue(ensembleAtom).getMembers();
-  
+
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
@@ -48,7 +49,7 @@ const EnsembleView: FC = () => {
             <FormControl fullWidth>
               <InputLabel>Instrument</InputLabel>
               <Select
-                value={instrument}
+                value={currentEnsemble.getInstrument(userID)}
                 label="instrument"
                 onChange={changeInstrumentHandler}
                 fullWidth
@@ -86,10 +87,9 @@ const EnsembleView: FC = () => {
           padding: "0px",
         }}
       >
-        {  currentUsers.map((currentUser) => (
-            <BarLineVisualizer key={currentUser} author={currentUser} />
-          ))
-        }
+        {currentUsers.map((currentUser) => (
+          <BarLineVisualizer key={currentUser} author={currentUser} />
+        ))}
       </Container>
       <br />
       <br />

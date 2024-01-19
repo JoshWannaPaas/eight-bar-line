@@ -5,7 +5,6 @@ import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../../recoil/beat";
 import { paletteAtom } from "../../../recoil/palette";
 import { paletteDict } from "../../../ui-components/Palette";
-import { currentInstrumentAtom } from "../../../recoil/instrument";
 import {
   altoSaxSampler,
   bassSampler,
@@ -14,7 +13,7 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-import { ensembleAtom, userListAtom } from "../../../recoil/ensemble";
+import { ensembleAtom } from "../../../recoil/ensemble";
 import { socketAtom, userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
 
@@ -26,14 +25,13 @@ interface SingleNoteProps {
 }
 
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
-let instrumentSampler = fluteSampler;
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const palette = useRecoilValue(paletteAtom);
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
-  const userList = useRecoilValue(userListAtom);
   const userID = useRecoilValue(userIDSelector);
+
   // Colors for notes
   const colorMapping = {
     [NoteType.REST]: paletteDict[palette].rest,
@@ -42,24 +40,28 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   };
 
   // note type - attack sustain rest
-  const currentNoteType = currentEnsemble.getNote(author, pitch, beatNumber).type;
+  const currentNoteType = currentEnsemble.getNote(
+    author,
+    pitch,
+    beatNumber,
+  ).type;
 
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
-  const currentInstrument = useRecoilValue(currentInstrumentAtom);
+  const currentInstrument = currentEnsemble.getInstrument(author);
   const playNow = globalBeatNumber === beatNumber;
+  const now = Tone.now();
 
-  // 
   useEffect(() => {
     // Do nothing if music is not being played
     if (!playNow) return;
 
     // Assign correct instrument sounds to what player selected
-    switchInstrument(currentInstrument);
+    const sampler = getSampler(currentInstrument);
 
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
       Tone.Transport.scheduleOnce((time) => {
-        instrumentSampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
+        sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
       }, Tone.now());
     }
   }, [
@@ -67,35 +69,32 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     pitch,
     currentNoteType,
     currentInstrument,
+    now,
     beatNumber,
     currentEnsemble,
     userID,
-    author
+    author,
   ]);
 
   // Change instrument sound based on currently selected
-  const switchInstrument = (instrument: Instrument) => {
+  const getSampler = (instrument: Instrument) => {
     switch (instrument) {
       case Instrument.FLUTE:
-        instrumentSampler = fluteSampler;
-        break;
+        return fluteSampler;
       case Instrument.ALTO_SAX:
-        instrumentSampler = altoSaxSampler;
-        break;
+        return altoSaxSampler;
       case Instrument.MARIMBA:
-        instrumentSampler = marimbaSampler;
-        break;
+        return marimbaSampler;
       case Instrument.GUITAR:
-        instrumentSampler = guitarSampler;
-        break;
+        return guitarSampler;
       case Instrument.BASS:
-        instrumentSampler = bassSampler;
-        break;
+        return bassSampler;
       case Instrument.TUBA:
-        instrumentSampler = tubaSampler;
-        break;
+        return tubaSampler;
+      default:
+        return fluteSampler;
     }
-  }
+  };
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -114,7 +113,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const handleClick = () => {
     if (state !== "hasValue") return;
     if (userID === author) {
-      console.log("Current ensemble:", currentEnsemble.toObject())
+      console.log("Current ensemble:", currentEnsemble.toObject());
       // Local update
       currentEnsemble.toggleNote(userID, pitch, beatNumber);
       setCurrentEnsemble(currentEnsemble);
