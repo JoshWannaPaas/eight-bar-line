@@ -159,7 +159,7 @@ export class Ensemble {
    *   arrangement: [ ... ]
    * });
    */
-  static fromObject(object: EnsembleObject) {
+  fromObject(object: EnsembleObject) {
     const newEnsemble = new Ensemble();
     newEnsemble.state = {
       ...object,
