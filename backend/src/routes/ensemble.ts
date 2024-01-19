@@ -23,6 +23,7 @@ const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
   };
 
   const toggleNote = (row: number, col: number) => {
+    console.log("User is toggling: ", row, col)
     const { username, roomCode } = socket.data;
     if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);

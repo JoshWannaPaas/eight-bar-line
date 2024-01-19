@@ -123,7 +123,7 @@ export class Ensemble {
   /**
    * Returns an immutable copy of the list of userIDs
    */
-  getMembers(): readonly string[] {
+  getMembers(): string[] {
     return Array.from(this.state.authors);
   }
 
@@ -159,7 +159,7 @@ export class Ensemble {
    *   arrangement: [ ... ]
    * });
    */
-  fromObject(object: EnsembleObject) {
+  static fromObject(object: EnsembleObject) {
     const newEnsemble = new Ensemble();
     newEnsemble.state = {
       ...object,

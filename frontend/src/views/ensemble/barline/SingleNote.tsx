@@ -50,36 +50,20 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
 
   useEffect(() => {
     // Update currentNotType
-    console.log("update note?")
-    const newNoteType = currentEnsemble
-      .getBarLine(userID)
-      .getNoteType(pitch, beatNumber);
-    if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+    if(userID === author){
+      console.log("Updated note from " + userID);
+      const newNoteType = currentEnsemble
+        .getBarLine(userID)
+        .getNoteType(pitch, beatNumber);
+      if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+      socket.emit("ensemble:toggle-note")
+    }
 
     // Do nothing if music is not being played
     if (!playNow) return;
 
     // Assign correct instrument sounds to what player selected
-    switch (currentInstrument) {
-      case Instrument.FLUTE:
-        instrumentSampler = fluteSampler;
-        break;
-      case Instrument.ALTO_SAX:
-        instrumentSampler = altoSaxSampler;
-        break;
-      case Instrument.MARIMBA:
-        instrumentSampler = marimbaSampler;
-        break;
-      case Instrument.GUITAR:
-        instrumentSampler = guitarSampler;
-        break;
-      case Instrument.BASS:
-        instrumentSampler = bassSampler;
-        break;
-      case Instrument.TUBA:
-        instrumentSampler = tubaSampler;
-        break;
-    }
+    switchInstrument(currentInstrument);
 
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
@@ -100,7 +84,33 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     beatNumber,
     currentEnsemble,
     userID,
+    author,
+    socket
   ]);
+
+  // Change instrument sound based on currently selected
+  const switchInstrument = (instrument: Instrument) => {
+    switch (instrument) {
+      case Instrument.FLUTE:
+        instrumentSampler = fluteSampler;
+        break;
+      case Instrument.ALTO_SAX:
+        instrumentSampler = altoSaxSampler;
+        break;
+      case Instrument.MARIMBA:
+        instrumentSampler = marimbaSampler;
+        break;
+      case Instrument.GUITAR:
+        instrumentSampler = guitarSampler;
+        break;
+      case Instrument.BASS:
+        instrumentSampler = bassSampler;
+        break;
+      case Instrument.TUBA:
+        instrumentSampler = tubaSampler;
+        break;
+    }
+  }
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -119,6 +129,8 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const handleClick = () => {
     if (state !== "hasValue") return;
     if (userID === author) {
+      console.log("Current ensemble:", currentEnsemble.toObject())
+      // Local update
       currentEnsemble.toggleNote(userID, pitch, beatNumber);
       setCurrentEnsemble(currentEnsemble);
       socket.emit("ensemble:toggle-note", pitch, beatNumber);

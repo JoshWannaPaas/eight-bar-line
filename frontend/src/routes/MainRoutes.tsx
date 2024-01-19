@@ -1,7 +1,7 @@
-import { Outlet } from "react-router-dom";
 import MainLayout from "../layout/MainLayout";
 import { lazy } from "react";
 import Loadable from "./Loadable";
+import RTCLayout from "../layout/RTCLayout";
 
 // Lazy import means you only load the code when you need it instead of all at once on page load
 const BrowseView = Loadable(lazy(() => import("../views/browse")));
@@ -24,7 +24,7 @@ const mainRoutes = {
     },
     {
       path: "/ensemble",
-      element: <Outlet />,
+      element: <RTCLayout />,
       children: [
         {
           path: ":roomCode",

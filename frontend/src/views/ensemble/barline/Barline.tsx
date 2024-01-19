@@ -15,7 +15,6 @@ interface BarlineProps {
 const Barline: React.FC<BarlineProps> = ({ author }) => {
   return (
     <Box>
-      <a>Barline of {author}</a>
       {_.range(BARLINE_HEIGHT).map((n) => (
         <SingleRow author={author} pitch={n} key={`note-pitch-${n}`} />
       ))}

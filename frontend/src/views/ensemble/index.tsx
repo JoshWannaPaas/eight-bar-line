@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import {
   Box,
   Container,
@@ -14,11 +14,11 @@ import {
 import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import { Instrument } from "common/dist/ensembles/Note";
-import { socketAtom, userIDSelector } from "../../recoil/socket";
-import { ensembleAtom } from "../../recoil/ensemble";
+import { userIDSelector } from "../../recoil/socket";
+import { userListAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
@@ -29,27 +29,13 @@ const EnsembleView: FC = () => {
     setInstrument(e.target.value);
   };
 
-  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  // const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const userID = useRecoilValue(userIDSelector);
-  const testID = "aaa";
-  const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
-
-  useEffect(() => {
-    // I need to check if we have the value before we continue to do anything
-    if (state !== "hasValue") return;
-    
-    const serverEnsembleUpdateHandler = () => {
-      console.log("Ensemble Update Received from Server")
-    };
-
-    const updateUsers = (users: readonly string[]) => {
-      console.log(users)
-    }
-
-    socket.on("ensemble:update", serverEnsembleUpdateHandler);
-    socket.on("room:user-list", updateUsers)
-  }, [socket, state, currentEnsemble, setCurrentEnsemble]);
-
+  // const currentEnsemble = useRecoilState(ensembleAtom);
+  const currentUsers = useRecoilValue(userListAtom);
+  
+  console.log("Local's users: ", currentUsers)
+  
   return (
     <main>
       {/* Top Line for Instrument Settings, Title, and Room Settings */}
@@ -104,32 +90,11 @@ const EnsembleView: FC = () => {
           padding: "0px",
         }}
       >
-        <BarLineVisualizer author={userID} />
-        <br />
-        <br />
-        <br />
-        <BarLineVisualizer author={testID} />
+        {  currentUsers.map((currentUser) => (
+            <BarLineVisualizer key={currentUser} author={currentUser} />
+          ))
+        }
       </Container>
-      <br />
-      <br />
-      <br />
-      {/* Other play area */}
-      {/* <Container
-        sx={{
-          margin: "auto",
-          marginTop: "2%",
-          alignSelf: "center",
-          alignItems: "center",
-          padding: "0px",
-        }}
-      >
-        <Barline />
-        <br />
-        <VolumeRow />
-      </Container> */}
-      <br />
-      <br />
-      <br />
     </main>
   );
 };

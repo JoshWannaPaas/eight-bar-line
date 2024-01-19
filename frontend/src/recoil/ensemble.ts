@@ -6,3 +6,15 @@ export const ensembleAtom = atom<Ensemble>({
   default: new Ensemble(),
   dangerouslyAllowMutability: true,
 });
+
+// export const barlineSelector = selector<BarLine>({
+//   key: "barlineSelector",
+//   get: ({ get }) => {
+//     return get(ensembleAtom).getBarLine(userIDSelector);
+//   },
+// });
+
+export const userListAtom = atom<string[]>({
+  key: "userListAtom",
+  default: [],
+})

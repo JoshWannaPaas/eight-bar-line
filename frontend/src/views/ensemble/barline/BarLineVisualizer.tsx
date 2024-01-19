@@ -8,6 +8,7 @@ interface BarLineVisualizerProps {
 const BarLineVisualizer: React.FC<BarLineVisualizerProps> = ({ author }) => {
   return (
     <>
+      <p>Barline of {author}</p>
       <Barline author={author} />
       <br />
       <VolumeRow author={author} />
