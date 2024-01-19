@@ -18,7 +18,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { currentInstrumentAtom } from "../../recoil/instrument";
 import { Instrument } from "common/dist/ensembles/Note";
 import { userIDSelector } from "../../recoil/socket";
-import { userListAtom } from "../../recoil/ensemble";
+import { ensembleAtom, userListAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
@@ -29,12 +29,8 @@ const EnsembleView: FC = () => {
     setInstrument(e.target.value);
   };
 
-  // const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const userID = useRecoilValue(userIDSelector);
-  // const currentEnsemble = useRecoilState(ensembleAtom);
-  const currentUsers = useRecoilValue(userListAtom);
-  
-  console.log("Local's users: ", currentUsers)
+  const currentUsers = useRecoilValue(ensembleAtom).getMembers();
   
   return (
     <main>

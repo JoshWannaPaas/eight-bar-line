@@ -14,7 +14,7 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-import { ensembleAtom } from "../../../recoil/ensemble";
+import { ensembleAtom, userListAtom } from "../../../recoil/ensemble";
 import { socketAtom, userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
 
@@ -32,6 +32,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const palette = useRecoilValue(paletteAtom);
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  const userList = useRecoilValue(userListAtom);
   const userID = useRecoilValue(userIDSelector);
   // Colors for notes
   const colorMapping = {
@@ -41,9 +42,6 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   };
 
   // note type - attack sustain rest
-  
-  console.log("Pitch: ", pitch);
-  console.log("Beat: ", beatNumber);
   const currentNoteType = currentEnsemble.getNote(author, pitch, beatNumber).type;
 
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
