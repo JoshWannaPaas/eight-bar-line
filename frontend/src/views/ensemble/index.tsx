@@ -11,7 +11,6 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import { VolumeRow } from "./barline/Barline";
 import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
