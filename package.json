@@ -12,7 +12,6 @@
     "lint": "npx eslint . --ext .ts --ext .tsx --max-warnings 0",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
-    "database": "cd backend && npm run database",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\""
   },
   "workspaces": [
