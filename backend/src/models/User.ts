@@ -8,8 +8,8 @@ import {
 import { sequelize } from "../database.js";
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  // 'CreationOptional' is a special type that marks the field as optional
-  // when creating an instance of the model (such as using Model.create()).
+  // 'CreationOptional' marks the field as optional when
+  // creating an instance of the model (such as using Model.create()).
   declare id: CreationOptional<string>;
   declare username: string;
   declare password: string;
@@ -17,7 +17,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
 
 User.init(
   {
-    // Model attributes are defined here
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4, // Or DataTypes.UUIDV1
@@ -30,6 +29,8 @@ User.init(
       allowNull: false,
       unique: true,
     },
+    // @todo delegate responsibility for logging in to another
+    // service, such as Auth0 or Firebase.
     password: {
       type: DataTypes.STRING,
       allowNull: false,
