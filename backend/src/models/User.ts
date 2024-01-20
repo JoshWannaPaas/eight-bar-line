@@ -40,6 +40,6 @@ User.init(
 
 // Makes sure the true table matches the above definition.
 // Setting `alter` will modify the table, rather than delete the table if it already exists.
-User.sync({ alter: true });
+User.sync({ alter: true, logging: false });
 
 export default User;
