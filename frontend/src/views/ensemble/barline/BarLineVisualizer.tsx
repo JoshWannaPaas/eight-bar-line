@@ -1,5 +1,6 @@
 import { UserID } from "common/dist";
 import Barline, { VolumeRow } from "./Barline";
+import { Stack } from "@mui/material";
 
 interface BarLineVisualizerProps {
   author: UserID;
@@ -7,11 +8,10 @@ interface BarLineVisualizerProps {
 
 const BarLineVisualizer: React.FC<BarLineVisualizerProps> = ({ author }) => {
   return (
-    <>
+    <Stack spacing={4}>
       <Barline author={author} />
-      <br />
       <VolumeRow author={author} />
-    </>
+    </Stack>
   );
 };
 
