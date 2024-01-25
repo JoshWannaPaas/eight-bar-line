@@ -3,6 +3,9 @@
 Music notation website allowing for custom 8 bars of music to be played with other users.
 
 ## Installation
+
+To begin, install all of the node modules. I've configured this command to recursively install node modules for both the frontends and backends.
+
 ```bash
 # Start in the root directory
 cd eight-bar-line
@@ -11,15 +14,24 @@ npm install
 
 ## Development
 
-To start the dev
+There are two parts to the stack that are relevant for local development:
+- The Backend Node Server
+- The Frontend React Client
 
-These commands will start the backend and frontend projects and listen to changes in either directory.
+### Start the Development Servers
+
+While in development mode, we have a service that will observe any file changes and automatically refresh the preview. To start the development mode for the frontend or backend, run these commands in separate terminals:
 ```bash
 npm run dev:backend
 npm run dev:frontend
 ```
 
-However, this does not listen to changes in the `common` directory automatically. If you want to make changes to the `common` directory, you will need to run this command in the project root directory:
+For convenience, you can run this command, which will handle starting **both** the backend and frontend development servers concurrently in the same terminal:
+```bash
+npm run dev
+```
+
+However, while in development mode, changes in the `common` directory are not immediately reloaded. If you want to make changes to the `common` directory, you will need to run this command in the project root directory:
 ```bash
 npm run build:common
 ```
