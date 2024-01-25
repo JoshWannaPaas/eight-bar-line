@@ -91,26 +91,6 @@ const EnsembleView: FC = () => {
           <BarLineVisualizer key={currentUser} author={currentUser} />
         ))}
       </Container>
-      <br />
-      <br />
-      <br />
-      {/* Other play area */}
-      {/* <Container
-        sx={{
-          margin: "auto",
-          marginTop: "2%",
-          alignSelf: "center",
-          alignItems: "center",
-          padding: "0px",
-        }}
-      >
-        <Barline />
-        <br />
-        <VolumeRow />
-      </Container> */}
-      <br />
-      <br />
-      <br />
     </main>
   );
 };

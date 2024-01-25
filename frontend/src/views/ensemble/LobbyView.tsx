@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { FC, useState } from "react";
-import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { useNavigate } from "react-router-dom";
 import { ensembleAtom } from "../../recoil/ensemble";
@@ -19,7 +19,7 @@ const LobbyView: FC = () => {
   const stackSpacing = 3;
   const navigate = useNavigate();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
-  const currentEnsemble = useRecoilState(ensembleAtom);
+  const currentEnsemble = useRecoilValue(ensembleAtom);
   const userID = useRecoilValue(userIDSelector);
   const [joinRoomCode, setJoinRoomCode] = useState("");
 
