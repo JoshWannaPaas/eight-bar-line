@@ -11,7 +11,7 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import Barline, { VolumeRow } from "./Barline";
+import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -30,6 +30,7 @@ const EnsembleView: FC = () => {
   };
 
   const userID = useRecoilValue(userIDSelector);
+  const testID = "aaa";
 
   const currentEnsemble = useRecoilValue(ensembleAtom);
   useEffect(() => {
@@ -91,9 +92,11 @@ const EnsembleView: FC = () => {
           padding: "0px",
         }}
       >
-        <Barline />
+        <BarLineVisualizer author={userID} />
         <br />
-        <VolumeRow />
+        <br />
+        <br />
+        <BarLineVisualizer author={testID} />
       </Container>
     </main>
   );

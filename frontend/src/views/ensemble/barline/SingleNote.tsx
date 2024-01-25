@@ -1,11 +1,11 @@
-import { Instrument, NoteType } from "common/dist";
+import { Instrument, NoteType, UserID } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { beatNumberAtom } from "../../recoil/beat";
-import { paletteAtom } from "../../recoil/palette";
-import { paletteDict } from "../../ui-components/Palette";
-import { currentInstrumentAtom } from "../../recoil/instrument";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { beatNumberAtom } from "../../../recoil/beat";
+import { paletteAtom } from "../../../recoil/palette";
+import { paletteDict } from "../../../ui-components/Palette";
+import { currentInstrumentAtom } from "../../../recoil/instrument";
 import {
   altoSaxSampler,
   bassSampler,
@@ -14,22 +14,24 @@ import {
   marimbaSampler,
   tubaSampler,
 } from "./Samplers";
-import { ensembleAtom } from "../../recoil/ensemble";
-import { userIDSelector } from "../../recoil/socket";
+import { ensembleAtom } from "../../../recoil/ensemble";
+import { socketAtom, userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
 
 interface SingleNoteProps {
   beatNumber: number;
   /** An integer */
   pitch: number;
+  author: UserID;
 }
 
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 let instrumentSampler = fluteSampler;
 
-const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
+const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const palette = useRecoilValue(paletteAtom);
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
+  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const userID = useRecoilValue(userIDSelector);
   // Colors for notes
   const colorMapping = {
@@ -89,22 +91,26 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch }) => {
 
   // When mouse enter, "we are hovering"
   const handleMouseEnter = () => {
-    setOnHover(true);
+    if (userID === author) setOnHover(true);
   };
 
   // When mouse leave, "we are not hovering"
   const handleMouseLeave = () => {
-    setOnHover(false);
+    if (userID === author) setOnHover(false);
   };
 
   // When click, update current note type
   const handleClick = () => {
-    currentEnsemble.toggleNote(userID, pitch, beatNumber);
-    setCurrentEnsemble(currentEnsemble);
-    const newNoteType = currentEnsemble
-      .getBarLine(userID)
-      .getNoteType(pitch, beatNumber);
-    if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+    if (state !== "hasValue") return;
+    if (userID === author) {
+      currentEnsemble.toggleNote(userID, pitch, beatNumber);
+      setCurrentEnsemble(currentEnsemble);
+      const newNoteType = currentEnsemble
+        .getBarLine(userID)
+        .getNoteType(pitch, beatNumber);
+      if (newNoteType !== undefined) setCurrentNoteType(newNoteType);
+      socket.emit("ensemble:toggle-note", pitch, beatNumber);
+    }
   };
 
   // Color depends on Hover and NoteType
