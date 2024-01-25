@@ -5,6 +5,8 @@ import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../../recoil/beat";
 import { paletteAtom } from "../../../recoil/palette";
 import { paletteDict } from "../../../ui-components/Palette";
+import { currentInstrumentAtom } from "../../../recoil/instrument";
+
 import {
   altoSaxSampler,
   bassSampler,
@@ -25,6 +27,7 @@ interface SingleNoteProps {
 }
 
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
+let instrumentSampler = fluteSampler;
 
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const palette = useRecoilValue(paletteAtom);
@@ -95,6 +98,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
         return fluteSampler;
     }
   };
+
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
