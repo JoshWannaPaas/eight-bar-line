@@ -14,14 +14,11 @@ interface BarlineProps {
 // temp name for music editor area
 const Barline: React.FC<BarlineProps> = ({ author }) => {
   return (
-    <>
-      <p>Barline of {author}</p>
-      <Box>
-        {_.range(BARLINE_HEIGHT).map((n) => (
-          <SingleRow author={author} pitch={n} key={`note-pitch-${n}`} />
-        ))}
-      </Box>
-    </>
+    <Box>
+      {_.range(BARLINE_HEIGHT).map((n) => (
+        <SingleRow author={author} pitch={n} key={`note-pitch-${n}`} />
+      ))}
+    </Box>
   );
 };
 export default Barline;

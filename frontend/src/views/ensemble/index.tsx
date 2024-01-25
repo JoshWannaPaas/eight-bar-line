@@ -81,10 +81,8 @@ const EnsembleView: FC = () => {
       <Container
         sx={{
           margin: "auto",
-          marginTop: "2%",
           alignSelf: "center",
           alignItems: "center",
-          padding: "0px",
         }}
       >
         {currentUsers.map((currentUser) => (
