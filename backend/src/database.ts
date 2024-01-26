@@ -5,11 +5,11 @@ const DEFAULT_PG_USERNAME = "user";
 const DEFAULT_PG_PASSWORD = "mysecretpassword";
 
 export const sequelize = new Sequelize(
-  process.env.PG_DATABASE ?? DEFAULT_PG_DATABASE,
-  process.env.PG_USERNAME ?? DEFAULT_PG_USERNAME,
-  process.env.PG_PASSWORD ?? DEFAULT_PG_PASSWORD,
+  process.env.POSTGRES_DB ?? DEFAULT_PG_DATABASE,
+  process.env.POSTGRES_USER ?? DEFAULT_PG_USERNAME,
+  process.env.POSTGRES_PASSWORD ?? DEFAULT_PG_PASSWORD,
   {
-    host: "localhost",
+    host: process.env.POSTGRES_HOST ?? "localhost",
     dialect: "postgres",
     logging: false,
   },
