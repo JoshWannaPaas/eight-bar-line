@@ -4,21 +4,9 @@
 // with the `sequelize` library)
 
 import express, { Request } from "express";
+import User from "../models/User.js";
 
 type ReqBody<T> = Request<unknown, unknown, T>;
-
-/**
- * @todo DO NOT release this project with passwords stored as plaintext.
- * Down the line, we will want to delegate logging in responsibility to
- * sservices like [Signup with Google].
- */
-type TempUsers = {
-  username: string;
-  password: string;
-};
-
-// The "Database"
-const dummyUsersList: TempUsers[] = [];
 
 const usersRouter = express.Router();
 
@@ -27,8 +15,10 @@ const usersRouter = express.Router();
  *
  * @name GET /api/users/
  */
-usersRouter.get("/", (req, res) => {
-  res.json(dummyUsersList.map((user) => user.username).join(", "));
+usersRouter.get("/", async (req, res) => {
+  const users = await User.findAll();
+  const usernames = users.map((user) => user.username);
+  res.json(usernames.join(", "));
 });
 
 /**
@@ -40,23 +30,29 @@ usersRouter.get("/", (req, res) => {
  * @throws {400} if the password is invalid
  * @throws {409} if the username already exists
  */
-usersRouter.post("/", (req: ReqBody<PostUserReqBody>, res) => {
+usersRouter.post("/", async (req: ReqBody<PostUserReqBody>, res) => {
   if (req.body.username === undefined)
     return res.status(400).send("Invalid username.");
   if (req.body.password === undefined)
     return res.status(400).send("Invalid password.");
 
-  const matchingUser = dummyUsersList.find(
-    (user) => user.username === req.body.username,
-  );
-  if (matchingUser !== undefined)
+  const matchingUser = await User.findOne({
+    where: { username: req.body.username },
+  });
+
+  if (matchingUser !== null)
     return res
       .status(409)
       .send(`The username "${req.body.username}" already exists.`);
-  dummyUsersList.push({
-    username: req.body.username,
-    password: req.body.password,
-  });
+  try {
+    await User.create({
+      username: req.body.username,
+      password: req.body.password,
+    });
+  } catch (e) {
+    return res.status(500).send(e);
+  }
+
   // Send a success status with the default message ("OK")
   return res.sendStatus(200);
 });
@@ -76,7 +72,7 @@ type PostUserReqBody = {
  * @throws {403} if the user is deleting someone else's account
  * @throws {409} if the username does not exist
  */
-usersRouter.delete("/", (req: ReqBody<DeleteUserReqBody>, res) => {
+usersRouter.delete("/", async (req: ReqBody<DeleteUserReqBody>, res) => {
   // Sends an error status if they are trying to delete an account while not logged in
   if (req.session.username === undefined)
     return res.status(401).send("You are not logged in.");
@@ -85,18 +81,8 @@ usersRouter.delete("/", (req: ReqBody<DeleteUserReqBody>, res) => {
   if (req.body.username !== req.session.username)
     return res.status(403).send("You can only delete your own account");
 
-  // Sends an error status with a custom message
-  const matchingUser = dummyUsersList.find(
-    (user) => user.username === req.body.username,
-  );
-  if (matchingUser === undefined)
-    return res
-      .status(409)
-      .send(`The username "${req.body.username}" does not exist.`);
-
-  dummyUsersList.splice(
-    dummyUsersList.findIndex((user) => user.username === req.body.username),
-  );
+  const { username } = req.body;
+  await User.destroy({ where: { username } });
 
   return res.sendStatus(200);
 });
@@ -113,16 +99,14 @@ type DeleteUserReqBody = {
  *
  * @throws {403} if the user is trying to log in but is already logged in
  */
-usersRouter.post("/session/", (req: ReqBody<PostSessionReqBody>, res) => {
+usersRouter.post("/session/", async (req: ReqBody<PostSessionReqBody>, res) => {
   // Throw an error if they are already logged in.
   if (req.session.username !== undefined)
     return res.status(403).send("You are already signed in.");
 
   // Throw an error if the login credentials are not correct
-  const matchingUser = dummyUsersList.find(
-    (user) => user.username === req.body.username,
-  );
-  if (matchingUser === undefined)
+  const user = await User.findOne({ where: { username: req.body.username } });
+  if (user === null)
     return res.status(400).send("Username or password is incorrect.");
 
   req.session.username = req.body.username;

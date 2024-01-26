@@ -14,11 +14,23 @@ npm install
 
 ## Development
 
-There are two parts to the stack that are relevant for local development:
+There are three parts to the stack that are relevant for local development:
+- The PostgreSQL Database
 - The Backend Node Server
 - The Frontend React Client
 
-### Start the Development Servers
+### 1. Start the PostgreSQL Database
+
+Before running the backend in developer mode, you will need to have a docker image. 
+
+Once you install the Docker CLI, you can download the `postrgres` Docker image. This docker image will handle hosting a local PostgreSQL server at the location `localhost:5432`. (Setting one up without docker is much more involved.)
+
+With both the Docker CLI and the `postgres` docker image, you can run this command.
+```bash
+npm run database
+```
+
+### 2. Start the Development Servers
 
 While in development mode, we have a service that will observe any file changes and automatically refresh the preview. To start the development mode for the frontend or backend, run these commands in separate terminals:
 ```bash
