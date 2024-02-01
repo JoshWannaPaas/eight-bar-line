@@ -6,6 +6,11 @@ interface BarLineVisualizerProps {
   author: UserID;
 }
 
+/**
+ * A component that groups together all the components of a single user's BarLine
+ * 
+ * Contains text for the User who owns it, the Barline which contains the SingleNotes, and the VolumeRow
+ */
 const BarLineVisualizer: React.FC<BarLineVisualizerProps> = ({ author }) => {
   return (
     <>

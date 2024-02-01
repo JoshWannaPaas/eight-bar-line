@@ -113,12 +113,10 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   const handleClick = () => {
     if (state !== "hasValue") return;
     if (userID === author) {
-      console.log("Current ensemble:", currentEnsemble.toObject());
       // Local update
       currentEnsemble.toggleNote(userID, pitch, beatNumber);
       setCurrentEnsemble(currentEnsemble);
       socket.emit("ensemble:toggle-note", pitch, beatNumber);
-      console.log("Socket Emitted! Toggled Note from " + userID);
     }
   };
 
