@@ -7,10 +7,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { FC } from "react";
-import { useRecoilValueLoadable } from "recoil";
-import { socketAtom } from "../../recoil/socket";
+import { FC, useState } from "react";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { useNavigate } from "react-router-dom";
+import { ensembleAtom } from "../../recoil/ensemble";
 
 // <Stack> is the same as <Box display='flex' flexDirection='column'>
 
@@ -18,20 +19,31 @@ const LobbyView: FC = () => {
   const stackSpacing = 3;
   const navigate = useNavigate();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
-
-  // if(state !==)
+  const currentEnsemble = useRecoilValue(ensembleAtom);
+  const userID = useRecoilValue(userIDSelector);
+  const [joinRoomCode, setJoinRoomCode] = useState("");
 
   const onCreateRoom = () => {
     // Tell server you're making a new room
     if (state !== "hasValue") return undefined; // Check if youre talking to the server AKA socket has value
+    // Server creates an inactive room code and gives it to client
     socket.emit("room:create", (roomCode) => {
-      navigate(roomCode);
-      // Server creates an inactive room code and gives it to client
-
       // Client takes the room code and navigates to the Ensemble
+      navigate(roomCode);
+      currentEnsemble.joinRoom(userID);
     });
 
     return undefined;
+  };
+
+  const onJoinRoom = () => {
+    if (joinRoomCode === "") return;
+    if (state !== "hasValue") return; // Check if youre talking to the server AKA socket has value
+    // return () => currentEnsemble.leaveRoom(userID);
+    console.log("Room Code: " + joinRoomCode);
+    socket.emit("room:join", joinRoomCode);
+    navigate(joinRoomCode);
+    currentEnsemble.joinRoom(userID);
   };
 
   return (
@@ -40,9 +52,18 @@ const LobbyView: FC = () => {
         <Paper elevation={2} sx={{ p: 2 }}>
           <Stack spacing={stackSpacing}>
             <Typography textAlign="center">Join a Room</Typography>
-            <TextField label="Room Code" InputProps={{}} />
+            <TextField
+              value={joinRoomCode}
+              label="Room Code"
+              InputProps={{}}
+              onChange={(e) => {
+                setJoinRoomCode(e.target.value);
+              }}
+            />
             <TextField label="Password" />
-            <Button variant="outlined">Join</Button>
+            <Button variant="outlined" onClick={onJoinRoom}>
+              Join
+            </Button>
           </Stack>
         </Paper>
 

@@ -32,6 +32,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     socket.data.roomCode = undefined;
     // Let everyone in the room know the list of users changed
     io.to(currentRoomCode).emit("room:user-list", ensemble.getMembers());
+    io.to(currentRoomCode).emit("ensemble:update", ensemble.toObject());
     if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
   };
 
@@ -46,6 +47,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
     io.to(roomCode).emit("room:user-list", ensemble.getMembers());
+    io.to(roomCode).emit("ensemble:update", ensemble.toObject());
   };
 
   const messageRoom = (message: string) => {

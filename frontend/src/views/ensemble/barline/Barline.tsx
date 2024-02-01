@@ -15,7 +15,6 @@ interface BarlineProps {
 const Barline: React.FC<BarlineProps> = ({ author }) => {
   return (
     <Box>
-      <a>Barline of {author}</a>
       {_.range(BARLINE_HEIGHT).map((n) => (
         <SingleRow author={author} pitch={n} key={`note-pitch-${n}`} />
       ))}
@@ -46,13 +45,15 @@ const SingleRow: React.FC<SingleRowProps> = ({ pitch, author }) => {
 interface VolumeRowProps {
   author: UserID;
 }
+
+// Change this to its own component (VolumeNote, etc) independent of pitch
 export const VolumeRow: React.FC<VolumeRowProps> = ({ author }) => {
   return (
     <Box display="flex">
       {_.range(BARLINE_WIDTH).map((n) => (
         <SingleNote
           author={author}
-          pitch={-1}
+          pitch={0}
           beatNumber={n}
           key={`note-volume-${n}`}
         />

@@ -1,4 +1,4 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import {
   Box,
   Container,
@@ -14,29 +14,24 @@ import {
 import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { currentInstrumentAtom } from "../../recoil/instrument";
+import { useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { Instrument } from "common/dist/ensembles/Note";
-import { userIDSelector } from "../../recoil/socket";
+import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { ensembleAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
   const roomCode = useParams();
+  const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  const currentEnsemble = useRecoilValue(ensembleAtom);
 
-  const [instrument, setInstrument] = useRecoilState(currentInstrumentAtom);
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
     if (typeof e.target.value === "string") return;
-    setInstrument(e.target.value);
+    if (state !== "hasValue") return;
+    socket.emit("ensemble:set-instrument", e.target.value);
   };
 
   const userID = useRecoilValue(userIDSelector);
-  const testID = "aaa";
-
-  const currentEnsemble = useRecoilValue(ensembleAtom);
-  useEffect(() => {
-    currentEnsemble.joinRoom(userID);
-    return () => currentEnsemble.leaveRoom(userID);
-  }, [userID, currentEnsemble]);
+  const currentUsers = useRecoilValue(ensembleAtom).getMembers();
 
   return (
     <main>
@@ -54,7 +49,7 @@ const EnsembleView: FC = () => {
             <FormControl fullWidth>
               <InputLabel>Instrument</InputLabel>
               <Select
-                value={instrument}
+                value={currentEnsemble.getInstrument(userID)}
                 label="instrument"
                 onChange={changeInstrumentHandler}
                 fullWidth
@@ -86,17 +81,13 @@ const EnsembleView: FC = () => {
       <Container
         sx={{
           margin: "auto",
-          marginTop: "2%",
           alignSelf: "center",
           alignItems: "center",
-          padding: "0px",
         }}
       >
-        <BarLineVisualizer author={userID} />
-        <br />
-        <br />
-        <br />
-        <BarLineVisualizer author={testID} />
+        {currentUsers.map((currentUser) => (
+          <BarLineVisualizer key={currentUser} author={currentUser} />
+        ))}
       </Container>
     </main>
   );

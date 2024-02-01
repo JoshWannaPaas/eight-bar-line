@@ -88,6 +88,13 @@ export class Ensemble {
     barLine.setInstrument(instrument);
   }
 
+  getInstrument(userId: UserID) {
+    const barLine = this.getBarLine(userId);
+    if (barLine === undefined)
+      throw new Error(`User ${userId} does not have a BarLine`);
+    return barLine.getInstrument();
+  }
+
   /**
    * Toggles the note at position (`row`, `col`) in the BarLine that belongs to `userId`.
    *
@@ -123,7 +130,7 @@ export class Ensemble {
   /**
    * Returns an immutable copy of the list of userIDs
    */
-  getMembers(): readonly string[] {
+  getMembers(): string[] {
     return Array.from(this.state.authors);
   }
 
