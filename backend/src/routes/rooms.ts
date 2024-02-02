@@ -34,6 +34,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     io.to(currentRoomCode).emit("room:user-list", ensemble.getMembers());
     io.to(currentRoomCode).emit("ensemble:update", ensemble.toObject());
     if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
+    console.log("user left room");
   };
 
   const joinRoom = (roomCode: RoomCode) => {

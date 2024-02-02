@@ -33,12 +33,17 @@ const EnsembleView: FC = () => {
   const userID = useRecoilValue(userIDSelector);
   const currentUsers = useRecoilValue(ensembleAtom).getMembers();
 
+  // useEffect(() => {
+  //   return () =>{
+  //     socket.emit("room:leave");
+  //     console.log("left room");
+  //   }
+  // }, [])
+
   useEffect(() => {
-    return () =>{
-      socket.emit("room:leave");
-      console.log("left room");
-    }
-  }, [])
+    console.log("Join Room");
+    return () => console.log("leave room");
+  }, []);
 
   return (
     <main>

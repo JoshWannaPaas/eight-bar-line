@@ -21,13 +21,6 @@ const RTCLayout: React.FC = () => {
   const setCurrentUsers = useSetRecoilState(userListAtom);
   const setCurrentEnsemble = useSetRecoilState(ensembleAtom);
 
-  const updateUsers = useCallback(
-    (users: string[]) => {
-      setCurrentUsers(users);
-    },
-    [setCurrentUsers],
-  );
-
   useEffect(() => {
     // I need to check if we have the value before we continue to do anything
     if (state !== "hasValue") return undefined;
@@ -40,14 +33,14 @@ const RTCLayout: React.FC = () => {
 
     // Attach event listeners
     socket.on("ensemble:update", serverEnsembleUpdateHandler);
-    socket.on("room:user-list", updateUsers);
+    socket.on("room:user-list", setCurrentUsers);
 
     return () => {
       // Remove event listeners
       socket.off("ensemble:update", serverEnsembleUpdateHandler);
-      socket.off("room:user-list", updateUsers);
+      socket.off("room:user-list", setCurrentUsers);
     };
-  }, [socket, state, setCurrentEnsemble, updateUsers]);
+  }, [socket, state, setCurrentEnsemble, setCurrentUsers]);
 
   return <Outlet />;
 };
