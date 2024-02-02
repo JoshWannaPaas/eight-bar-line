@@ -30,7 +30,7 @@ export class BarLine {
 
   private state: BarLineObject;
 
-  constructor(author: UserID, instrument = Instrument.PIANO) {
+  constructor(author: UserID, instrument = Instrument.FLUTE) {
     const notes: Note[][] = [];
     for (let r = 0; r < BarLine.ROWS; r++) {
       const row: Note[] = [];
