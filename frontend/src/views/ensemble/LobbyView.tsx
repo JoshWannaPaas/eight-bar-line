@@ -42,16 +42,6 @@ const LobbyView: FC = () => {
     currentEnsemble.joinRoom(userID);
   };
 
-  const onJoinRoom = () => {
-    if (joinRoomCode === "") return;
-    if (state !== "hasValue") return; // Check if youre talking to the server AKA socket has value
-    // return () => currentEnsemble.leaveRoom(userID);
-    console.log("Room Code: " + joinRoomCode);
-    socket.emit("room:join", joinRoomCode);
-    navigate(joinRoomCode);
-    currentEnsemble.joinRoom(userID);
-  };
-
   return (
     <Container>
       <Box display="flex" justifyContent="center" gap={10} sx={{ my: 10 }}>
