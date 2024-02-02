@@ -38,7 +38,7 @@ const EnsembleView: FC = () => {
     return () => {
       socket.emit("room:leave");
     };
-  }, []);
+  }, [socket]);
 
   return (
     <main>
