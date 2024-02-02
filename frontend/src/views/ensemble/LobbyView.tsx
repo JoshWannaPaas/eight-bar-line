@@ -32,6 +32,8 @@ const LobbyView: FC = () => {
       navigate(roomCode);
       currentEnsemble.joinRoom(userID);
     });
+
+    return undefined;
   };
 
   const onJoinRoom = () => {
