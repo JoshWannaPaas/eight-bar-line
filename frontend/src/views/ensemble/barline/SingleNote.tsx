@@ -28,12 +28,12 @@ const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
 /**
  * A single square on the main board of the Ensemble View
- * 
+ *
  * Specifications
  * --------------
  * - Highlights when the user hovers over it only when the user is the author
  * - Plays the note's sound when the beat number is the current beat number
- * - When clicked, sends a socket event to toggle the note. The server will 
+ * - When clicked, sends a socket event to toggle the note. The server will
  *   trigger an update for all clients.
  */
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
@@ -63,7 +63,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   // Load the sampler for the current instrument
   const currentInstrument = currentEnsemble.getInstrument(author);
   const sampler = getSampler(currentInstrument);
-  
+
   // Load the global beat number and check if we need to play
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
   const playNow = globalBeatNumber === beatNumber;
@@ -79,7 +79,6 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
       }, "+0");
     }
   }, [currentNoteType, pitch, playNow, sampler]);
-
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -97,7 +96,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   // When click, update current note type
   const handleClick = () => {
     if (state !== "hasValue") return;
-    if (userID === author) 
+    if (userID === author)
       socket.emit("ensemble:toggle-note", pitch, beatNumber);
   };
 
