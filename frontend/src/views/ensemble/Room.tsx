@@ -11,7 +11,7 @@ import {
   MenuItem,
   SelectChangeEvent,
 } from "@mui/material";
-import BarLineVisualizer from "../../ui-components/barline/BarLineVisualizer";
+import BarLineVisualizer from "./barline/BarLineVisualizer";
 import { useParams } from "react-router-dom";
 import Metronome from "./Metronome";
 import { useRecoilValue, useRecoilValueLoadable } from "recoil";
