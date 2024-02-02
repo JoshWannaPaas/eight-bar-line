@@ -35,10 +35,10 @@ const EnsembleView: FC = () => {
 
   // Tell the server you've left the room when you navigate away
   useEffect(() => {
-    return () =>{
+    return () => {
       socket.emit("room:leave");
-    }
-  }, [])
+    };
+  }, []);
 
   return (
     <main>

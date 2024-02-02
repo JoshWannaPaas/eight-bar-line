@@ -4,9 +4,9 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { RecoilRoot } from "recoil";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-    <RecoilRoot>
-      <Router>
-        <App />
-      </Router>
-    </RecoilRoot>
+  <RecoilRoot>
+    <Router>
+      <App />
+    </Router>
+  </RecoilRoot>,
 );
