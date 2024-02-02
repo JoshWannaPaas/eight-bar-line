@@ -7,10 +7,10 @@ export enum NoteType {
 }
 
 export enum Instrument {
-  PERCUSSION,
+  // PERCUSSION,
   FLUTE,
-  PIANO,
-  TRUMPET,
+  // PIANO,
+  // TRUMPET,
   MARIMBA,
   GUITAR,
   BASS,
