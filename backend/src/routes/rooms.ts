@@ -33,7 +33,15 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     // Let everyone in the room know the list of users changed
     io.to(currentRoomCode).emit("room:user-list", ensemble.getMembers());
     io.to(currentRoomCode).emit("ensemble:update", ensemble.toObject());
-    if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
+    // If the room is empty, wait some time before deleting it. This is to
+    // prevent the room from being deleted if the last user refreshed.
+    if (ensemble.getMembers().length === 0) {
+      setTimeout(() => {
+        // If it is still empty, delete the room
+        if (ensemble.getMembers().length === 0)
+          delete rooms[currentRoomCode];
+      }, 10_000);
+    }
   };
 
   const joinRoom = (roomCode: RoomCode) => {
