@@ -11,9 +11,9 @@ const Metronome: FC = () => {
   const setBeatNumber = useSetRecoilState(beatNumberAtom);
   const [playing, setPlaying] = useState(false);
 
-  const toggleMetronome = async () => {
+  const toggleMetronome = () => {
     if (!playing) {
-      await Tone.start();
+      Tone.start();
       Tone.Transport.start();
       Tone.Transport.bpm.value = msToBPM(tempoMS);
       setPlaying(true);

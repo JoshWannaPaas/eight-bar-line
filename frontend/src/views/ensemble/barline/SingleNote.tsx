@@ -74,13 +74,11 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
 
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
-      console.log("Playing Now");
-      sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n");
-      // Tone.Transport.scheduleOnce((time) => {
-      //   sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
-      // }, 0);
+      Tone.Transport.scheduleOnce((time) => {
+        sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
+      }, "+0");
     }
-  }, [playNow, pitch, currentNoteType, currentInstrument, beatNumber, currentEnsemble, userID, author, sampler]);
+  }, [currentNoteType, pitch, playNow, sampler]);
 
 
   // Store if we are currently hovering over it
