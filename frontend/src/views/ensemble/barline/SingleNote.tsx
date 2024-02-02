@@ -1,7 +1,7 @@
 import { Instrument, NoteType, UserID } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
-import { useRecoilValue, useRecoilValueLoadable } from "recoil";
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../../recoil/beat";
 import { paletteAtom } from "../../../recoil/palette";
 import { paletteDict } from "../../../ui-components/Palette";
@@ -40,7 +40,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   /** The current color palette, for rendering the correct colors */
   const palette = useRecoilValue(paletteAtom);
   /** The current state of the ensemble */
-  const currentEnsemble = useRecoilValue(ensembleAtom);
+  const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
   /** Our socket connection, for sending the socket events */
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   /** Our user ID, for checking if we are the author */
@@ -76,7 +76,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     if (currentNoteType === NoteType.ATTACK) {
       Tone.Transport.scheduleOnce((time) => {
         sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
-      }, "+0");
+      }, Tone.now());
     }
   }, [currentNoteType, pitch, playNow, sampler]);
 
@@ -96,8 +96,12 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   // When click, update current note type
   const handleClick = () => {
     if (state !== "hasValue") return;
-    if (userID === author)
+    if (userID === author) {
+      // Local update
+      currentEnsemble.toggleNote(userID, pitch, beatNumber);
+      setCurrentEnsemble(currentEnsemble);
       socket.emit("ensemble:toggle-note", pitch, beatNumber);
+    }
   };
 
   // Color depends on Hover and NoteType
