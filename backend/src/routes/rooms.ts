@@ -38,8 +38,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     if (ensemble.getMembers().length === 0) {
       setTimeout(() => {
         // If it is still empty, delete the room
-        if (ensemble.getMembers().length === 0)
-          delete rooms[currentRoomCode];
+        if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
       }, 10_000);
     }
   };
