@@ -1,18 +1,11 @@
-import { Instrument, NoteType, UserID } from "common/dist";
+import { NoteType, UserID } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../../recoil/beat";
 import { paletteAtom } from "../../../recoil/palette";
 import { paletteDict } from "../../../ui-components/Palette";
-import {
-  altoSaxSampler,
-  bassSampler,
-  fluteSampler,
-  guitarSampler,
-  marimbaSampler,
-  tubaSampler,
-} from "./Samplers";
+import { samplers } from "./Samplers";
 import { ensembleAtom } from "../../../recoil/ensemble";
 import { socketAtom, userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
@@ -62,7 +55,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
 
   // Load the sampler for the current instrument
   const currentInstrument = currentEnsemble.getInstrument(author);
-  const sampler = getSampler(currentInstrument);
+  const sampler = samplers[currentInstrument];
 
   // Load the global beat number and check if we need to play
   const globalBeatNumber = useRecoilValue(beatNumberAtom);
@@ -132,23 +125,3 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   );
 };
 export default SingleNote;
-
-// Change instrument sound based on currently selected
-const getSampler = (instrument: Instrument) => {
-  switch (instrument) {
-    case Instrument.FLUTE:
-      return fluteSampler;
-    case Instrument.ALTO_SAX:
-      return altoSaxSampler;
-    case Instrument.MARIMBA:
-      return marimbaSampler;
-    case Instrument.GUITAR:
-      return guitarSampler;
-    case Instrument.BASS:
-      return bassSampler;
-    case Instrument.TUBA:
-      return tubaSampler;
-    default:
-      return fluteSampler;
-  }
-};
