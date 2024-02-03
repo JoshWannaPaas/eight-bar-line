@@ -15,6 +15,8 @@ import { Outlet, Link } from "react-router-dom";
 import { paletteAtom } from "../recoil/palette";
 import { paletteDict, Palette } from "../ui-components/Palette";
 import { useRecoilState } from "recoil";
+import ErrorPage from "../views/ErrorPage";
+import ErrorBoundary from "../ui-components/ErrorBoundary";
 
 const MainLayout: FC = () => {
   const [palette, setPalette] = useRecoilState(paletteAtom);
@@ -91,7 +93,9 @@ const MainLayout: FC = () => {
           </Box>
         </Container>
       </Box>
-      <Outlet />
+      <ErrorBoundary errorPage={ErrorPage}>
+        <Outlet />
+      </ErrorBoundary>
     </Box>
   );
 };
