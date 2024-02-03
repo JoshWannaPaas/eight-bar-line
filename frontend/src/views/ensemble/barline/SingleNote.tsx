@@ -69,7 +69,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     if (currentNoteType === NoteType.ATTACK) {
       Tone.Transport.scheduleOnce((time) => {
         sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
-      }, Tone.now());
+      }, "+0");
     }
   }, [currentNoteType, pitch, playNow, sampler]);
 
