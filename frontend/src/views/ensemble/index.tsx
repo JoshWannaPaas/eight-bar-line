@@ -23,6 +23,7 @@ const EnsembleView: FC = () => {
   const roomCode = useParams();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const currentEnsemble = useRecoilValue(ensembleAtom);
+  const currentUsers = currentEnsemble.getMembers();
 
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
     if (typeof e.target.value === "string") return;
@@ -31,7 +32,6 @@ const EnsembleView: FC = () => {
   };
 
   const userID = useRecoilValue(userIDSelector);
-  const currentUsers = useRecoilValue(ensembleAtom).getMembers();
 
   // Tell the server you've left the room when you navigate away
   useEffect(() => {

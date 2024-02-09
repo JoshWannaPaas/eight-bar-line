@@ -20,6 +20,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
     io.to(roomCode).emit("room:user-list", ensemble.getMembers());
+    io.to(roomCode).emit("ensemble:update", ensemble.toObject());
     callback(roomCode);
   };
 

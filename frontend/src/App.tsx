@@ -21,10 +21,18 @@ function App() {
     // Create a connection to the server, called a "socket"
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `localhost:${DEFAULT_SERVER_PORT}`,
+      {
+        auth: (cb) => {
+          cb({ token: localStorage.token });
+        },
+      },
     );
 
     // Save this connection to the `socketAtom` for other pages to use.
-    const saveSocketToRecoil = () => setSocket(socket);
+    const saveSocketToRecoil = () => {
+      setSocket(socket);
+      console.log(socket.recovered);
+    };
     socket.on("connect", saveSocketToRecoil);
 
     return () => {

@@ -55,6 +55,7 @@ const io = new Server<
 
 io.on("connection", (socket) => {
   console.log("A client connected to the server!");
+  socket.emit("give-token", socket.id);
 
   // A dummy endpoint that receives a message from the client and returns it
   socket.on("ping", (message) => {
