@@ -6,6 +6,14 @@ export enum NoteType {
   REST,
 }
 
+/**
+ * The instruments will be manually assigned a number. 
+ * When we add a new instrument, assign it a number.
+ * If we remove an instrument, leave a comment with 
+ * the number it used to be. 
+ * 
+ * This is for backwards compatibility with the database.
+ */
 export enum Instrument {
   // PERCUSSION,
   FLUTE,

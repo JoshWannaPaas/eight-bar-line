@@ -7,6 +7,7 @@ import {
 } from "common/dist/index.js";
 
 import { Server, Socket } from "socket.io";
+import { Request } from "express";
 
 export type IoType = Server<
   ClientToServerEvents,
@@ -27,3 +28,6 @@ declare module "express-session" {
     username: string;
   }
 }
+
+/** A helper type for defining a simple Http request expecting only a body */
+export type ReqBody<T> = Request<unknown, unknown, T>;

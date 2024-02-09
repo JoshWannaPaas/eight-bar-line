@@ -13,3 +13,5 @@ This table will store information for an individual Barline and associate it wit
 ## TBD `Ensemble.ts`
 
 This table will associate multiple Barlines together. It will also allow for assigning the volume for each Barline, the overall tempo for the piece, etc.
+
+The `CreationOptional` marks the field as optional when creating an instance of the model (such as using `Model.create()`).

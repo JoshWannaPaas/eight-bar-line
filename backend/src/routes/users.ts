@@ -3,10 +3,10 @@
 // (The database will be managed in PostgreSQL
 // with the `sequelize` library)
 
-import express, { Request } from "express";
+import express from "express";
 import User from "../models/User.js";
+import { ReqBody } from "./types.js";
 
-type ReqBody<T> = Request<unknown, unknown, T>;
 
 const usersRouter = express.Router();
 
