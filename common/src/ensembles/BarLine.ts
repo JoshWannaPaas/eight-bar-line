@@ -24,13 +24,21 @@ export type BarLineObject = {
   masterVolume: number;
 };
 
+type BarLineOptions = {
+  instrument?: Instrument;
+  id?: string;
+};
+
 export class BarLine {
   static ROWS = 8;
   static COLS = 32;
 
   private state: BarLineObject;
 
-  constructor(author: UserID, instrument = Instrument.FLUTE) {
+  constructor(
+    author: UserID,
+    options: BarLineOptions = { instrument: Instrument.FLUTE },
+  ) {
     const notes: Note[][] = [];
     for (let r = 0; r < BarLine.ROWS; r++) {
       const row: Note[] = [];
@@ -40,9 +48,9 @@ export class BarLine {
     }
 
     const initialState: BarLineObject = {
-      id: uuidv4(),
+      id: options.id ?? uuidv4(),
       author,
-      instrument,
+      instrument: options.instrument,
       dynamics: new Array(BarLine.COLS).fill(0.5),
       masterVolume: 1,
       notes,
@@ -246,7 +254,7 @@ export class BarLine {
    * const barLine = BarLine.fromObject(barLineObject)
    */
   static fromObject(object: BarLineObject): BarLine {
-    const newBarLine = new BarLine(object.author);
+    const newBarLine = new BarLine(object.author, { id: object.id });
     newBarLine.state = _.cloneDeep(object);
     return newBarLine;
   }
