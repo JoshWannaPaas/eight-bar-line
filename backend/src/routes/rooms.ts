@@ -14,7 +14,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     do roomCode = generateRoomCode();
     while (existingRoomCodes.includes(roomCode));
     const ensemble = new Ensemble();
-    ensemble.joinRoom(socket.id);
+    ensemble.joinRoom(socket.handshake.auth.token ?? socket.id);
     rooms[roomCode] = ensemble;
     socket.join(roomCode);
     socket.data.roomCode = roomCode;
@@ -28,7 +28,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     const { roomCode: currentRoomCode } = socket.data;
     if (currentRoomCode === undefined) return;
     const ensemble = rooms[currentRoomCode];
-    ensemble.leaveRoom(socket.id);
+    ensemble.leaveRoom(socket.handshake.auth.token ?? socket.id);
     socket.leave(currentRoomCode);
     socket.data.roomCode = undefined;
     // Let everyone in the room know the list of users changed
@@ -50,7 +50,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     const ensemble = rooms[roomCode];
     /** @TODO Return a meaningful error message here */
     if (ensemble === undefined) return;
-    ensemble.joinRoom(socket.id);
+    ensemble.joinRoom(socket.handshake.auth.token ?? socket.id);
     socket.join(roomCode);
     socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
@@ -62,7 +62,13 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     const { roomCode } = socket.data;
     if (roomCode === undefined) return;
     // Let everyone in the room EXCEPT `socket` know about the new message
-    socket.to(roomCode).emit("room:receive-message", socket.id, message);
+    socket
+      .to(roomCode)
+      .emit(
+        "room:receive-message",
+        socket.handshake.auth.token ?? socket.id,
+        message,
+      );
   };
 
   socket.on("room:create", createRoom);

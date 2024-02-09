@@ -17,7 +17,10 @@ const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
     if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);
     const ensemble = rooms[roomCode];
-    ensemble.setInstrument(socket.id, instrument);
+    ensemble.setInstrument(
+      socket.handshake.auth.token ?? socket.id,
+      instrument,
+    );
     io.to(roomCode).emit("ensemble:update", ensemble.toObject());
     return undefined;
   };
@@ -27,7 +30,7 @@ const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
     if (roomCode === undefined)
       return console.error(`User "${username}" is not in an ensemble.`);
     const ensemble = rooms[roomCode];
-    ensemble.toggleNote(socket.id, row, col);
+    ensemble.toggleNote(socket.handshake.auth.token ?? socket.id, row, col);
     io.to(roomCode).emit("ensemble:update", ensemble.toObject());
     return undefined;
   };
