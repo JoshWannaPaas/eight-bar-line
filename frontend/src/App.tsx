@@ -29,7 +29,6 @@ function App() {
     // Save this connection to the `socketAtom` for other pages to use.
     const saveSocketToRecoil = () => {
       setSocket(socket);
-      console.log(socket.recovered);
     };
     socket.on("connect", saveSocketToRecoil);
     socket.on("give-token", (token) => {

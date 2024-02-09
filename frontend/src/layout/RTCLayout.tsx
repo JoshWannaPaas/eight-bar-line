@@ -1,12 +1,8 @@
 import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from "recoil";
+import { useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { ensembleAtom, userListAtom } from "../recoil/ensemble";
-import { socketAtom, userIDAtom, userIDSelector } from "../recoil/socket";
+import { socketAtom } from "../recoil/socket";
 import { Ensemble, EnsembleObject } from "common/dist";
 
 /**
@@ -24,10 +20,6 @@ const RTCLayout: React.FC = () => {
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const setCurrentUsers = useSetRecoilState(userListAtom);
   const setCurrentEnsemble = useSetRecoilState(ensembleAtom);
-  // const userID = useRecoilValue(userIDSelector);
-  // console.log(userID);
-  const userAtom = useRecoilValueLoadable(userIDAtom);
-  console.log(userAtom);
 
   useEffect(() => {
     // I need to check if we have the value before we continue to do anything
