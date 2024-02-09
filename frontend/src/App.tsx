@@ -22,9 +22,7 @@ function App() {
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
       `localhost:${DEFAULT_SERVER_PORT}`,
       {
-        auth: (cb) => {
-          cb({ token: localStorage.token });
-        },
+        auth: (cb) => cb({ token: sessionStorage.token }),
       },
     );
 
@@ -34,6 +32,9 @@ function App() {
       console.log(socket.recovered);
     };
     socket.on("connect", saveSocketToRecoil);
+    socket.on("give-token", (token) => {
+      sessionStorage.token = token;
+    });
 
     return () => {
       // Remove the "connect" event listener if we unmount too quickly

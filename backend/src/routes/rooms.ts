@@ -1,5 +1,5 @@
 import { Ensemble, RoomCode } from "common/dist/index.js";
-import { IoType, SocketType } from "./types.js";
+import { IoType, SocketType, getSocketId } from "./types.js";
 
 export const rooms: Record<RoomCode, Ensemble> = {};
 
@@ -14,7 +14,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     do roomCode = generateRoomCode();
     while (existingRoomCodes.includes(roomCode));
     const ensemble = new Ensemble();
-    ensemble.joinRoom(socket.handshake.auth.token ?? socket.id);
+    ensemble.joinRoom(getSocketId(socket));
     rooms[roomCode] = ensemble;
     socket.join(roomCode);
     socket.data.roomCode = roomCode;
@@ -25,10 +25,11 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
   };
 
   const leaveRoom = () => {
+    console.log(`${getSocketId(socket)} left the room`);
     const { roomCode: currentRoomCode } = socket.data;
     if (currentRoomCode === undefined) return;
     const ensemble = rooms[currentRoomCode];
-    ensemble.leaveRoom(socket.handshake.auth.token ?? socket.id);
+    ensemble.leaveRoom(getSocketId(socket));
     socket.leave(currentRoomCode);
     socket.data.roomCode = undefined;
     // Let everyone in the room know the list of users changed
@@ -39,18 +40,22 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     if (ensemble.getMembers().length === 0) {
       setTimeout(() => {
         // If it is still empty, delete the room
-        if (ensemble.getMembers().length === 0) delete rooms[currentRoomCode];
-      }, 10_000);
+        if (ensemble.getMembers().length === 0) {
+          delete rooms[currentRoomCode];
+        }
+      }, 6_000);
     }
   };
 
   const joinRoom = (roomCode: RoomCode) => {
     // If already in a room, leave.
-    leaveRoom();
+    // leaveRoom();
+    console.log(`${getSocketId(socket)} joined the room`);
     const ensemble = rooms[roomCode];
     /** @TODO Return a meaningful error message here */
     if (ensemble === undefined) return;
-    ensemble.joinRoom(socket.handshake.auth.token ?? socket.id);
+    if (!ensemble.getMembers().includes(getSocketId(socket)))
+      ensemble.joinRoom(getSocketId(socket));
     socket.join(roomCode);
     socket.data.roomCode = roomCode;
     // Let everyone in the room know the list of users changed
@@ -64,11 +69,7 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
     // Let everyone in the room EXCEPT `socket` know about the new message
     socket
       .to(roomCode)
-      .emit(
-        "room:receive-message",
-        socket.handshake.auth.token ?? socket.id,
-        message,
-      );
+      .emit("room:receive-message", getSocketId(socket), message);
   };
 
   socket.on("room:create", createRoom);

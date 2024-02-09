@@ -35,7 +35,7 @@ export const localStorageUserIDEffect: (key: string) => AtomEffect<UserID> =
 export const userIDSelector = selector<UserID>({
   key: "userIDSelector",
   get: ({ get }) => {
-    return get(socketAtom).id;
+    return sessionStorage.token ?? get(socketAtom).id;
   },
 });
 
