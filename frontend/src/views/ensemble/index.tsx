@@ -111,7 +111,6 @@ const EnsembleView: FC = () => {
     </main>
   );
 };
-
 export default EnsembleView;
 
 // Taken from https://mui.com/material-ui/react-grid/
