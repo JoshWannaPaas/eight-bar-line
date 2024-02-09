@@ -8,44 +8,32 @@ import TubaD3 from "frontend/src/assets/samples/TubaD3.wav";
 import { Instrument } from "common/dist";
 
 export const fluteSampler = new Tone.Sampler({
-  urls: {
-    Db5: FluteDb5,
-  },
+  urls: { Db5: FluteDb5 },
   release: 1,
 }).toDestination();
 
 export const marimbaSampler = new Tone.Sampler({
-  urls: {
-    G4: MarimbaG4,
-  },
+  urls: { G4: MarimbaG4 },
   release: 1,
 }).toDestination();
 
 export const guitarSampler = new Tone.Sampler({
-  urls: {
-    B3: GuitarB2,
-  },
+  urls: { B3: GuitarB2 },
   release: 1,
 }).toDestination();
 
 export const bassSampler = new Tone.Sampler({
-  urls: {
-    F3: BassF2,
-  },
+  urls: { F3: BassF2 },
   release: 1,
 }).toDestination();
 
 export const altoSaxSampler = new Tone.Sampler({
-  urls: {
-    Db4: AltoSaxDb4,
-  },
+  urls: { Db4: AltoSaxDb4 },
   release: 1,
 }).toDestination();
 
 export const tubaSampler = new Tone.Sampler({
-  urls: {
-    D4: TubaD3,
-  },
+  urls: { D4: TubaD3 },
   release: 1,
 }).toDestination();
 
