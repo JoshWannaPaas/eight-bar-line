@@ -1,18 +1,11 @@
-import { Instrument, NoteType, UserID } from "common/dist";
+import { NoteType, UserID } from "common/dist";
 import { FC, useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable } from "recoil";
 import { beatNumberAtom } from "../../../recoil/beat";
 import { paletteAtom } from "../../../recoil/palette";
 import { paletteDict } from "../../../ui-components/Palette";
-import {
-  altoSaxSampler,
-  bassSampler,
-  fluteSampler,
-  guitarSampler,
-  marimbaSampler,
-  tubaSampler,
-} from "./Samplers";
+import { samplers } from "./Samplers";
 import { ensembleAtom } from "../../../recoil/ensemble";
 import { socketAtom, userIDSelector } from "../../../recoil/socket";
 import * as Tone from "tone";
@@ -26,10 +19,24 @@ interface SingleNoteProps {
 
 const PITCH_VALUES = ["C5", "B4", "A4", "G4", "F4", "E4", "D4", "C4"];
 
+/**
+ * A single square on the main board of the Ensemble View
+ *
+ * Specifications
+ * --------------
+ * - Highlights when the user hovers over it only when the user is the author
+ * - Plays the note's sound when the beat number is the current beat number
+ * - When clicked, sends a socket event to toggle the note. The server will
+ *   trigger an update for all clients.
+ */
 const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
+  /** The current color palette, for rendering the correct colors */
   const palette = useRecoilValue(paletteAtom);
+  /** The current state of the ensemble */
   const [currentEnsemble, setCurrentEnsemble] = useRecoilState(ensembleAtom);
+  /** Our socket connection, for sending the socket events */
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
+  /** Our user ID, for checking if we are the author */
   const userID = useRecoilValue(userIDSelector);
 
   // Colors for notes
@@ -46,17 +53,17 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
     beatNumber,
   ).type;
 
-  const globalBeatNumber = useRecoilValue(beatNumberAtom);
+  // Load the sampler for the current instrument
   const currentInstrument = currentEnsemble.getInstrument(author);
+  const sampler = samplers[currentInstrument];
+
+  // Load the global beat number and check if we need to play
+  const globalBeatNumber = useRecoilValue(beatNumberAtom);
   const playNow = globalBeatNumber === beatNumber;
-  const now = Tone.now();
 
   useEffect(() => {
     // Do nothing if music is not being played
     if (!playNow) return;
-
-    // Assign correct instrument sounds to what player selected
-    const sampler = getSampler(currentInstrument);
 
     // Trigger a music note if we are not a NoteType.REST
     if (currentNoteType === NoteType.ATTACK) {
@@ -64,37 +71,7 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
         sampler.triggerAttackRelease(PITCH_VALUES[pitch], "4n", time);
       }, Tone.now());
     }
-  }, [
-    playNow,
-    pitch,
-    currentNoteType,
-    currentInstrument,
-    now,
-    beatNumber,
-    currentEnsemble,
-    userID,
-    author,
-  ]);
-
-  // Change instrument sound based on currently selected
-  const getSampler = (instrument: Instrument) => {
-    switch (instrument) {
-      case Instrument.FLUTE:
-        return fluteSampler;
-      case Instrument.ALTO_SAX:
-        return altoSaxSampler;
-      case Instrument.MARIMBA:
-        return marimbaSampler;
-      case Instrument.GUITAR:
-        return guitarSampler;
-      case Instrument.BASS:
-        return bassSampler;
-      case Instrument.TUBA:
-        return tubaSampler;
-      default:
-        return fluteSampler;
-    }
-  };
+  }, [currentNoteType, pitch, playNow, sampler]);
 
   // Store if we are currently hovering over it
   const [onHover, setOnHover] = useState(false);
@@ -121,14 +98,11 @@ const SingleNote: FC<SingleNoteProps> = ({ beatNumber, pitch, author }) => {
   };
 
   // Color depends on Hover and NoteType
-  let noteColor = colorMapping[NoteType.REST];
   let highlight = 1; // 100% Brightness which is Normal Brightness
 
   // Coloring
-  if (currentNoteType === NoteType.ATTACK)
-    noteColor = colorMapping[NoteType.ATTACK];
-  if (currentNoteType === NoteType.SUSTAIN)
-    noteColor = colorMapping[NoteType.SUSTAIN];
+  const noteColor = colorMapping[currentNoteType];
+
   if (onHover || playNow) {
     if (currentNoteType === NoteType.REST) highlight = 1.1;
     if (currentNoteType === NoteType.SUSTAIN) highlight = 1.4;
