@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import {
   Box,
   Container,
@@ -32,6 +32,13 @@ const EnsembleView: FC = () => {
 
   const userID = useRecoilValue(userIDSelector);
   const currentUsers = useRecoilValue(ensembleAtom).getMembers();
+
+  // Tell the server you've left the room when you navigate away
+  useEffect(() => {
+    return () => {
+      socket.emit("room:leave");
+    };
+  }, [socket]);
 
   return (
     <main>
