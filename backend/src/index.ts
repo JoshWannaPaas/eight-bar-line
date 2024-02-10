@@ -25,12 +25,14 @@ const app = express();
 
 // Enables the ability to log in and out by saving info to the user's session.
 // See middleware for more details on how this works.
-app.use(session({
-  secret: 'eight-bar-line',
-  cookie: { secure: false },
-  resave: true,
-  saveUninitialized: true
-}));
+app.use(
+  session({
+    secret: "eight-bar-line",
+    cookie: { secure: false },
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
 
 app.use(cors());
 app.use(express.json());
