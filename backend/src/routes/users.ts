@@ -1,8 +1,3 @@
-// This file contains boiler plate for a REST API
-// to add or remove users from the database.
-// (The database will be managed in PostgreSQL
-// with the `sequelize` library)
-
 import express, { Request, Response } from "express";
 import User from "../models/User.js";
 import {
