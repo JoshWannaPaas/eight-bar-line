@@ -9,10 +9,10 @@ import {
   InterServerEvents,
   SocketData,
 } from "common/dist/index.js";
-import registerRoomEvents from "./routes/rooms.js";
+import registerRoomEvents from "./websockets/rooms.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import registerEnsembleEvents from "./routes/ensemble.js";
+import registerEnsembleEvents from "./websockets/ensemble.js";
 import usersRouter from "./routes/users.js";
 
 const __filename = fileURLToPath(import.meta.url);
