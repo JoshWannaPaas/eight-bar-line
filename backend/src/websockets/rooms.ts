@@ -26,7 +26,6 @@ const registerRoomEvents = (io: IoType, socket: SocketType) => {
   };
 
   const leaveRoom = () => {
-    console.log(`${getSocketId(socket)} left the room`);
     const { roomCode: currentRoomCode } = socket.data;
     if (currentRoomCode === undefined) return;
     const ensemble = rooms[currentRoomCode];
