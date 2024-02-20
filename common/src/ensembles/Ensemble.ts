@@ -23,16 +23,17 @@ type EnsembleState = Omit<EnsembleObject, "arrangement"> & {
 export class Ensemble {
   private state: EnsembleState;
 
-  constructor() {
+  constructor(id?: string) {
     const initialState: EnsembleState = {
-      id: uuidv4(),
+      id: id ?? uuidv4(),
       authors: [],
       tempo: 0.5,
       arrangement: [],
     };
 
     this.state = initialState;
-    console.log(`Made new Ensemble with ID: ${this.state.id}`);
+    if (id === undefined)
+      console.log(`Made new Ensemble with ID: ${this.state.id}`);
   }
 
   /**
@@ -173,7 +174,7 @@ export class Ensemble {
    * });
    */
   static fromObject(object: EnsembleObject) {
-    const newEnsemble = new Ensemble();
+    const newEnsemble = new Ensemble(object.id);
     newEnsemble.state = {
       ...object,
       arrangement: object.arrangement.map(BarLine.fromObject),
