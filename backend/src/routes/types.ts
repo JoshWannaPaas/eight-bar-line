@@ -1,4 +1,5 @@
 import "express-session";
+import { SocketType } from "../websockets/types";
 
 declare module "express-session" {
   interface SessionData {

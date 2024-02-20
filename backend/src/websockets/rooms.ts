@@ -1,5 +1,6 @@
 import { Ensemble, RoomCode } from "common/dist/index.js";
-import { IoType, SocketType, getSocketId } from "./types.js";
+import { getSocketId } from "../routes/types.js";
+import { IoType, SocketType } from "./types.js";
 
 export const rooms: Record<RoomCode, Ensemble> = {};
 

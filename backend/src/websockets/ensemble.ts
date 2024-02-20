@@ -1,5 +1,6 @@
 import { ClientToServerEvents, Instrument } from "common/dist/index.js";
-import { IoType, SocketType, getSocketId } from "./types.js";
+import { getSocketId } from "../routes/types.js";
+import { IoType, SocketType } from "./types.js";
 import { rooms } from "./rooms.js";
 
 const registerEnsembleEvents = (io: IoType, socket: SocketType) => {
