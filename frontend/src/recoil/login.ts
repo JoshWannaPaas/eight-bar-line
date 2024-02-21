@@ -1,9 +1,15 @@
 import { AtomEffect, atom } from "recoil";
-import { Palette } from "../ui-components/Palette";
+
+// Temporary declartion for testing purposes
+// Login info will NOT be plain text when finished
+export type User = {
+  username: string;
+  password: string;
+};
 
 const store = typeof window !== "undefined" ? window.localStorage : null;
 
-export const localStoragePaletteEffect: (key: string) => AtomEffect<Palette> =
+export const localStorageLoginEffect: (key: string) => AtomEffect<User> =
   (key) =>
   ({ setSelf, onSet }) => {
     if (store) {
@@ -20,8 +26,13 @@ export const localStoragePaletteEffect: (key: string) => AtomEffect<Palette> =
     }
   };
 
-export const paletteAtom = atom<Palette>({
-  key: "paletteAtom",
-  default: Palette.GRAYSCALE,
-  effects: [localStoragePaletteEffect("palette")],
+export const defaultUser = {
+  username: "Guest",
+  password: "password",
+};
+
+export const currentLoginAtom = atom<User>({
+  key: "currentLoginAtom",
+  default: defaultUser,
+  effects: [localStorageLoginEffect("current_user")],
 });
