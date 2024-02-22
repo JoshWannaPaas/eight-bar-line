@@ -118,7 +118,9 @@ usersRouter.post(
     // Throw an error if the login credentials are not correct
     const user = await User.findOne({ where: { username: req.body.username } });
     if (user === null)
-      return res.status(400).send("Username or password is incorrect.");
+      return res
+        .status(400)
+        .send("Username or password is incorrect,\nOr user does not exist");
 
     req.session.username = req.body.username;
     return res.sendStatus(200);
