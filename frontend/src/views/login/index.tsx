@@ -61,8 +61,8 @@ const LoginView: FC = () => {
       });
   };
 
-  //
-  const handleError = (error: unknown) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleError = (error: any) => {
     const errorCode = error?.response?.status;
     const errorMessage = error?.response?.data;
 
