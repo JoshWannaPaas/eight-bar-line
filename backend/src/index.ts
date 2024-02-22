@@ -9,11 +9,12 @@ import {
   InterServerEvents,
   SocketData,
 } from "common/dist/index.js";
-import registerRoomEvents from "./routes/rooms.js";
+import registerRoomEvents from "./websockets/rooms.js";
 import path from "path";
 import { fileURLToPath } from "url";
-import registerEnsembleEvents from "./routes/ensemble.js";
+import registerEnsembleEvents from "./websockets/ensemble.js";
 import usersRouter from "./routes/users.js";
+import session from "express-session";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -21,6 +22,18 @@ const __dirname = path.dirname(__filename);
 const PORT = process.env.PORT || DEFAULT_SERVER_PORT;
 
 const app = express();
+
+// Enables the ability to log in and out by saving info to the user's session.
+// See middleware for more details on how this works.
+app.use(
+  session({
+    secret: "eight-bar-line",
+    cookie: { secure: false },
+    resave: true,
+    saveUninitialized: true,
+  }),
+);
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
