@@ -23,5 +23,5 @@ export const localStoragePaletteEffect: (key: string) => AtomEffect<Palette> =
 export const paletteAtom = atom<Palette>({
   key: "paletteAtom",
   default: Palette.GRAYSCALE,
-  effects: [localStoragePaletteEffect("current_user")],
+  effects: [localStoragePaletteEffect("palette")],
 });

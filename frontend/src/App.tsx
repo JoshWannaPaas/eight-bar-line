@@ -21,11 +21,21 @@ function App() {
 
   useEffect(() => {
     // Create a connection to the server, called a "socket"
-    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(HOST);
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+      HOST,
+      {
+        auth: (cb) => cb({ token: sessionStorage.token }),
+      },
+    );
 
     // Save this connection to the `socketAtom` for other pages to use.
-    const saveSocketToRecoil = () => setSocket(socket);
+    const saveSocketToRecoil = () => {
+      setSocket(socket);
+    };
     socket.on("connect", saveSocketToRecoil);
+    socket.on("give-token", (token) => {
+      sessionStorage.token = token;
+    });
 
     return () => {
       // Remove the "connect" event listener if we unmount too quickly

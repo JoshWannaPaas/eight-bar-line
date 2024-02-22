@@ -14,16 +14,6 @@ export const ensembleAtom = atom<Ensemble>({
   dangerouslyAllowMutability: true,
 });
 
-// todo
-/*
-export const barlineSelector = selector<BarLine>({
-  key: "barlineSelector",
-  get: ({ get }) => {
-    return get(ensembleAtom).getBarLine(userIDSelector);
-  },
-});
-*/
-
 /**
  * An array of all UserID's in the current Ensemble.
  *
