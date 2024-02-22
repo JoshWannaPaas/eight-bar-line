@@ -27,7 +27,7 @@ const LoginView: FC = () => {
         alert("Logged in!");
         setCurrentLogin(userLogin);
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         handleError(error);
       });
   };
@@ -45,7 +45,7 @@ const LoginView: FC = () => {
         alert("You have logged out!");
         setCurrentLogin(defaultUser);
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         console.log(error);
       });
   };
@@ -56,13 +56,13 @@ const LoginView: FC = () => {
       .then(() => {
         alert("User created! \nNow go log in.");
       })
-      .catch((error: any) => {
+      .catch((error: unknown) => {
         handleError(error);
       });
   };
 
   //
-  const handleError = (error: any) => {
+  const handleError = (error: unknown) => {
     const errorCode = error?.response?.status;
     const errorMessage = error?.response?.data;
 
