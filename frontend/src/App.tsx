@@ -11,6 +11,11 @@ import { socketAtom } from "./recoil/socket";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { paletteAtom } from "./recoil/palette";
 import { paletteDict } from "./ui-components/Palette";
+import dotenv from "dotenv";
+dotenv.config();
+
+const HOST = process.env.HOST ?? "localhost";
+const PORT = process.env.PORT ?? DEFAULT_SERVER_PORT;
 
 function App() {
   const setSocket = useSetRecoilState(socketAtom);
@@ -20,7 +25,7 @@ function App() {
   useEffect(() => {
     // Create a connection to the server, called a "socket"
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `localhost:${DEFAULT_SERVER_PORT}`,
+      `${HOST}:${PORT}`
     );
 
     // Save this connection to the `socketAtom` for other pages to use.
