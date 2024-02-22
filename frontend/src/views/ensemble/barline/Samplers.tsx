@@ -1,10 +1,10 @@
 import * as Tone from "tone";
-import FluteDb5 from "frontend/src/assets/samples/FluteDb5.wav";
-import MarimbaG4 from "frontend/src/assets/samples/MarimbaG4.wav";
-import GuitarB2 from "frontend/src/assets/samples/GuitarB2.wav";
-import BassF2 from "frontend/src/assets/samples/BassF2.wav";
-import AltoSaxDb4 from "frontend/src/assets/samples/AltoSaxDb4.wav";
-import TubaD3 from "frontend/src/assets/samples/TubaD3.wav";
+import FluteDb5 from "../../../assets/samples/FluteDb5.wav";
+import MarimbaG4 from "../../../assets/samples/MarimbaG4.wav";
+import GuitarB2 from "../../../assets/samples/GuitarB2.wav";
+import BassF2 from "../../../assets/samples/BassF2.wav";
+import AltoSaxDb4 from "../../../assets/samples/AltoSaxDb4.wav";
+import TubaD3 from "../../../assets/samples/TubaD3.wav";
 import { Instrument } from "common/dist";
 
 export const fluteSampler = new Tone.Sampler({
