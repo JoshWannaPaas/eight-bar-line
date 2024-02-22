@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     // Create a connection to the server, called a "socket"
     const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `${HOST}:${PORT}`
+      `${HOST}:${PORT}`,
     );
 
     // Save this connection to the `socketAtom` for other pages to use.
