@@ -1,11 +1,11 @@
 import { Button, TextField } from "@mui/material";
 import { FC, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { currentLoginAtom, defaultUser } from "../../recoil/login";
 import axios from "axios";
 
 const LoginView: FC = () => {
-  const [currentLogin, setCurrentLogin] = useRecoilState(currentLoginAtom);
+  const setCurrentLogin = useSetRecoilState(currentLoginAtom);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
