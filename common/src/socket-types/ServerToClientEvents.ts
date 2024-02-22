@@ -14,5 +14,7 @@ interface ServerToClientEvents {
 
   /** Triggered whenever another user modifies the Ensemble  */
   ["ensemble:update"]: (newState: EnsembleObject) => void;
+
+  ["give-token"]: (token: string) => void;
 }
 export default ServerToClientEvents;

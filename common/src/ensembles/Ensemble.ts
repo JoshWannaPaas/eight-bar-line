@@ -57,6 +57,8 @@ export class Ensemble {
    */
   joinRoom(userId: UserID) {
     this.state.authors.push(userId);
+    // This is true if the user briefly disconnected and reconnected
+    if (this.state.arrangement.some((a) => a.getAuthor() === userId)) return;
     this.state.arrangement.push(new BarLine(userId));
   }
 
@@ -68,9 +70,13 @@ export class Ensemble {
    */
   leaveRoom(userId: UserID) {
     this.state.authors = this.state.authors.filter((e) => e !== userId);
-    this.state.arrangement = this.state.arrangement.filter(
-      (a) => a.getAuthor() !== userId,
-    );
+    // If the user remains gone from the room for 30 seconds, remove their BarLine
+    setTimeout(() => {
+      if (this.state.authors.includes(userId)) return;
+      this.state.arrangement = this.state.arrangement.filter(
+        (a) => a.getAuthor() !== userId,
+      );
+    }, 3_000);
   }
 
   /**

@@ -20,9 +20,10 @@ import { socketAtom, userIDSelector } from "../../recoil/socket";
 import { ensembleAtom } from "../../recoil/ensemble";
 
 const EnsembleView: FC = () => {
-  const roomCode = useParams();
+  const { roomCode } = useParams();
   const { state, contents: socket } = useRecoilValueLoadable(socketAtom);
   const currentEnsemble = useRecoilValue(ensembleAtom);
+  const currentUsers = currentEnsemble.getMembers();
 
   const changeInstrumentHandler = (e: SelectChangeEvent<Instrument>) => {
     if (typeof e.target.value === "string") return;
@@ -31,14 +32,21 @@ const EnsembleView: FC = () => {
   };
 
   const userID = useRecoilValue(userIDSelector);
-  const currentUsers = useRecoilValue(ensembleAtom).getMembers();
 
-  // Tell the server you've left the room when you navigate away
+  // Tell the server you left when the tab closes
   useEffect(() => {
+    const onCloseTab = () => socket.emit("room:leave");
+    window.addEventListener("beforeunload", onCloseTab);
+    return () => window.removeEventListener("beforeunload", onCloseTab);
+  });
+
+  // Join the room on load, and tell the server you left when navigating away
+  useEffect(() => {
+    socket.emit("room:join", roomCode);
     return () => {
       socket.emit("room:leave");
     };
-  }, [socket]);
+  }, [roomCode, socket]);
 
   return (
     <main>
@@ -56,7 +64,11 @@ const EnsembleView: FC = () => {
             <FormControl fullWidth>
               <InputLabel>Instrument</InputLabel>
               <Select
-                value={currentEnsemble.getInstrument(userID)}
+                value={
+                  currentEnsemble.getMembers().includes(userID)
+                    ? currentEnsemble.getInstrument(userID)
+                    : Instrument.FLUTE
+                }
                 label="instrument"
                 onChange={changeInstrumentHandler}
                 fullWidth
@@ -79,7 +91,7 @@ const EnsembleView: FC = () => {
         </Box>
         <Item>
           <h3>Room Settings</h3>
-          <p>Room Code: {roomCode.roomCode}</p>
+          <p>Room Code: {roomCode}</p>
           <p>User ID: {userID}</p>
         </Item>
       </Stack>

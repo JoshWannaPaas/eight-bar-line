@@ -16,6 +16,6 @@ export const socketAtom = atom<
 export const userIDSelector = selector<UserID>({
   key: "userIDSelector",
   get: ({ get }) => {
-    return get(socketAtom).id;
+    return sessionStorage.token ?? get(socketAtom).id;
   },
 });
