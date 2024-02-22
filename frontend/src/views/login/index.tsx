@@ -10,8 +10,8 @@ const LoginView: FC = () => {
   const [password, setPassword] = useState("");
 
   const userLogin = {
-    username: username,
-    password: password,
+    username,
+    password,
   };
 
   const onLogin = () => {
