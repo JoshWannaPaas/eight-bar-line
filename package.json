@@ -8,7 +8,7 @@
     "build:common": "cd common && npm run build && cd .. && npm upgrade common",
     "build:frontend": "cd frontend && npm run build",
     "build": "npm run build:common && npm run build:frontend && npm run build:backend",
-    "start": "cd backend && npm run start",
+    "start": "node --experimental-modules --es-module-specifier-resolution=node backend/dist/index.js",
     "lint": "npx eslint . --ext .ts --ext .tsx --max-warnings 0",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
