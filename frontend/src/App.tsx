@@ -15,6 +15,8 @@ import axios from "axios";
 
 axios.defaults.baseURL = "http://localhost:8080";
 
+const HOST = import.meta.env.BASE_URL ?? `localhost:${DEFAULT_SERVER_PORT}`;
+
 function App() {
   const setSocket = useSetRecoilState(socketAtom);
   const palette = useRecoilValue(paletteAtom);
@@ -22,9 +24,7 @@ function App() {
 
   useEffect(() => {
     // Create a connection to the server, called a "socket"
-    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
-      `localhost:${DEFAULT_SERVER_PORT}`,
-    );
+    const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(HOST);
 
     // Save this connection to the `socketAtom` for other pages to use.
     const saveSocketToRecoil = () => setSocket(socket);
