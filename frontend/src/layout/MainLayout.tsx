@@ -14,9 +14,10 @@ import { FC } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { paletteAtom } from "../recoil/palette";
 import { paletteDict, Palette } from "../ui-components/Palette";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import ErrorPage from "../views/ErrorPage";
 import ErrorBoundary from "../ui-components/ErrorBoundary";
+import { currentLoginAtom } from "../recoil/login";
 
 const MainLayout: FC = () => {
   const [palette, setPalette] = useRecoilState(paletteAtom);
@@ -24,6 +25,7 @@ const MainLayout: FC = () => {
     if (typeof e.target.value !== "number") return;
     setPalette(e.target.value);
   };
+  const currentUser = useRecoilValue(currentLoginAtom);
 
   return (
     <Box>
@@ -59,6 +61,11 @@ const MainLayout: FC = () => {
               <Link to={"/browse"}>Browse</Link>
             </TitleButtons>
           </Box>
+          <Box flex={1}>
+            <TitleButtons>
+              <Link to={"/login"}>Login</Link>
+            </TitleButtons>
+          </Box>
           <Box flex={1} sx={{ width: "50%" }}>
             <FormControl
               fullWidth
@@ -90,6 +97,9 @@ const MainLayout: FC = () => {
                 </MenuItem>
               </Select>
             </FormControl>
+          </Box>
+          <Box flex={1}>
+            <TitleButtons>Hello, {currentUser.username}!</TitleButtons>
           </Box>
         </Container>
       </Box>

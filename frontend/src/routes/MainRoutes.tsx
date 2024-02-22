@@ -9,6 +9,7 @@ const CreateView = Loadable(lazy(() => import("../views/create")));
 const EnsembleView = Loadable(lazy(() => import("../views/ensemble")));
 const HomeView = Loadable(lazy(() => import("../views/home")));
 const LobbyView = Loadable(lazy(() => import("../views/ensemble/LobbyView")));
+const LoginView = Loadable(lazy(() => import("../views/login")));
 
 const mainRoutes = {
   path: "/",
@@ -39,6 +40,10 @@ const mainRoutes = {
     {
       path: "/browse",
       element: <BrowseView />,
+    },
+    {
+      path: "/login",
+      element: <LoginView />,
     },
   ],
 };

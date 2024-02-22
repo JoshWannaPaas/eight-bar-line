@@ -11,6 +11,9 @@ import { socketAtom } from "./recoil/socket";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { paletteAtom } from "./recoil/palette";
 import { paletteDict } from "./ui-components/Palette";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:8080";
 
 const HOST = import.meta.env.BASE_URL ?? `localhost:${DEFAULT_SERVER_PORT}`;
 

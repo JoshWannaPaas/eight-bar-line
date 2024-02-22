@@ -61,8 +61,9 @@ const io = new Server<
   SocketData
 >(httpServer, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "OPTIONS", "HEAD"],
+    credentials: true,
   },
 });
 
