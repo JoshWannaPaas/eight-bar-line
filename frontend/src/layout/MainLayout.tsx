@@ -31,11 +31,11 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const drawerItems = ["Home", "Ensemble", "Create", "Browse", "Account"];
 const drawerIcons = [
-  <HomeIcon />,
-  <GroupsIcon />,
-  <CreateIcon />,
-  <SearchIcon />,
-  <AccountBoxIcon />,
+  <HomeIcon key="HomeIcon" />,
+  <GroupsIcon key="GroupsIcon" />,
+  <CreateIcon key="CreateIcon" />,
+  <SearchIcon key="SearchIcon" />,
+  <AccountBoxIcon key="AccountBoxIcon" />,
 ];
 const drawerNavigation = ["/", "/ensemble", "/create", "/browse", "/login"];
 
