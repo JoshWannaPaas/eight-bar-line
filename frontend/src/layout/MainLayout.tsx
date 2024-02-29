@@ -48,6 +48,7 @@ const MainLayout: FC = () => {
   };
 
   const currentUser = useRecoilValue(currentLoginAtom);
+  const userText = "Hello, " + currentUser.username + "!";
 
   const [isOpen, setOpen] = useState(false);
   const toggleDrawer = (newOpen: boolean) => () => {
@@ -58,6 +59,17 @@ const MainLayout: FC = () => {
     <Box sx={{ width: "300px", paddingTop: "10px" }}>
       {/* Drawer */}
       <List>
+        {/* Current User */}
+        <ListItem key="User">
+          <ListItemText
+            primary={userText}
+            primaryTypographyProps={{
+              fontSize: "24px",
+              fontFamily: "Segoe UI",
+            }}
+          />
+        </ListItem>
+
         {/* Close Drawer */}
         <ListItem key="Close" disablePadding>
           <ListItemButton onClick={toggleDrawer(false)}>
@@ -72,9 +84,9 @@ const MainLayout: FC = () => {
               }}
             />
           </ListItemButton>
-
-          {/* Navigation */}
         </ListItem>
+
+        {/* Navigation */}
         {drawerItems.map((text, index) => (
           <ListItem key={text} disablePadding>
             <Link
