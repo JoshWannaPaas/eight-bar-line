@@ -6,6 +6,7 @@ export type PaletteType = {
   sustain: ColorHex;
   rest: ColorHex;
   icon: string;
+  navigation: string;
 };
 
 const defaultRest: ColorHex = "#e0e0e0";
@@ -16,6 +17,7 @@ const grayscale: PaletteType = {
   sustain: "#808080",
   rest: defaultRest,
   icon: "src/assets/grayscale.ico",
+  navigation: "src/assets/navigation/nav-grayscale.png",
 };
 
 const sunset: PaletteType = {
@@ -24,6 +26,7 @@ const sunset: PaletteType = {
   sustain: "#c7417b",
   rest: defaultRest,
   icon: "src/assets/sunset.ico",
+  navigation: "src/assets/navigation/nav-sunset.png",
 };
 
 const marine: PaletteType = {
@@ -32,6 +35,7 @@ const marine: PaletteType = {
   sustain: "#2a6fdb",
   rest: defaultRest,
   icon: "src/assets/marine.ico",
+  navigation: "src/assets/navigation/nav-marine.png",
 };
 
 const goldenrod: PaletteType = {
@@ -40,6 +44,7 @@ const goldenrod: PaletteType = {
   sustain: "#b38b00",
   rest: defaultRest,
   icon: "src/assets/goldenrod.ico",
+  navigation: "src/assets/navigation/nav-goldenrod.png",
 };
 
 // https://colors.muz.li/palette/006600/004700/bfffbf/80ff80/ffffff
@@ -49,6 +54,7 @@ const forest: PaletteType = {
   sustain: "#439843",
   rest: "#c2dfc2",
   icon: "src/assets/forest.ico",
+  navigation: "src/assets/navigation/nav-forest.png",
 };
 
 export enum Palette {

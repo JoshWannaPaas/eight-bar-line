@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Container,
   CssBaseline,
   Drawer,
   FormControl,
@@ -12,20 +11,17 @@ import {
   ListItemIcon,
   ListItemText,
   MenuItem,
-  Paper,
   Select,
   SelectChangeEvent,
-  styled,
 } from "@mui/material";
 import { FC, useState } from "react";
-import { Outlet, Link, useNavigate, redirect } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 import { paletteAtom } from "../recoil/palette";
 import { paletteDict, Palette } from "../ui-components/Palette";
 import { useRecoilState, useRecoilValue } from "recoil";
 import ErrorPage from "../views/ErrorPage";
 import ErrorBoundary from "../ui-components/ErrorBoundary";
 import { currentLoginAtom } from "../recoil/login";
-import drawerImage from "../assets/drawers/drawer grayscale alt.png";
 import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HomeIcon from "@mui/icons-material/Home";
 import GroupsIcon from "@mui/icons-material/Groups";
@@ -45,10 +41,12 @@ const drawerNavigation = ["/", "/ensemble", "/create", "/browse", "/login"];
 
 const MainLayout: FC = () => {
   const [palette, setPalette] = useRecoilState(paletteAtom);
+  const currentNavIcon = paletteDict[palette].navigation;
   const changePaletteHandler = (e: SelectChangeEvent<Palette>) => {
     if (typeof e.target.value !== "number") return;
     setPalette(e.target.value);
   };
+
   const currentUser = useRecoilValue(currentLoginAtom);
 
   const [isOpen, setOpen] = useState(false);
@@ -56,14 +54,11 @@ const MainLayout: FC = () => {
     setOpen(newOpen);
   };
 
-  const onRedirect = (page: string) => {
-    return redirect(page);
-  };
-
   const DrawerItems = (
     <Box sx={{ width: "300px", paddingTop: "10px" }}>
-      {/* Drawer Navigation */}
+      {/* Drawer */}
       <List>
+        {/* Close Drawer */}
         <ListItem key="Close" disablePadding>
           <ListItemButton onClick={toggleDrawer(false)}>
             <ListItemIcon>
@@ -77,11 +72,19 @@ const MainLayout: FC = () => {
               }}
             />
           </ListItemButton>
+
+          {/* Navigation */}
         </ListItem>
         {drawerItems.map((text, index) => (
           <ListItem key={text} disablePadding>
-            <Link to={drawerNavigation[index]}>
-              <ListItemButton sx={{ width: "200%" }}>
+            <Link
+              to={drawerNavigation[index]}
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <ListItemButton
+                onClick={toggleDrawer(false)}
+                sx={{ width: "200%" }}
+              >
                 <ListItemIcon>{drawerIcons[index]}</ListItemIcon>
                 <ListItemText
                   primary={text}
@@ -147,9 +150,9 @@ const MainLayout: FC = () => {
         }}
       >
         <Button onClick={toggleDrawer(true)} sx={{ width: "5%" }}>
-          <img src={drawerImage} style={{ imageRendering: "pixelated" }} />
+          <img src={currentNavIcon} style={{ imageRendering: "pixelated" }} />
         </Button>
-        <h1>8Bar Line</h1>
+        <h1>8BAR LINE</h1>
       </Box>
 
       <Drawer
